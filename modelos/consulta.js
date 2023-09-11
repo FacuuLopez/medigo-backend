@@ -18,6 +18,12 @@ Consulta.init({
     estado:{
 
     },
+    valoracionMedico:{
+
+    },
+    valoracionCliente:{
+
+    },
 });
 
 export default Consulta;

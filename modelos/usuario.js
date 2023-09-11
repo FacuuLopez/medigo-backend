@@ -15,10 +15,7 @@ Usuario.init({
     telefono:{
 
     },
-    direccion:{
-
-    },
-    valoracion:{
+    direccion: {
 
     },
     estado:{
