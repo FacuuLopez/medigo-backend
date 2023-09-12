@@ -18,6 +18,9 @@ Usuario.init({
     direccion: {
 
     },
+    valoracion:{
+
+    },
     estado:{
 
     },
