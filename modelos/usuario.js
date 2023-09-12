@@ -15,7 +15,7 @@ Usuario.init({
     telefono:{
 
     },
-    direccion:{
+    direccion: {
 
     },
     valoracion:{

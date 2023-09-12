@@ -13,11 +13,8 @@ Persona.belongsTo(Usuario);
 Medico.hasOne(Usuario);
 Usuario.belongsTo(Medico);
 
-EspecialidadMedico.hasOne(Medico);
-Medico.belongsTo(EspecialidadMedico);
-
-EspecialidadMedico.hasOne(Especialidad);
-Especialidad.belongsTo(EspecialidadMedico);
+Medico.belongsToMany(Especialidad, { through: 'Medico_Especialidad' });
+Especialidad.belongsToMany(Medico, { through: 'Medico_Especialidad' });
 
 Cliente.hasOne(Usuario);
 Usuario.belongsTo(Cliente);

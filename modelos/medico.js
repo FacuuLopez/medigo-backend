@@ -9,6 +9,9 @@ Medico.init({
     redioAccion:{
 
     },
+    precio: {
+
+    },
 });
 
 export default Medico;
