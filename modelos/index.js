@@ -1,11 +1,10 @@
-import Cliente from "./cliente";
-import Consulta from "./consulta";
-import Especialidad from "./especialidad";
-import EspecialidadMedico from "./especialidadMedico";
-import GrupoFamiliar from "./grupoFamiliar";
-import Medico from "./medico";
-import Persona from "./persona";
-import Usuario from "./usuario";
+import Cliente from "./cliente.js";
+import Consulta from "./consulta.js";
+import Especialidad from "./especialidad.js";
+import GrupoFamiliar from "./grupoFamiliar.js";
+import Medico from "./medico.js";
+import Persona from "./persona.js";
+import Usuario from "./usuario.js";
 
 Usuario.hasOne(Persona);
 Persona.belongsTo(Usuario);
@@ -34,5 +33,16 @@ Persona.belongsTo(Consulta);
 Consulta.hasOne(Medico);
 Medico.belongsTo(Consulta);
 
+const iniciarModelos = null;
 
+export {
+    Cliente,
+    Consulta,
+    Especialidad,
+    GrupoFamiliar,
+    Medico,
+    Persona,
+    Usuario,
+    iniciarModelos,
+}
 

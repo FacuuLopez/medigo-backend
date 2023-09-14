@@ -1,7 +1,8 @@
 import express from "express";
-import sequelize from "./config/config";
+import sequelize from "./config/config.js";
 import cors from "cors";
-import rutas from "./rutas/rutas";
+import rutas from "./rutas/rutas.js";
+import { iniciarModelos } from "./modelos/index.js";
 
 const port = process.env.SERVER_PORT;
 const app = express();
