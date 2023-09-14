@@ -1,0 +1,33 @@
+version: "3"
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: medigo
+    networks:
+      - internal
+
+  backend:
+    image: "medigo/backend"
+    build:
+      context: .
+      dockerfile: dockerfile.backend
+    ports:
+      - "3000:3000"
+    environment:
+      - SERVER_PORT=3000
+      - DATABASE=medigo
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - DB_PORT=5432
+      - DB_DIALECT=postgresql
+      - DB_HOST=db
+      - JWT_SECRET=
+    networks:
+      - internal
+  
+networks:
+  internal:
+    name: internal
