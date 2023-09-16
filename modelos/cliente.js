@@ -1,9 +1,9 @@
 import { Model, DataTypes as DT } from "sequelize";
 
-class Cliente extends Model { }
+class cliente extends Model { }
 
-Cliente.init({
+cliente.init({
 
 });
 
-export default Cliente;
+export default cliente;

@@ -1,11 +1,11 @@
 import { Model, DataTypes as DT } from "sequelize";
 
-class Especialidad extends Model {}
+class especialidad extends Model {}
 
-Especialidad.init({
+especialidad.init({
     especialidad:{
 
     },
 });
 
-export default Especialidad
+export default especialidad

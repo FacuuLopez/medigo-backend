@@ -1,8 +1,8 @@
 import { Model, DataTypes as DT } from "sequelize";
 
-class Consulta extends Model {}
+class consulta extends Model {}
 
-Consulta.init({
+consulta.init({
     motivo:{
 
     },
@@ -26,4 +26,4 @@ Consulta.init({
     },
 });
 
-export default Consulta;
+export default consulta;

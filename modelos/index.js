@@ -1,48 +1,48 @@
-import Cliente from "./cliente.js";
-import Consulta from "./consulta.js";
-import Especialidad from "./especialidad.js";
-import GrupoFamiliar from "./grupoFamiliar.js";
-import Medico from "./medico.js";
-import Persona from "./persona.js";
-import Usuario from "./usuario.js";
+import cliente from "./cliente.js";
+import consulta from "./consulta.js";
+import especialidad from "./especialidad.js";
+import grupoFamiliar from "./grupoFamiliar.js";
+import medico from "./medico.js";
+import persona from "./persona.js";
+import usuario from "./usuario.js";
 
-Usuario.hasOne(Persona);
-Persona.belongsTo(Usuario);
+usuario.hasOne(persona);
+persona.belongsTo(usuario);
 
-Medico.hasOne(Usuario);
-Usuario.belongsTo(Medico);
+medico.hasOne(usuario);
+usuario.belongsTo(medico);
 
-Medico.belongsToMany(Especialidad, { through: 'Medico_Especialidad' });
-Especialidad.belongsToMany(Medico, { through: 'Medico_Especialidad' });
+medico.belongsToMany(especialidad, { through: 'medico_especialidad' });
+especialidad.belongsToMany(medico, { through: 'medico_especialidad' });
 
-Cliente.hasOne(Usuario);
-Usuario.belongsTo(Cliente);
+cliente.hasOne(usuario);
+usuario.belongsTo(cliente);
 
-GrupoFamiliar.hasMany(Persona);
-Persona.belongsTo(GrupoFamiliar);
+grupoFamiliar.hasMany(persona);
+persona.belongsTo(grupoFamiliar);
 
-Cliente.hasOne(GrupoFamiliar);
-GrupoFamiliar.belongsTo(Cliente);
+cliente.hasOne(grupoFamiliar);
+grupoFamiliar.belongsTo(cliente);
 
-Consulta.hasOne(Cliente);
-Cliente.belongsTo(Consulta);
+consulta.hasOne(cliente);
+cliente.belongsTo(consulta);
 
-Consulta.hasOne(Persona);
-Persona.belongsTo(Consulta);
+consulta.hasOne(persona);
+persona.belongsTo(consulta);
 
-Consulta.hasOne(Medico);
-Medico.belongsTo(Consulta);
+consulta.hasOne(medico);
+medico.belongsTo(consulta);
 
 const iniciarModelos = null;
 
 export {
-    Cliente,
-    Consulta,
-    Especialidad,
-    GrupoFamiliar,
-    Medico,
-    Persona,
-    Usuario,
+    cliente,
+    consulta,
+    especialidad,
+    grupoFamiliar,
+    medico,
+    persona,
+    usuario,
     iniciarModelos,
 }
 

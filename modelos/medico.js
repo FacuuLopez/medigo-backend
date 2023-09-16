@@ -1,8 +1,8 @@
 import { Model, DataTypes as DT } from "sequelize";
 
-class Medico extends Model {}
+class medico extends Model {}
 
-Medico.init({
+medico.init({
     nroMatricula:{
 
     },
@@ -14,4 +14,4 @@ Medico.init({
     },
 });
 
-export default Medico;
+export default medico;
