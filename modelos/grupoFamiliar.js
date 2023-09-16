@@ -1,9 +1,9 @@
 import { Model, DataTypes as DT } from "sequelize";
 
-class GrupoFamiliar extends Model {}
+class grupoFamiliar extends Model {}
 
-GrupoFamiliar.init({
+grupoFamiliar.init({
 
 });
 
-export default GrupoFamiliar;
+export default grupoFamiliar;

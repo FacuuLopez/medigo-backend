@@ -1,8 +1,8 @@
 import { Model, DataTypes as DT } from "sequelize";
 
-class Usuario extends Model {}
+class usuario extends Model {}
 
-Usuario.init({
+usuario.init({
     username:{
 
     },
@@ -26,4 +26,4 @@ Usuario.init({
     },
 });
 
-export default Usuario;
+export default usuario;
