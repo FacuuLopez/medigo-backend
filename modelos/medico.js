@@ -4,13 +4,19 @@ class medico extends Model {}
 
 medico.init({
     nroMatricula:{
-
+        type: DT.INTEGER,
+        allowNull: false,
+        unique: true,
     },
-    redioAccion:{
+    radioAccion:{
+        type: DT.DECIMAL,
+        allowNull: false,
 
     },
     precio: {
-
+        type: DT.DECIMAL,
+        allowNull: false,
+        
     },
 });
 
