@@ -4,7 +4,8 @@ class especialidad extends Model {}
 
 especialidad.init({
     especialidad:{
-
+        type: DT.STRING,
+        allowNull: false,
     },
 });
 
