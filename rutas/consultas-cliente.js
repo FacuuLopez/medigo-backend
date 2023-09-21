@@ -1,6 +1,6 @@
 import { Router } from "express";
-import consultasController from "../controladores/consultas";
-import { validarCliente } from "../validadores/clientes";
+import consultasController from "../controladores/consultas.js";
+import { validarCliente } from "../validadores/clientes.js";
 
 const consultasClientesRutas = Router();
 const consultaController = new consultasController();

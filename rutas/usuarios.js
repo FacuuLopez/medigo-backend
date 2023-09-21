@@ -1,14 +1,14 @@
 import { Router } from "express";
-import usuariosController from "../controladores/usuarios";
-import { validarUsuario } from "../validadores/usuarios";
+import usuariosController from "../controladores/usuarios.js";
+import { validarUsuario } from "../validadores/usuarios.js";
 
 const usuariosRutas = Router();
 const usuarioController = new usuariosController();
 
-usuarioRoutes.post("/login", usuarioController.login);
+usuariosRutas.post("/login", usuarioController.login);
 
 usuariosRutas.use(validarUsuario);
 
-usuarioRoutes.delete("/logout", usuarioController.logout);
+usuariosRutas.delete("/logout", usuarioController.logout);
 
 export default usuariosRutas;

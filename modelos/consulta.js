@@ -1,38 +1,43 @@
 import { Model, DataTypes as DT } from "sequelize";
+import sequelize from "../config/config.js";
 
-class consulta extends Model {}
+class consulta extends Model { }
 
 consulta.init({
-    motivo:{
+    motivo: {
         type: DT.STRING,
         allowNull: false,
 
     },
-    sintomas:{
+    sintomas: {
         type: DT.STRING,
         allowNull: false,
-        
+
     },
-    precio:{
+    precio: {
         type: DT.DECIMAL,
         allowNull: false,
     },
-    tiempoLLegada:{
+    tiempoLLegada: {
         type: DT.DECIMAL,
         allowNull: false,
     },
-    estado:{
-        type: DT.TINYINT,
+    estado: {
+        type: DT.STRING,
         allowNull: false,
     },
-    valoracionMedico:{
-        type: DT.TINYINT,
+    valoracionMedico: {
+        type: DT.SMALLINT,
         allowNull: true,
     },
-    valoracionCliente:{
-        type: DT.TINYINT,
+    valoracionCliente: {
+        type: DT.SMALLINT,
         allowNull: true,
     },
-});
+},
+    {
+        sequelize
+    }
+);
 
 export default consulta;

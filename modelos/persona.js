@@ -1,24 +1,29 @@
 import { Model, DataTypes as DT } from "sequelize";
+import sequelize from "../config/config.js";
 
-class persona extends Model {}
+class persona extends Model { }
 
 persona.init({
-    nombre:{
+    nombre: {
         type: DT.STRING,
         allowNull: false,
     },
-    apellido:{        
+    apellido: {
         type: DT.STRING,
         allowNull: false,
     },
-    sexo:{        
+    sexo: {
         type: DT.CHAR,
         allowNull: false,
-        }, 
-    fechaNacimiento:{
+    },
+    fechaNacimiento: {
         type: DT.DATE,
         allowNull: false,
     }
-});
+},
+    {
+        sequelize
+    }
+);
 
 export default persona;

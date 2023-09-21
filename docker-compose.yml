@@ -3,12 +3,11 @@ services:
   db:
     image: postgres:latest
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: medigo
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=medigo
     networks:
       - internal
-
   backend:
     image: "medigo/backend"
     build:
@@ -22,12 +21,11 @@ services:
       - DB_USERNAME=admin
       - DB_PASSWORD=admin
       - DB_PORT=5432
-      - DB_DIALECT=postgresql
+      - DB_DIALECT=postgres
       - DB_HOST=db
-      - JWT_SECRET=
+      - JWT_SECRET=dsfjirjksdbfk348426378fshkjfsd76328253erew54
     networks:
-      - internal
-  
+      - internal  
 networks:
   internal:
     name: internal

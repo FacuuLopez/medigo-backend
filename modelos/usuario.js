@@ -1,28 +1,29 @@
 import { Model, DataTypes as DT } from "sequelize";
+import sequelize from "../config/config.js";
 
-class usuario extends Model {}
+class usuario extends Model { }
 
 usuario.init({
-    username:{
+    username: {
         type: DT.STRING,
         allowNull: false,
         unique: true,
         validate: {
-            isEmail:true
+            isEmail: true
         }
     },
-    password:{
+    password: {
         type: DT.STRING,
         allowNull: false,
     },
-    dni:{
+    dni: {
         type: DT.STRING,
         allowNull: false,
-        validate:{
-            len:[7]
+        validate: {
+            len: [9]
         }
     },
-    telefono:{
+    telefono: {
         type: DT.STRING,
         allowNull: false,
     },
@@ -30,14 +31,18 @@ usuario.init({
         type: DT.STRING,
         allowNull: false,
     },
-    valoracion:{
-        type: DT.TINYINT,
+    valoracion: {
+        type: DT.SMALLINT,
         allowNull: true,
     },
-    estado:{
-        type: DT.TINYINT,
+    estado: {
+        type: DT.SMALLINT,
         allowNull: false,
     },
-});
+},
+    {
+        sequelize
+    }
+);
 
 export default usuario;

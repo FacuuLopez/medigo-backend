@@ -1,6 +1,6 @@
 import { Router } from "express";
-import medicosController from "../controladores/medicos";
-import consultasMedicosRutas from "./consultas-medicos";
+import medicosController from "../controladores/medicos.js";
+import consultasMedicosRutas from "./consultas-medicos.js";
 
 const medicosRutas = Router();
 const medicoController = new medicosController();

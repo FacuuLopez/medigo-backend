@@ -1,11 +1,11 @@
 import { Router } from "express";
-import consultasController from "../controladores/consultas";
-import { validarMedico } from "../validadores/medicos";
+import consultasController from "../controladores/consultas.js";
+import { validarMedico } from "../validadores/medicos.js";
 
 const consultasMedicosRutas = Router();
 const consultaController = new consultasController();
 
-consultasRutas.use(validarMedico);
+consultasMedicosRutas.use(validarMedico);
 
 consultasMedicosRutas.post('aceptar-consulta', consultaController.aceptarConsulta);
 consultasMedicosRutas.delete('cancelar-consulta', consultaController.cancelarConsulta);

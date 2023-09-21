@@ -1,14 +1,15 @@
 import { Model, DataTypes as DT } from "sequelize";
+import sequelize from "../config/config.js";
 
-class medico extends Model {}
+class medico extends Model { }
 
 medico.init({
-    nroMatricula:{
-        type: DT.INTEGER,
+    nroMatricula: {
+        type: DT.STRING,
         allowNull: false,
         unique: true,
     },
-    radioAccion:{
+    radioAccion: {
         type: DT.DECIMAL,
         allowNull: false,
 
@@ -16,8 +17,12 @@ medico.init({
     precio: {
         type: DT.DECIMAL,
         allowNull: false,
-        
+
     },
-});
+},
+    {
+        sequelize
+    }
+);
 
 export default medico;
