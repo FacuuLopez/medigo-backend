@@ -2,8 +2,9 @@ import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenCliente } fro
 
 export const validarCliente = async (req, res, next) => {
     try {
+        await validarTokenUsuario(req, res, next);
         const { tokenUsuario } = req.cookies;
-        const clienteVerificado = await verificarTokenCliente(tokenUsuario);
+        const usuarioVerificado = await verificarTokenCliente(tokenUsuario);
         if (!usuarioVerificado) throw new Error("no se encontro ningún usuario logueado");
         req.usuario = usuarioVerificado;
         //actualiza el token si es necesario

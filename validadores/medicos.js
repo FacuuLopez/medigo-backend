@@ -2,8 +2,9 @@ import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenMedico } from
 
 export const validarMedico = async (req, res, next) => {
     try {
+        await validarTokenUsuario(req, res, next);
         const { tokenUsuario } = req.cookies;
-        const medicoVerificado = await verificarTokenMedico(tokenUsuario);
+        const usuarioVerificado = await verificarTokenMedico(tokenUsuario);
         if (!usuarioVerificado) throw new Error("no se encontro ningún usuario logueado");
         req.usuario = usuarioVerificado;
         //actualiza el token si es necesario
