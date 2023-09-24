@@ -7,8 +7,4 @@ const usuarioController = new usuariosController();
 
 usuariosRutas.post("/login", usuarioController.login);
 
-usuariosRutas.use(validarUsuario);
-
-usuariosRutas.delete("/logout", usuarioController.logout);
-
 export default usuariosRutas;
