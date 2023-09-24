@@ -6,32 +6,35 @@ import medico from "./medico.js";
 import persona from "./persona.js";
 import usuario from "./usuario.js";
 
-usuario.hasOne(persona);
-persona.belongsTo(usuario);
+usuario.hasOne(persona, { foreingKey: "personaId"});
+persona.belongsTo(usuario, { foreingKey: "personaId"});
 
-medico.hasOne(usuario);
-usuario.belongsTo(medico);
+medico.hasOne(usuario, { foreingKey: "usuarioId"});
+usuario.belongsTo(medico, { foreingKey: "usuarioId"});
 
 medico.belongsToMany(especialidad, { through: 'medico_especialidad' });
 especialidad.belongsToMany(medico, { through: 'medico_especialidad' });
 
-cliente.hasOne(usuario);
-usuario.belongsTo(cliente);
+cliente.hasOne(usuario, { foreingKey: "usuarioId"});
+usuario.belongsTo(cliente, { foreingKey: "usuarioId"});
 
-grupoFamiliar.hasMany(persona);
-persona.belongsTo(grupoFamiliar);
+grupoFamiliar.hasMany(persona, { foreingKey: "personaId"});
+persona.belongsTo(grupoFamiliar, { foreingKey: "personaId"});
 
-cliente.hasOne(grupoFamiliar);
-grupoFamiliar.belongsTo(cliente);
+cliente.hasOne(grupoFamiliar, { foreingKey: "grupoFamiliarId"});
+grupoFamiliar.belongsTo(cliente, { foreingKey: "grupoFamiliarId"});
 
-consulta.hasOne(cliente);
-cliente.belongsTo(consulta);
+grupoFamiliar.hasOne(cliente, { foreingKey: "clienteId"});
+cliente.belongsTo(grupoFamiliar, { foreingKey: "clienteId"});
 
-consulta.hasOne(persona);
-persona.belongsTo(consulta);
+consulta.hasOne(cliente, { foreingKey: "clienteId"});
+cliente.belongsTo(consulta, { foreingKey: "clienteId"});
 
-consulta.hasOne(medico);
-medico.belongsTo(consulta);
+consulta.hasOne(persona, { foreingKey: "personaId"});
+persona.belongsTo(consulta, { foreingKey: "personaId"});
+
+consulta.hasOne(medico, { foreingKey: "medicoId"});
+medico.belongsTo(consulta, { foreingKey: "medicoId"});
 
 const iniciarModelos = null;
 
