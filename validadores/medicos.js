@@ -1,5 +1,5 @@
-import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenMedico } from "../../utils/jwt.js"
-
+import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenMedico } from "../utils/jwt.js"
+ 
 export const validarMedico = async (req, res, next) => {
     try {
         await validarTokenUsuario(req, res, next);
