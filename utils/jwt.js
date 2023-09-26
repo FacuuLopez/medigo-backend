@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { usuario as modeloUsuario } from "../medigo-backend/modelos/index.js";
+import { usuario as modeloUsuario } from "../modelos/index.js"
 
 const secret = process.env.JWT_SECRET;
 
