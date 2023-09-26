@@ -1,4 +1,4 @@
-import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenCliente } from "../../utils/jwt.js"
+import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenCliente } from "../utils/jwt.js"
 
 export const validarCliente = async (req, res, next) => {
     try {
