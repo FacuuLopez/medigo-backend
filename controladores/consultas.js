@@ -1,3 +1,6 @@
+import { consulta } from "../modelos/index.js"
+
+
 class consultasController {
     constructor() {}
 
