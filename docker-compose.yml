@@ -2,17 +2,25 @@ version: "3"
 services:
   db:
     image: postgres:latest
+    user: postgres
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=medigo
     networks:
       - internal
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "medigo", "-U", "admin" ]
+      interval: 5s
+      timeout: 5s
   backend:
     image: "medigo/backend"
     build:
       context: .
       dockerfile: dockerfile.backend
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
     environment:
