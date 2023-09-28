@@ -1,7 +1,12 @@
+import bcrypt from 'bcrypt';
 import { Model, DataTypes as DT } from "sequelize";
 import sequelize from "../config/config.js";
 
-class usuario extends Model { }
+class usuario extends Model { 
+    async validatePassword(password, hash) {
+        return await bcrypt.compare(password, hash);
+    }
+}
 
 usuario.init({
     username: {
@@ -16,6 +21,9 @@ usuario.init({
         type: DT.STRING,
         allowNull: false,
     },
+    salt: {
+        type: DT.STRING,
+      },
     dni: {
         type: DT.STRING,
         allowNull: false,
@@ -41,8 +49,19 @@ usuario.init({
     },
 },
     {
-        sequelize
+        sequelize,
+        modelName: "usuario",
+        timestamps: false,
     }
 );
+
+
+usuario.beforeCreate(async (usuario) => {
+    const salt = await bcrypt.genSalt();
+    usuario.salt = salt;
+  
+    const hash = await bcrypt.hash(usuario.password, salt);
+    usuario.password = hash;
+  });
 
 export default usuario;

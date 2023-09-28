@@ -5,6 +5,7 @@ import { validarTokenUsuario } from "../validadores/usuarios.js";
 const usuariosRutas = Router();
 const usuarioController = new usuariosController();
 
+usuariosRutas.post("/register", usuarioController.createUsuario);
 usuariosRutas.post("/login", usuarioController.login);
 
 export default usuariosRutas;
