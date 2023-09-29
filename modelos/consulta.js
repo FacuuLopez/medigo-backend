@@ -34,6 +34,10 @@ consulta.init({
         type: DT.SMALLINT,
         allowNull: true,
     },
+    direccion: {
+        type: DT.JSON,
+        allowNull: false,
+    }
 },
     {
         sequelize

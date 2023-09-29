@@ -28,7 +28,7 @@ usuario.init({
         allowNull: false,
     },
     direccion: {
-        type: DT.STRING,
+        type: DT.JSON,
         allowNull: false,
     },
     valoracion: {
@@ -36,7 +36,7 @@ usuario.init({
         allowNull: true,
     },
     estado: {
-        type: DT.SMALLINT,
+        type: DT.STRING,
         allowNull: false,
     },
 },
