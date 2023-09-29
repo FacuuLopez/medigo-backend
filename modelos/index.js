@@ -24,9 +24,6 @@ persona.belongsTo(grupoFamiliar, { foreingKey: "personaId"});
 cliente.hasOne(grupoFamiliar, { foreingKey: "grupoFamiliarId"});
 grupoFamiliar.belongsTo(cliente, { foreingKey: "grupoFamiliarId"});
 
-grupoFamiliar.hasOne(cliente, { foreingKey: "clienteId"});
-cliente.belongsTo(grupoFamiliar, { foreingKey: "clienteId"});
-
 consulta.hasOne(cliente, { foreingKey: "clienteId"});
 cliente.belongsTo(consulta, { foreingKey: "clienteId"});
 

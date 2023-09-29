@@ -18,8 +18,9 @@ consulta.init({
         type: DT.DECIMAL,
         allowNull: true,
     },
+    // lo cambie a date porque si no hay que actualizarlo permanentemente
     tiempoLLegada: {
-        type: DT.DECIMAL,
+        type: DT.DATE,
         allowNull: true,
     },
     estado: {

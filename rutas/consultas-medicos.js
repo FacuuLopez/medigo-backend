@@ -10,6 +10,6 @@ consultasMedicosRutas.use(validarMedico);
 consultasMedicosRutas.post('aceptar-consulta', consultaController.aceptarConsulta);
 consultasMedicosRutas.delete('cancelar-consulta', consultaController.cancelarConsulta);
 consultasMedicosRutas.put('finalizar-consulta', consultaController.finalizarConsulta);
-consultasMedicosRutas.put('valorar-consulta', consultaController.valorarConsulta);
+consultasMedicosRutas.put('valorar-consulta', consultaController.valorarConsultaMedico);
 
 export default consultasMedicosRutas;

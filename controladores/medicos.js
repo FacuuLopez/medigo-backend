@@ -2,49 +2,58 @@ import { medico } from "../modelos/index.js";
 
 
 class medicosController {
-    constructor() {}
+    constructor() { }
 
-    createMedico = async (req, res, next) =>{
-        try{
+    createMedico = async (req, res, next) => {
+        try {
 
-            const { nroMatricula, radioAccion, precio, usuarioId } = req.body;
-            const result = await medico.create({ nroMatricula, radioAccion, precio, usuarioId  });
-            if(!result){
-                const error = new Error("No se pudo crear al medico");
-                error.status = 400;
-                throw error;
-            } 
+            const { nroMatricula, radioAccion, precio, username, password, nombre, apellido, sexo, fechaNacimiento } = req.body;
+            //crea la persona
+            const nuevaPersona = await persona.create({
+                nombre,
+                apellido,
+                sexo,
+                fechaNacimiento,
+            });
+            //crea el usuario
+            const nuevoUsuario = await usuario.create({
+                username,
+                password,
+                personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
+            });
+            //crea el medico    
+            const nuevoMedico = await medico.create({ nroMatricula, radioAccion, precio, usuarioId: nuevoUsuario.dataValues.id });
             res.status(200).send({
-                success: true, 
-                message:"Medico creado con exito",
+                success: true,
+                message: "Medico creado con exito",
                 result,
             });
-        
-        } catch(error) {
+
+        } catch (error) {
             res.status(200).send({
                 success: false,
                 message: error.message,
             });
         }
     }
-    
-    getMedicoPorId = async (req, res, next) =>{
+
+    getMedicoPorId = async (req, res, next) => {
         try {
-            const {id} = req.params;
+            const { id } = req.params;
             const result = await medico.findAll({
-                attributes: [ "id", "nroMatricula", "radioAccion", "precio", "usuarioId"],
+                attributes: ["id", "nroMatricula", "radioAccion", "precio", "usuarioId"],
                 where: {
                     id
                 }
             });
-            if(result.length===0) throw new Error("No hay usuario");
+            if (result.length === 0) throw new Error("No hay usuario");
             // console.log("result:", result[0].dataValues);
             res.status(200).send({
                 success: true,
                 message: "Medico encontrado",
                 result: result[0].dataValues,
             });
-        } catch(error) {
+        } catch (error) {
             res.status(200).send({
                 success: false,
                 message: error.message,
@@ -52,12 +61,12 @@ class medicosController {
         }
     }
 
-    updateMedicoPorId = async (req, res, next) =>{
+    updateMedicoPorId = async (req, res, next) => {
         try {
             const { id } = req.params;
-            const { nroMatricula, radioAccion, precio, usuarioId } = req.body;
+            const { nroMatricula, radioAccion, precio } = req.body;
             const result = await medico.update(
-                { nroMatricula, radioAccion, precio, usuarioId },
+                { nroMatricula, radioAccion, precio },
                 {
                     where: {
                         id,
@@ -65,13 +74,13 @@ class medicosController {
                 }
             );
             console.log("Result:", result);
-            if(result[0]===0) throw new Error("No se pudo modificar el medico");
+            if (result[0] === 0) throw new Error("No se pudo modificar el medico");
             // if(!result) throw new Error ("No se pudo crear el producto")
             res.status(200).send({
                 success: true,
                 message: "Medico modificado exitosamente",
             });
-        } catch(error) {
+        } catch (error) {
             res.status(400).send({
                 success: false,
                 message: error.message,
@@ -79,19 +88,21 @@ class medicosController {
         }
     }
 
-    deleteMedicoPorId = async (req, res, next) =>{
+    deleteMedicoPorId = async (req, res, next) => {
         try {
-            const {id}= req.params;
-            await medico.destroy({where:{
-              id
-            }});
-        
+            const { id } = req.params;
+            await medico.destroy({
+                where: {
+                    id
+                }
+            });
+
             // Enviar una respuesta exitosa
             res.status(200).json({ message: 'Medico eliminado exitosamente' });
-          } catch (error) {
+        } catch (error) {
             // Manejar cualquier error que ocurra durante el proceso
             res.status(500).json({ error: 'Error al eliminar el medico' });
-          }
+        }
     }
 
     registro = async (req, res, next) => {
