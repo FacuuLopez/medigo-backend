@@ -19,6 +19,13 @@ medico.init({
         allowNull: false,
 
     },
+    ubicacion: {
+        type: DT.JSON,
+        allowNull: true,
+        validate:{
+            
+        }
+    }
 },
     {
         sequelize

@@ -16,11 +16,11 @@ consulta.init({
     },
     precio: {
         type: DT.DECIMAL,
-        allowNull: false,
+        allowNull: true,
     },
     tiempoLLegada: {
         type: DT.DECIMAL,
-        allowNull: false,
+        allowNull: true,
     },
     estado: {
         type: DT.STRING,
