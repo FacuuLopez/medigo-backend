@@ -12,9 +12,6 @@ persona.belongsTo(usuario, { foreignKey: "personaId"});
 medico.hasOne(usuario, { foreignKey: "usuarioId"});
 usuario.belongsTo(medico, { foreignKey: "usuarioId"});
 
-medico.belongsToMany(especialidad, { through: 'medico_especialidad' });
-especialidad.belongsToMany(medico, { through: 'medico_especialidad' });
-
 cliente.hasOne(usuario, { foreignKey: "usuarioId"});
 usuario.belongsTo(cliente, { foreignKey: "usuarioId"});
 

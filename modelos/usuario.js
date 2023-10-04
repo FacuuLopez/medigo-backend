@@ -27,9 +27,6 @@ usuario.init({
     dni: {
         type: DT.STRING,
         allowNull: false,
-        validate: {
-            len: [9]
-        }
     },
     telefono: {
         type: DT.STRING,
@@ -38,10 +35,6 @@ usuario.init({
     direccion: {
         type: DT.JSON,
         allowNull: false,
-    },
-    valoracion: {
-        type: DT.SMALLINT,
-        allowNull: true,
     },
     estado: {
         type: DT.STRING,
