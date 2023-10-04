@@ -30,6 +30,7 @@ cliente.belongsTo(grupoFamiliar, { foreignKey: "clienteId"});
 consulta.hasOne(cliente, { foreignKey: "clienteId"});
 cliente.belongsTo(consulta, { foreignKey: "clienteId"});
 
+
 consulta.hasOne(persona, { foreignKey: "personaId"});
 persona.belongsTo(consulta, { foreignKey: "personaId"});
 

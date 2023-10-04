@@ -16,11 +16,12 @@ consulta.init({
     },
     precio: {
         type: DT.DECIMAL,
-        allowNull: false,
+        allowNull: true,
     },
+    // lo cambie a date porque si no hay que actualizarlo permanentemente
     tiempoLLegada: {
-        type: DT.DECIMAL,
-        allowNull: false,
+        type: DT.DATE,
+        allowNull: true,
     },
     estado: {
         type: DT.STRING,
@@ -34,6 +35,10 @@ consulta.init({
         type: DT.SMALLINT,
         allowNull: true,
     },
+    direccion: {
+        type: DT.JSON,
+        allowNull: false,
+    }
 },
     {
         sequelize
