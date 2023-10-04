@@ -7,5 +7,6 @@ const usuarioController = new usuariosController();
 
 usuariosRutas.post("/register", usuarioController.createUsuario);
 usuariosRutas.post("/login", usuarioController.login);
+usuariosRutas.get("/:id", usuarioController.getUsuarioPorId);
 
 export default usuariosRutas;

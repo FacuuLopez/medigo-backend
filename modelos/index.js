@@ -6,32 +6,36 @@ import medico from "./medico.js";
 import persona from "./persona.js";
 import usuario from "./usuario.js";
 
-usuario.hasOne(persona, { foreingKey: "personaId"});
-persona.belongsTo(usuario, { foreingKey: "personaId"});
+usuario.hasOne(persona, { foreignKey: "personaId"});
+persona.belongsTo(usuario, { foreignKey: "personaId"});
 
-medico.hasOne(usuario, { foreingKey: "usuarioId"});
-usuario.belongsTo(medico, { foreingKey: "usuarioId"});
+medico.hasOne(usuario, { foreignKey: "usuarioId"});
+usuario.belongsTo(medico, { foreignKey: "usuarioId"});
 
 medico.belongsToMany(especialidad, { through: 'medico_especialidad' });
 especialidad.belongsToMany(medico, { through: 'medico_especialidad' });
 
-cliente.hasOne(usuario, { foreingKey: "usuarioId"});
-usuario.belongsTo(cliente, { foreingKey: "usuarioId"});
+cliente.hasOne(usuario, { foreignKey: "usuarioId"});
+usuario.belongsTo(cliente, { foreignKey: "usuarioId"});
 
-grupoFamiliar.hasMany(persona, { foreingKey: "personaId"});
-persona.belongsTo(grupoFamiliar, { foreingKey: "personaId"});
+grupoFamiliar.hasMany(persona, { foreignKey: "personaId"});
+persona.belongsTo(grupoFamiliar, { foreignKey: "personaId"});
 
-cliente.hasOne(grupoFamiliar, { foreingKey: "grupoFamiliarId"});
-grupoFamiliar.belongsTo(cliente, { foreingKey: "grupoFamiliarId"});
+cliente.hasOne(grupoFamiliar, { foreignKey: "grupoFamiliarId"});
+grupoFamiliar.belongsTo(cliente, { foreignKey: "grupoFamiliarId"});
 
-consulta.hasOne(cliente, { foreingKey: "clienteId"});
-cliente.belongsTo(consulta, { foreingKey: "clienteId"});
+grupoFamiliar.hasOne(cliente, { foreignKey: "clienteId"});
+cliente.belongsTo(grupoFamiliar, { foreignKey: "clienteId"});
 
-consulta.hasOne(persona, { foreingKey: "personaId"});
-persona.belongsTo(consulta, { foreingKey: "personaId"});
+consulta.hasOne(cliente, { foreignKey: "clienteId"});
+cliente.belongsTo(consulta, { foreignKey: "clienteId"});
 
-consulta.hasOne(medico, { foreingKey: "medicoId"});
-medico.belongsTo(consulta, { foreingKey: "medicoId"});
+
+consulta.hasOne(persona, { foreignKey: "personaId"});
+persona.belongsTo(consulta, { foreignKey: "personaId"});
+
+consulta.hasOne(medico, { foreignKey: "medicoId"});
+medico.belongsTo(consulta, { foreignKey: "medicoId"});
 
 const iniciarModelos = null;
 

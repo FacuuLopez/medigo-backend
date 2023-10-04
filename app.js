@@ -2,7 +2,9 @@ import express from "express";
 import sequelize from "./config/config.js";
 import cors from "cors";
 import rutas from "./rutas/rutas.js";
-import { iniciarModelos } from "./modelos/index.js";
+import { usuario, iniciarModelos } from "./modelos/index.js";
+
+import userSeed from "./seed/userSeed.js";
 
 const port = process.env.SERVER_PORT;
 const app = express();
@@ -19,7 +21,13 @@ try {
         app.listen(port, () => {
             console.log(`server escuchando en puerto ${port}`);
           });
-    });
+    })
+    .then(() => {
+        return Promise.all([
+            usuario.count().then(count => count === 0 && userSeed()),
+        ]);
+      });
+    
 } catch (error) {
     console.error(error)
 }

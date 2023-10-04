@@ -1,7 +1,5 @@
 import { usuario } from "../modelos/index.js";
 
-
-
 class usuariosController {
     constructor() {}
 
