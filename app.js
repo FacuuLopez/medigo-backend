@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import sequelize from "./config/config.js";
 import cors from "cors";
@@ -15,19 +16,20 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rutas);
 
 try {
-    await sequelize.authenticate();
-    console.log("Coneccion establecida");
-    await sequelize.sync({ force: true }).then(async () => {
-        app.listen(port, () => {
-            console.log(`server escuchando en puerto ${port}`);
-          });
+  await sequelize.authenticate();
+  console.log("Coneccion establecida");
+  await sequelize
+    .sync({ force: true })
+    .then(async () => {
+      app.listen(port, () => {
+        console.log(`server escuchando en puerto ${port}`);
+      });
     })
     .then(() => {
-        return Promise.all([
-            usuario.count().then(count => count === 0 && userSeed()),
-        ]);
-      });
-    
+      return Promise.all([
+        usuario.count().then((count) => count === 0 && userSeed()),
+      ]);
+    });
 } catch (error) {
-    console.error(error)
+  console.error(error);
 }
