@@ -1,4 +1,4 @@
-import { body } from "express-validator/src";
+import { body } from "express-validator";
 
 
 
