@@ -25,11 +25,8 @@ usuario.init({
         type: DT.STRING,
       },
     dni: {
-        type: DT.STRING,
+        type: DT.STRING(9),
         allowNull: false,
-        validate: {
-            len: [9]
-        }
     },
     telefono: {
         type: DT.STRING,

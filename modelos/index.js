@@ -12,9 +12,6 @@ persona.belongsTo(usuario, { foreignKey: "personaId"});
 medico.hasOne(usuario, { foreignKey: "usuarioId"});
 usuario.belongsTo(medico, { foreignKey: "usuarioId"});
 
-medico.belongsToMany(especialidad, { through: 'medico_especialidad' });
-especialidad.belongsToMany(medico, { through: 'medico_especialidad' });
-
 cliente.hasOne(usuario, { foreignKey: "usuarioId"});
 usuario.belongsTo(cliente, { foreignKey: "usuarioId"});
 
@@ -24,18 +21,15 @@ persona.belongsTo(grupoFamiliar, { foreignKey: "personaId"});
 cliente.hasOne(grupoFamiliar, { foreignKey: "grupoFamiliarId"});
 grupoFamiliar.belongsTo(cliente, { foreignKey: "grupoFamiliarId"});
 
-grupoFamiliar.hasOne(cliente, { foreignKey: "clienteId"});
-cliente.belongsTo(grupoFamiliar, { foreignKey: "clienteId"});
+cliente.hasMany(consulta);
+consulta.belongsTo(cliente);
 
-consulta.hasOne(cliente, { foreignKey: "clienteId"});
-cliente.belongsTo(consulta, { foreignKey: "clienteId"});
+medico.hasMany(consulta);
+consulta.belongsTo(medico);
 
+persona.hasMany(consulta);
+consulta.belongsTo(persona);
 
-consulta.hasOne(persona, { foreignKey: "personaId"});
-persona.belongsTo(consulta, { foreignKey: "personaId"});
-
-consulta.hasOne(medico, { foreignKey: "medicoId"});
-medico.belongsTo(consulta, { foreignKey: "medicoId"});
 
 const iniciarModelos = null;
 
