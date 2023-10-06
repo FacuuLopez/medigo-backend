@@ -1,25 +1,24 @@
 import cliente from "./cliente.js";
 import consulta from "./consulta.js";
-import especialidad from "./especialidad.js";
 import grupoFamiliar from "./grupoFamiliar.js";
 import medico from "./medico.js";
 import persona from "./persona.js";
 import usuario from "./usuario.js";
 
-usuario.hasOne(persona, { foreignKey: "personaId"});
-persona.belongsTo(usuario, { foreignKey: "personaId"});
+persona.hasOne(usuario);
+usuario.belongsTo(persona);
 
-medico.hasOne(usuario, { foreignKey: "usuarioId"});
-usuario.belongsTo(medico, { foreignKey: "usuarioId"});
+usuario.hasOne(medico);
+medico.belongsTo(usuario);
 
-cliente.hasOne(usuario, { foreignKey: "usuarioId"});
-usuario.belongsTo(cliente, { foreignKey: "usuarioId"});
+usuario.hasOne(cliente);
+cliente.belongsTo(usuario);
 
-grupoFamiliar.hasMany(persona, { foreignKey: "personaId"});
-persona.belongsTo(grupoFamiliar, { foreignKey: "personaId"});
+grupoFamiliar.hasMany(persona);
+persona.belongsTo(grupoFamiliar);
 
-cliente.hasOne(grupoFamiliar, { foreignKey: "grupoFamiliarId"});
-grupoFamiliar.belongsTo(cliente, { foreignKey: "grupoFamiliarId"});
+grupoFamiliar.hasOne(cliente);
+cliente.belongsTo(grupoFamiliar);
 
 cliente.hasMany(consulta);
 consulta.belongsTo(cliente);
@@ -36,7 +35,6 @@ const iniciarModelos = null;
 export {
     cliente,
     consulta,
-    especialidad,
     grupoFamiliar,
     medico,
     persona,

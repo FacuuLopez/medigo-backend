@@ -13,6 +13,7 @@ export const crearNuevoCliente = async ({
     const nuevoGrupoFamiliar = await grupoFamiliar.create({
         // Propiedades del Grupo Familiar
     });
+    console.log(nuevoGrupoFamiliar.dataValues);
     // A continuación, crea una Persona asociada al Grupo Familiar
     const nuevaPersona = await persona.create({
         nombre,
@@ -23,7 +24,7 @@ export const crearNuevoCliente = async ({
     });
     //agrega los familiares
     if (familiares.length > 0) {
-        for (const familiar of familiares) await persona.create(familiar);
+        for (const familiar of familiares) await persona.create({...familiar,  grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id});
     }
     //crea el usuario
     const nuevoUsuario = await usuario.create({
