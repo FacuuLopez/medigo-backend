@@ -1,8 +1,9 @@
 import { consulta, medico } from "../modelos/index.js"
+import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
 
 
 class consultasController {
-    constructor() { }
+    constructor() {}
 
     solicitarConsulta = async (req, res, next) => {
         // se debe de validar en los validadores que no exista otra
@@ -15,7 +16,7 @@ class consultasController {
                 sintomas,
                 motivo,
                 direccion,
-                estado: "iniciada",
+                estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico
             });
             const medicosDisponibles = null // hay que retornar el array de medicos disponibles
             res
@@ -43,7 +44,7 @@ class consultasController {
                 medicoId,
                 precio,
                 tiempoLLegada,
-                estado: "seleccionando"
+                estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico
             }).dataValues;
             res
                 .status(200)
@@ -60,7 +61,7 @@ class consultasController {
             const { consultaId } = req.body;
             const consultaAceptada = await consulta.findByPk(consultaId);
             await consultaAceptada.update({
-                estado: 'en curso'
+                estado: ENUM_CONSULTA_ESTADOS.enCurso
             });
             res
                 .status(200)
@@ -93,7 +94,7 @@ class consultasController {
             const { consultaId } = req.body;
             const consultaFinalizada = await consulta.findByPk(consultaId);
             await consultaFinalizada.update({
-                estado: 'finalizada'
+                estado: ENUM_CONSULTA_ESTADOS.finalizada
             });
             res
                 .status(200)

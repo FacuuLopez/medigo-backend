@@ -1,5 +1,6 @@
 import { crearNuevoCliente } from '../controladores/clientes.js';
 import { crearMedico } from '../controladores/medicos.js';
+import { ENUM_MEDICO_ESPECIALIDADES, ENUM_USUARIO_ESTADOS } from '../utils/enums.js';
 
 const crearClientes = async () => {
   try {
@@ -20,7 +21,7 @@ const crearClientes = async () => {
       const dni = `223335${i}`;
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
-      const estado = 'desconectado';
+      const estado = ENUM_USUARIO_ESTADOS.desconenctado;
       const sexo = i % 2 === 0 ? 'femenino' : 'masculino';
       const fechaNacimiento = new Date('1990-10-03T12:00:00');
 
@@ -56,12 +57,12 @@ const crearMedicos = async() => {
       const dni = `223335${i}`;
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
-      const estado = 'desconectado';
+      const estado = ENUM_USUARIO_ESTADOS.desconenctado;
       const sexo = i % 2 === 0 ? 'femenino' : 'masculino';
       const fechaNacimiento = new Date('1990-10-03T12:00:00');
       const precio = 3000;
       const radioAccion = 1.0;
-      const especialidad = i % 2 ? 'clinico' : 'pediatra';
+      const especialidad = i % 2 ? ENUM_MEDICO_ESPECIALIDADES.clinico : ENUM_MEDICO_ESPECIALIDADES.pediatra;
       const nroMatricula = `AA123${i}`;
       const medico = {
         username,
