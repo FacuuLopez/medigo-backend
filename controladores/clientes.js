@@ -1,4 +1,48 @@
-import { cliente, grupoFamiliar } from "../modelos/index.js";
+import { cliente, grupoFamiliar, usuario, persona } from "../modelos/index.js";
+import bcrypt from 'bcrypt';
+
+export const crearNuevoCliente = async ({
+    nombre, apellido, sexo, fechaNacimiento,
+    username, password, dni, telefono, direccion, estado,
+    grupoFamiliar: familiares
+}) => {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // Primero, crea un Grupo Familiar
+    const nuevoGrupoFamiliar = await grupoFamiliar.create({
+        // Propiedades del Grupo Familiar
+    });
+    console.log(nuevoGrupoFamiliar.dataValues);
+    // A continuación, crea una Persona asociada al Grupo Familiar
+    const nuevaPersona = await persona.create({
+        nombre,
+        apellido,
+        sexo,
+        fechaNacimiento,
+        grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id, // Asociar la persona al Grupo Familiar recién creado
+    });
+    //agrega los familiares
+    if (familiares.length > 0) {
+        for (const familiar of familiares) await persona.create({...familiar,  grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id});
+    }
+    //crea el usuario
+    const nuevoUsuario = await usuario.create({
+        username,
+        password: hashedPassword,
+        salt,
+        dni,
+        telefono,
+        direccion,
+        estado,
+        personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
+    });
+    //crear nuevo cliente
+    const nuevoCliente = await cliente.create({
+        usuarioId: nuevoUsuario.dataValues.id,
+        grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id,
+    });
+}
 
 class clientesController {
     constructor() { }
@@ -6,30 +50,10 @@ class clientesController {
     createCliente = async (req, res, next) => {
         try {
 
-            const { username, password, nombre, apellido, sexo, fechaNacimiento } = req.body;
-            // Primero, crea un Grupo Familiar
-            const nuevoGrupoFamiliar = await grupoFamiliar.create({
-                // Propiedades del Grupo Familiar
-            });
-            // A continuación, crea una Persona asociada al Grupo Familiar
-            const nuevaPersona = await persona.create({
-                nombre,
-                apellido,
-                sexo,
-                fechaNacimiento,
-                grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id, // Asociar la persona al Grupo Familiar recién creado
-            });
-            //crea el usuario
-            const nuevoUsuario = await usuario.create({
-                username,
-                password,
-                personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
-            });
-            //crear nuevo cliente
-            const nuevoCliente = await cliente.create({
-                usuarioId: nuevoUsuario.dataValues.id,
-                grupoFamiliarId: grupoFamiliar.dataValues.id,
-            });
+            const { username, password, nombre, apellido, sexo, fechaNacimiento, dni } = req.body;
+            const estado = 'desconectado';
+            await this.crearNuevoCliente({ username, password, nombre, apellido, sexo, fechaNacimiento, dni, estado });
+
             res.status(200).send({
                 success: true,
                 message: "Cliente creado con exito",

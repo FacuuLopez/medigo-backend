@@ -25,6 +25,9 @@ medico.init({
         validate:{
             
         }
+    },
+    especialidad:{
+        type: DT.STRING
     }
 },
     {

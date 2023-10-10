@@ -1,5 +1,44 @@
-import { medico } from "../modelos/index.js";
+import { medico, persona, usuario } from "../modelos/index.js";
+import bcrypt from 'bcrypt';
 
+export const crearMedico = async ({
+    nroMatricula, radioAccion, precio, especialidad,
+    nombre, apellido, sexo, fechaNacimiento,
+    username, password, dni, telefono, direccion, estado,
+}) => {
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const nuevaPersona = await persona.create({
+        nombre,
+        apellido,
+        sexo,
+        fechaNacimiento,
+    });
+
+    //crea el usuario
+    const nuevoUsuario = await usuario.create({
+        username,
+        password: hashedPassword,
+        salt,
+        dni,
+        telefono,
+        direccion,
+        estado,
+        personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
+    });
+
+    const nuevoMedico = await medico.create({
+        usuarioId: nuevoUsuario.dataValues.id,
+        nroMatricula,
+        precio,
+        radioAccion,
+        especialidad
+    });
+
+    return nuevoMedico
+}
 
 class medicosController {
     constructor() { }
@@ -7,22 +46,18 @@ class medicosController {
     createMedico = async (req, res, next) => {
         try {
 
-            const { nroMatricula, radioAccion, precio, username, password, nombre, apellido, sexo, fechaNacimiento } = req.body;
-            //crea la persona
-            const nuevaPersona = await persona.create({
-                nombre,
-                apellido,
-                sexo,
-                fechaNacimiento,
-            });
-            //crea el usuario
-            const nuevoUsuario = await usuario.create({
-                username,
-                password,
-                personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
-            });
-            //crea el medico    
-            const nuevoMedico = await medico.create({ nroMatricula, radioAccion, precio, usuarioId: nuevoUsuario.dataValues.id });
+            const {
+                nroMatricula, radioAccion, precio, especialidad,
+                nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion, estado,
+            } = req.body;
+
+            await crearMedico({
+                nroMatricula, radioAccion, precio, especialidad,
+                nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion, estado,
+            })
+            
             res.status(200).send({
                 success: true,
                 message: "Medico creado con exito",

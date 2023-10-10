@@ -1,48 +1,40 @@
 import cliente from "./cliente.js";
 import consulta from "./consulta.js";
-import especialidad from "./especialidad.js";
 import grupoFamiliar from "./grupoFamiliar.js";
 import medico from "./medico.js";
 import persona from "./persona.js";
 import usuario from "./usuario.js";
 
-usuario.hasOne(persona, { foreignKey: "personaId"});
-persona.belongsTo(usuario, { foreignKey: "personaId"});
+persona.hasOne(usuario);
+usuario.belongsTo(persona);
 
-medico.hasOne(usuario, { foreignKey: "usuarioId"});
-usuario.belongsTo(medico, { foreignKey: "usuarioId"});
+usuario.hasOne(medico);
+medico.belongsTo(usuario);
 
-medico.belongsToMany(especialidad, { through: 'medico_especialidad' });
-especialidad.belongsToMany(medico, { through: 'medico_especialidad' });
+usuario.hasOne(cliente);
+cliente.belongsTo(usuario);
 
-cliente.hasOne(usuario, { foreignKey: "usuarioId"});
-usuario.belongsTo(cliente, { foreignKey: "usuarioId"});
+grupoFamiliar.hasMany(persona);
+persona.belongsTo(grupoFamiliar);
 
-grupoFamiliar.hasMany(persona, { foreignKey: "personaId"});
-persona.belongsTo(grupoFamiliar, { foreignKey: "personaId"});
+grupoFamiliar.hasOne(cliente);
+cliente.belongsTo(grupoFamiliar);
 
-cliente.hasOne(grupoFamiliar, { foreignKey: "grupoFamiliarId"});
-grupoFamiliar.belongsTo(cliente, { foreignKey: "grupoFamiliarId"});
+cliente.hasMany(consulta);
+consulta.belongsTo(cliente);
 
-grupoFamiliar.hasOne(cliente, { foreignKey: "clienteId"});
-cliente.belongsTo(grupoFamiliar, { foreignKey: "clienteId"});
+medico.hasMany(consulta);
+consulta.belongsTo(medico);
 
-consulta.hasOne(cliente, { foreignKey: "clienteId"});
-cliente.belongsTo(consulta, { foreignKey: "clienteId"});
+persona.hasMany(consulta);
+consulta.belongsTo(persona);
 
-
-consulta.hasOne(persona, { foreignKey: "personaId"});
-persona.belongsTo(consulta, { foreignKey: "personaId"});
-
-consulta.hasOne(medico, { foreignKey: "medicoId"});
-medico.belongsTo(consulta, { foreignKey: "medicoId"});
 
 const iniciarModelos = null;
 
 export {
     cliente,
     consulta,
-    especialidad,
     grupoFamiliar,
     medico,
     persona,
