@@ -6,9 +6,6 @@ export const crearNuevoCliente = async ({
     username, password, dni, telefono, direccion, estado,
     grupoFamiliar: familiares
 }) => {
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
     // Primero, crea un Grupo Familiar
     const nuevoGrupoFamiliar = await grupoFamiliar.create({
         // Propiedades del Grupo Familiar
@@ -29,8 +26,7 @@ export const crearNuevoCliente = async ({
     //crea el usuario
     const nuevoUsuario = await usuario.create({
         username,
-        password: hashedPassword,
-        salt,
+        password,
         dni,
         telefono,
         direccion,

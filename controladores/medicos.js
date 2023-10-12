@@ -6,9 +6,6 @@ export const crearMedico = async ({
     nombre, apellido, sexo, fechaNacimiento,
     username, password, dni, telefono, direccion, estado,
 }) => {
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
 
     const nuevaPersona = await persona.create({
         nombre,
@@ -20,8 +17,7 @@ export const crearMedico = async ({
     //crea el usuario
     const nuevoUsuario = await usuario.create({
         username,
-        password: hashedPassword,
-        salt,
+        password,
         dni,
         telefono,
         direccion,
