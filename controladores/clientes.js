@@ -1,5 +1,6 @@
 import { cliente, grupoFamiliar, usuario, persona } from "../modelos/index.js";
 import bcrypt from 'bcrypt';
+import { ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
 
 export const crearNuevoCliente = async ({
     nombre, apellido, sexo, fechaNacimiento,
@@ -52,7 +53,7 @@ class clientesController {
                 username, password, dni, telefono, direccion,
                 grupoFamiliar 
             } = req.body;
-            const estado = 'desconectado';
+            const estado = ENUM_USUARIO_ESTADOS.desconenctado;
             await crearNuevoCliente({ nombre, apellido, sexo, fechaNacimiento,
                 username, password, dni, telefono, direccion, estado,
                 grupoFamiliar});
