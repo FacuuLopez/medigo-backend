@@ -21,9 +21,6 @@ usuario.init({
         type: DT.STRING,
         allowNull: false,
     },
-    salt: {
-        type: DT.STRING,
-      },
     dni: {
         type: DT.STRING(9),
         allowNull: false,
@@ -55,8 +52,7 @@ usuario.init({
 
 usuario.beforeCreate(async (usuario) => {
     const salt = await bcrypt.genSalt();
-    usuario.salt = salt;
-  
+    console.log(usuario.password)
     const hash = await bcrypt.hash(usuario.password, salt);
     usuario.password = hash;
   });
