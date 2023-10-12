@@ -7,6 +7,6 @@ const medicoController = new medicosController();
 
 medicosRutas.use('consultas', consultasMedicosRutas)
 
-medicosRutas.post('/registro', medicoController.registro);
+medicosRutas.post('/registro', medicoController.createMedico);
 
 export default medicosRutas;
