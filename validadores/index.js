@@ -7,9 +7,10 @@ export const middlewareValidar = async (req, res, next, esquema) => {
         if (!errors.isEmpty()) {
           console.error('array errors', errors.array());
           const mapaErrores = errors.array().map(error => error.msg);
-          throw new Error(mapaErrores);
+          next(new Error(mapaErrores)) ;
         }
+        next()
     } catch (error) {
-        throw error
+         next(error)
     }
 }

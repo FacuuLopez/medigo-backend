@@ -1,5 +1,7 @@
 import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenMedico } from "../utils/jwt.js"
+import { medicoSchema } from "./esquemas/medicos.js";
  
+
 export const validarMedico = async (req, res, next) => {
     try {
         await validarTokenUsuario(req, res, next);
@@ -17,4 +19,22 @@ export const validarMedico = async (req, res, next) => {
             .status(401)
             .send({ success: false, result: 'no se pudo verificar al medico' });
     }
+}
+
+export const validarMatricula = async (req, res, next) => {
+    const esquema = { nroMatricula: medicoSchema.nroMatricula  }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarRadioAccion = async (req, res, next) => {
+    const esquema = { radioAccion: medicoSchema.radioAccion  }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarPrecio = async (req, res, next) => {
+    const esquema = { precio: medicoSchema.precio  }
+    await middlewareValidar(req, res, next, esquema);
+    return
 }
