@@ -38,6 +38,8 @@ export const crearNuevoCliente = async ({
         usuarioId: nuevoUsuario.dataValues.id,
         grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id,
     });
+
+    return
 }
 
 class clientesController {
@@ -46,17 +48,21 @@ class clientesController {
     createCliente = async (req, res, next) => {
         try {
 
-            const { username, password, nombre, apellido, sexo, fechaNacimiento, dni } = req.body;
+            const { nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion,
+                grupoFamiliar 
+            } = req.body;
             const estado = 'desconectado';
-            await this.crearNuevoCliente({ username, password, nombre, apellido, sexo, fechaNacimiento, dni, estado });
+            await crearNuevoCliente({ nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion, estado,
+                grupoFamiliar});
 
             res.status(200).send({
                 success: true,
                 message: "Cliente creado con exito",
-                result,
             });
         } catch (error) {
-            res.status(200).send({
+            res.status(500).send({
                 success: false,
                 message: error.message,
             });

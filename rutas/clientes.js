@@ -7,6 +7,6 @@ const clienteController = new clientesController();
 
 clientesRutas.use('consultas', consultasClientesRutas)
 
-clientesRutas.post('/registro', clienteController.registro);
+clientesRutas.post('/registro', clienteController.createCliente);
 
 export default clientesRutas;

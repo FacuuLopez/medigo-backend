@@ -41,7 +41,6 @@ class medicosController {
 
     createMedico = async (req, res, next) => {
         try {
-
             const {
                 nroMatricula, radioAccion, precio, especialidad,
                 nombre, apellido, sexo, fechaNacimiento,
