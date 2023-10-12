@@ -1,5 +1,6 @@
 import { medico, persona, usuario } from "../modelos/index.js";
 import bcrypt from 'bcrypt';
+import { ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
 
 export const crearMedico = async ({
     nroMatricula, radioAccion, precio, especialidad,
@@ -44,9 +45,9 @@ class medicosController {
             const {
                 nroMatricula, radioAccion, precio, especialidad,
                 nombre, apellido, sexo, fechaNacimiento,
-                username, password, dni, telefono, direccion, estado,
+                username, password, dni, telefono, direccion,
             } = req.body;
-
+            const estado = ENUM_USUARIO_ESTADOS.desconenctado
             await crearMedico({
                 nroMatricula, radioAccion, precio, especialidad,
                 nombre, apellido, sexo, fechaNacimiento,
@@ -56,7 +57,6 @@ class medicosController {
             res.status(200).send({
                 success: true,
                 message: "Medico creado con exito",
-                result,
             });
 
         } catch (error) {
