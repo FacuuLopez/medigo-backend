@@ -21,15 +21,9 @@ usuario.init({
         type: DT.STRING,
         allowNull: false,
     },
-    salt: {
-        type: DT.STRING,
-      },
     dni: {
-        type: DT.STRING,
+        type: DT.STRING(9),
         allowNull: false,
-        validate: {
-            len: [9]
-        }
     },
     telefono: {
         type: DT.STRING,
@@ -58,8 +52,7 @@ usuario.init({
 
 usuario.beforeCreate(async (usuario) => {
     const salt = await bcrypt.genSalt();
-    usuario.salt = salt;
-  
+    console.log(usuario.password)
     const hash = await bcrypt.hash(usuario.password, salt);
     usuario.password = hash;
   });

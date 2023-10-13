@@ -1,25 +1,26 @@
 import { usuario } from "../modelos/index.js";
+import { crearTokenUsuario, enviarTokenUsuario } from "../utils/jwt.js";
 
 class usuariosController {
-    constructor() {}
+    constructor() { }
 
-    createUsuario = async (req, res, next) =>{
-        try{
+    createUsuario = async (req, res, next) => {
+        try {
 
             const { username, password, dni, telefono, direccion, valoracion, estado, personaId } = req.body;
-            const result = await usuario.create({ username, password, dni,  telefono, direccion, valoracion, estado, personaId  });
-            if(!result){
+            const result = await usuario.create({ username, password, dni, telefono, direccion, valoracion, estado, personaId });
+            if (!result) {
                 const error = new Error("No se pudo crear al usuario");
                 error.status = 400;
                 throw error;
-            } 
+            }
             res.status(200).send({
-                success: true, 
-                message:"Usuario creado con exito",
+                success: true,
+                message: "Usuario creado con exito",
                 result,
             });
-        
-        } catch(error) {
+
+        } catch (error) {
             res.status(200).send({
                 success: false,
                 message: error.message,
@@ -27,24 +28,24 @@ class usuariosController {
         }
     }
 
-    getUsuarioPorId = async (req, res, next) =>{
+    getUsuarioPorId = async (req, res, next) => {
         try {
-            const {id} = req.params;
+            const { id } = req.params;
             const result = await usuario.findAll({
-                attributes: ["id", "username", "password" , "dni", "telefono", 
-                "direccion", "valoracion", "estado"],
+                attributes: ["id", "username", "password", "dni", "telefono",
+                    "direccion", "valoracion", "estado"],
                 where: {
                     id
                 }
             });
-            if(result.length===0) throw new Error("No hay usuario");
+            if (result.length === 0) throw new Error("No hay usuario");
             // console.log("result:", result[0].dataValues);
             res.status(200).send({
                 success: true,
                 message: "Usuario encontrado",
                 result: result[0].dataValues,
             });
-        } catch(error) {
+        } catch (error) {
             res.status(200).send({
                 success: false,
                 message: error.message,
@@ -52,7 +53,7 @@ class usuariosController {
         }
     }
 
-    updateUsuarioPorId = async (req, res, next) =>{
+    updateUsuarioPorId = async (req, res, next) => {
         try {
             const { id } = req.params;
             const { username, password, dni, telefono, direccion, valoracion, estado } = req.body;
@@ -65,42 +66,65 @@ class usuariosController {
                 }
             );
             console.log("Result:", result);
-            if(result[0]===0) throw new Error("No se pudo modificar el usuario");
+            if (result[0] === 0) throw new Error("No se pudo modificar el usuario");
             // if(!result) throw new Error ("No se pudo crear el producto")
             res.status(200).send({
                 success: true,
                 message: "Usuario modificado exitosamente",
             });
-        } catch(error) {
+        } catch (error) {
             res.status(400).send({
                 success: false,
                 message: error.message,
             });
         }
-        
+
     }
 
-    deleteUsuarioPorId = async (req, res, next) =>{
+    deleteUsuarioPorId = async (req, res, next) => {
         try {
-            const {id}= req.params;
-            await usuario.destroy({where:{
-              id
-            }});
-        
+            const { id } = req.params;
+            await usuario.destroy({
+                where: {
+                    id
+                }
+            });
+
             // Enviar una respuesta exitosa
             res.status(200).json({ message: 'Usuario eliminado exitosamente' });
-          } catch (error) {
+        } catch (error) {
             // Manejar cualquier error que ocurra durante el proceso
             res.status(500).json({ error: 'Error al eliminar el usuario' });
-          }
+        }
     }
 
     login = async (req, res, next) => {
-        
+        try {
+            const { username, password } = req.body;
+            const result = await usuario.findOne({
+                where: {
+                    username,
+                }
+            });
+            console.log('el usuario', result.dataValues.password)
+            if (!result) throw new Error("Credenciales incorrectas");
+            const compare = await result.validatePassword(password, result.dataValues.password);
+            console.log('compare', compare)
+            if (!compare) throw new Error("Credenciales incorrectas");
+            const tokenUsuario = crearTokenUsuario({ username });
+            enviarTokenUsuario(tokenUsuario, res);
+            res
+                .status(200)
+                .send({ success: true, message: "Usuario logueado con exito" });
+        } catch (error) {
+            console.error(error);
+            res.status(401).send({ success: false, result: 'Credenciales incorrectas' });
+        }
+
     }
 
     logout = async (req, res, next) => {
-        
+
     }
 }
 

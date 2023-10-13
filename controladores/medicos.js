@@ -1,32 +1,62 @@
-import { medico } from "../modelos/index.js";
+import { medico, persona, usuario } from "../modelos/index.js";
+import bcrypt from 'bcrypt';
+import { ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
 
+export const crearMedico = async ({
+    nroMatricula, radioAccion, precio, especialidad,
+    nombre, apellido, sexo, fechaNacimiento,
+    username, password, dni, telefono, direccion, estado,
+}) => {
+
+    const nuevaPersona = await persona.create({
+        nombre,
+        apellido,
+        sexo,
+        fechaNacimiento,
+    });
+
+    //crea el usuario
+    const nuevoUsuario = await usuario.create({
+        username,
+        password,
+        dni,
+        telefono,
+        direccion,
+        estado,
+        personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
+    });
+
+    const nuevoMedico = await medico.create({
+        usuarioId: nuevoUsuario.dataValues.id,
+        nroMatricula,
+        precio,
+        radioAccion,
+        especialidad
+    });
+
+    return nuevoMedico
+}
 
 class medicosController {
     constructor() { }
 
     createMedico = async (req, res, next) => {
         try {
-
-            const { nroMatricula, radioAccion, precio, username, password, nombre, apellido, sexo, fechaNacimiento } = req.body;
-            //crea la persona
-            const nuevaPersona = await persona.create({
-                nombre,
-                apellido,
-                sexo,
-                fechaNacimiento,
-            });
-            //crea el usuario
-            const nuevoUsuario = await usuario.create({
-                username,
-                password,
-                personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
-            });
-            //crea el medico    
-            const nuevoMedico = await medico.create({ nroMatricula, radioAccion, precio, usuarioId: nuevoUsuario.dataValues.id });
+            const {
+                nroMatricula, radioAccion, precio, especialidad,
+                nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion,
+            } = req.body;
+            const estado = ENUM_USUARIO_ESTADOS.desconenctado
+            await crearMedico({
+                nroMatricula, radioAccion, precio, especialidad,
+                nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion, estado,
+            })
+            
             res.status(200).send({
                 success: true,
                 message: "Medico creado con exito",
-                result,
             });
 
         } catch (error) {
