@@ -29,14 +29,6 @@ consulta.belongsTo(medico);
 persona.hasMany(consulta);
 consulta.belongsTo(persona);
 
-<<<<<<< HEAD
-consulta.hasOne(persona, { foreignKey: "personaId"});
-persona.belongsTo(consulta, { foreignKey: "personaId"});
-
-consulta.hasOne(medico, { foreignKey: "medicoId"});
-medico.belongsTo(consulta, { foreignKey: "medicoId"});
-=======
->>>>>>> upstream/main
 
 const iniciarModelos = null;
 
