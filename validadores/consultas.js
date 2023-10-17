@@ -43,6 +43,7 @@ export const validarDireccion= async (req, res, next) => {
     const esquema = { direccion: consultaSchema.direccion }
     await middlewareValidar(req, res, next, esquema);
     return
+}
 
 export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
     try {
