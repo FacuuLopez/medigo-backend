@@ -16,7 +16,14 @@ export const consultaSchema = [
         .optional()
         .isDecimal({ decimal_digits: "2" })
         .withMessage("El precio debe ser un número decimal válido"),
-
+        // Utiliza la función `custom` para realizar la validación personalizada
+    body('especialidad').custom((value) => {
+        if (Object.values(ENUM_MEDICO_ESPECIALIDADES).includes(value)) {
+        return true; // El valor pertenece al enum
+        } else {
+        throw new Error('Especialidad no válida');
+        }
+    }),
     body("tiempoLLegada")
         .optional()
         .isDate()

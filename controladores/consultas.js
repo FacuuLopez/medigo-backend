@@ -6,19 +6,19 @@ class consultasController {
     constructor() { }
 
     solicitarConsulta = async (req, res, next) => {
-        // se debe de validar en los validadores que no exista otra
-        // consulta para ese usuario con estado "iniciada"
+        // se valida en los validadores/consulta que no exista otra consulta para ese cliente con estado "en curso"
         try {
             const { id: clienteId } = req.cliente
-            const { sintomas, motivo, direccion } = req.body;
+            const { sintomas, motivo, direccion, especialidad } = req.body;
             await consulta.create({
                 clienteId,
                 sintomas,
                 motivo,
                 direccion,
-                estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico
+                estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+                especialidad,
             });
-            const medicosDisponibles = null // hay que retornar el array de medicos disponibles
+            const medicosDisponibles = await obtenerMedicosDisponiblesPorEspecialidadYRadio(especialidad, direccion) // hay que retornar el array de medicos disponibles
             res
                 .status(200)
                 .send("solicitando profesional")

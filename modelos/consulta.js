@@ -7,7 +7,6 @@ consulta.init({
     motivo: {
         type: DT.STRING,
         allowNull: false,
-
     },
     sintomas: {
         type: DT.STRING,
@@ -26,6 +25,10 @@ consulta.init({
     estado: {
         type: DT.STRING,
         allowNull: false,
+    },
+    especialidad: {
+        type: DT.STRING,
+        allowNull:false,
     },
     valoracionMedico: {
         type: DT.SMALLINT,
