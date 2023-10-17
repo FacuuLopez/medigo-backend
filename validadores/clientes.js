@@ -1,15 +1,16 @@
-import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenCliente } from "../utils/jwt.js"
+import { cliente as modeloCliente } from "../modelos/index.js";
 
 export const validarCliente = async (req, res, next) => {
     try {
-        await validarTokenUsuario(req, res, next);
-        const { tokenUsuario } = req.cookies;
-        const usuarioVerificado = await verificarTokenCliente(tokenUsuario);
-        if (!usuarioVerificado) throw new Error("no se encontro ningún usuario logueado");
-        req.usuario = usuarioVerificado;
-        //actualiza el token si es necesario
-        const tokenActualizado = actualizarTokenUsuario(tokenUsuario);
-        enviarTokenUsuario(tokenActualizado, res);
+        const {id: usuarioId} = req.usuario
+        const cliente = await modeloCliente.findOne({
+            where: {
+                usuarioId: usuarioId
+            }
+        })
+        if(!cliente) throw new Error('no existe un cliente para ese usuario');
+        console.log(cliente.dataValues);
+        req.cliente = cliente.dataValues
         next();
     } catch (error) {
         console.error(error);
@@ -18,3 +19,4 @@ export const validarCliente = async (req, res, next) => {
             .send({ success: false, result: 'no se pudo verificar al cliente' });
     }
 }
+

@@ -4,12 +4,13 @@ import sequelize from "./config/config.js";
 import cors from "cors";
 import rutas from "./rutas/rutas.js";
 import { usuario, iniciarModelos } from "./modelos/index.js";
-
 import userSeed from "./seed/userSeed.js";
+import cookieParser from "cookie-parser";
 
 const port = process.env.SERVER_PORT;
 const app = express();
 
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
