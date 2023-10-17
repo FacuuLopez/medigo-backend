@@ -43,7 +43,7 @@ export const validarDireccion= async (req, res, next) => {
     const esquema = { direccion: consultaSchema.direccion }
     await middlewareValidar(req, res, next, esquema);
     return
-
+}
 export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
     try {
         const { id: clienteId } = req.cliente;
@@ -61,4 +61,5 @@ export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
     } catch (error) {
         console.error(error)
     }
+
 }

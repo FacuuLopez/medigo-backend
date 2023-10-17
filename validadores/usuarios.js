@@ -1,6 +1,6 @@
 import { middlewareValidar } from "./index.js";
 import { tokenUsuarioSchema, usuarioSchema } from "./esquemas/usuarios.js";
-import { tokenUsuarioSchema } from "./esquemas/usuarios.js";
+//simport { tokenUsuarioSchema } from "./esquemas/usuarios.js";
 import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenUsuario} from "../utils/jwt.js";
 
 export const validarTokenUsuario = async (req, res, next) => {
