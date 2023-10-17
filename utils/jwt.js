@@ -23,7 +23,7 @@ export const crearTokenUsuario = (usuario) => {
 
 const verificarToken = token => jwt.verify(token, secret);
 
-const verificarTokenUsuario = async (tokenUsuario) => {
+export const verificarTokenUsuario = async (tokenUsuario) => {
     try {
         const { payload } = verificarToken(tokenUsuario);
         const { usuario } = payload;
@@ -34,8 +34,6 @@ const verificarTokenUsuario = async (tokenUsuario) => {
                 where: {
                     username
                 },
-                attributes:
-                    ['id', 'username'],
             }
         );
         if (!usuarioEncontrado) throw new Error('No se encontro al usuario');
@@ -46,9 +44,6 @@ const verificarTokenUsuario = async (tokenUsuario) => {
         throw error;
     }
 }
-
-export const verificarTokenMedico = async tokenUsuario => await verificarTokenUsuario(tokenUsuario);
-export const verificarTokenCliente = async tokenUsuario => await verificarTokenUsuario(tokenUsuario);
 
 export const enviarTokenUsuario = (token, res) => res.cookie('tokenUsuario', token, { httpOnly: true, secure: true });
 
