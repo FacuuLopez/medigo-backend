@@ -18,7 +18,7 @@ class consultasController {
                 estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
                 especialidad,
             });
-            const medicosDisponibles = await obtenerMedicosDisponiblesPorEspecialidadYRadio(especialidad, direccion) // hay que retornar el array de medicos disponibles
+            const medicosDisponibles = null // hay que retornar el array de medicos disponibles
             res
                 .status(200)
                 .send("solicitando profesional")
