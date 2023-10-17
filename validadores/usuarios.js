@@ -22,6 +22,6 @@ export const validarUsuario = async (req, res, next) => {
         console.error(error);
         res
             .status(401)
-            .send({ success: false, result: 'no se pudo verificar al cliente' });
+            .send({ success: false, result: 'no se pudo verificar al usuario' });
     }
 }
