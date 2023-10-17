@@ -1,14 +1,12 @@
 import { cliente, grupoFamiliar, usuario, persona } from "../modelos/index.js";
 import bcrypt from 'bcrypt';
+import { ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
 
 export const crearNuevoCliente = async ({
     nombre, apellido, sexo, fechaNacimiento,
     username, password, dni, telefono, direccion, estado,
     grupoFamiliar: familiares
 }) => {
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
     // Primero, crea un Grupo Familiar
     const nuevoGrupoFamiliar = await grupoFamiliar.create({
         // Propiedades del Grupo Familiar
@@ -29,8 +27,7 @@ export const crearNuevoCliente = async ({
     //crea el usuario
     const nuevoUsuario = await usuario.create({
         username,
-        password: hashedPassword,
-        salt,
+        password,
         dni,
         telefono,
         direccion,
@@ -42,6 +39,8 @@ export const crearNuevoCliente = async ({
         usuarioId: nuevoUsuario.dataValues.id,
         grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id,
     });
+
+    return
 }
 
 class clientesController {
@@ -50,17 +49,21 @@ class clientesController {
     createCliente = async (req, res, next) => {
         try {
 
-            const { username, password, nombre, apellido, sexo, fechaNacimiento, dni } = req.body;
-            const estado = 'desconectado';
-            await this.crearNuevoCliente({ username, password, nombre, apellido, sexo, fechaNacimiento, dni, estado });
+            const { nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion,
+                grupoFamiliar 
+            } = req.body;
+            const estado = ENUM_USUARIO_ESTADOS.desconenctado;
+            await crearNuevoCliente({ nombre, apellido, sexo, fechaNacimiento,
+                username, password, dni, telefono, direccion, estado,
+                grupoFamiliar});
 
             res.status(200).send({
                 success: true,
                 message: "Cliente creado con exito",
-                result,
             });
         } catch (error) {
-            res.status(200).send({
+            res.status(500).send({
                 success: false,
                 message: error.message,
             });

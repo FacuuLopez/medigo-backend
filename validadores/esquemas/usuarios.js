@@ -1,4 +1,3 @@
-
 export const usuarioSchema = {
   username: {
     in: ['body'],
@@ -61,8 +60,6 @@ export const usuarioSchema = {
     },
   },
   };
-
-
   
   export const tokenUsuarioSchema = {
       in: ['cookies'],
