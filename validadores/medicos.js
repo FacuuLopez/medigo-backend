@@ -1,4 +1,5 @@
 import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenMedico } from "../utils/jwt.js"
+import { validarTokenUsuario } from "./usuarios.js";
  
 export const validarMedico = async (req, res, next) => {
     try {

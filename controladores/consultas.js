@@ -3,16 +3,16 @@ import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
 
 
 class consultasController {
-    constructor() {}
+    constructor() { }
 
     solicitarConsulta = async (req, res, next) => {
         // se debe de validar en los validadores que no exista otra
         // consulta para ese usuario con estado "iniciada"
         try {
-            const { id: usuarioId } = req.usuario;
-            const { sintomas, motivo } = req.body;
+            const { id: clienteId } = req.cliente
+            const { sintomas, motivo, direccion } = req.body;
             await consulta.create({
-                usuarioId,
+                clienteId,
                 sintomas,
                 motivo,
                 direccion,
@@ -22,7 +22,7 @@ class consultasController {
             res
                 .status(200)
                 .send("solicitando profesional")
-                .json({ medicosDisponibles });
+            // .json({ medicosDisponibles });
         } catch (error) {
             res.status(500).send({
                 success: false,
@@ -33,8 +33,8 @@ class consultasController {
 
     seleccionarMedicoConsulta = async (req, res, next) => {
         try {
-            const { consultaId } = req.consulta // hay que agregarla cuando se valida
-            //tiene que ser la unica consulta para ese clienteId con estado 'iniciada'
+            const { id: consultaId } = req.consulta // hay que agregarla cuando se valida
+            //tiene que ser la unica consulta para ese clienteId con estado 'seleccionando medico'
             const { medicoId } = req.body;
             const medicoElegido = await medico.findByPk(medicoId);
             const { precio } = medicoElegido.dataValues;
@@ -45,12 +45,12 @@ class consultasController {
                 precio,
                 tiempoLLegada,
                 estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico
-            }).dataValues;
+            });
             res
                 .status(200)
-                .send("consulta iniciada con exito")
-                .json({ consulta: consultaIniciada });
+                .json({message:"consulta iniciada con exito", consulta: consultaIniciada.dataValues });
         } catch (error) {
+            console.error(error)
             res.status(500).send("no se pudo iniciar la consutla");
         }
 

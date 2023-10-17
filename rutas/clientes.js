@@ -5,7 +5,7 @@ import consultasClientesRutas from "./consultas-cliente.js";
 const clientesRutas = Router();
 const clienteController = new clientesController();
 
-clientesRutas.use('consultas', consultasClientesRutas)
+clientesRutas.use('/consultas', consultasClientesRutas)
 
 clientesRutas.post('/registro', clienteController.createCliente);
 
