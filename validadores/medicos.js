@@ -1,3 +1,5 @@
+import { medico as modeloMedico} from "../modelos/index.js";
+
 export const validarMedico = async (req, res, next) => {
     try {
         const {id: usuarioId} = req.usuario

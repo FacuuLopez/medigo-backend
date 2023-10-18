@@ -59,14 +59,16 @@ export const usuarioSchema = {
       errorMessage: 'La dirección es obligatoria.',
     },
   },
-  };
-  
-  export const tokenUsuarioSchema = {
-      in: ['cookies'],
-      exists: {
-          errorMessage: 'El token JWT no está presente en la cookie.',
-      },
-      isJWT: {
-          errorMessage: 'El token JWT no tiene un formato válido.',
-      },
-  };
+};
+
+export const tokenUsuarioSchema = {
+  tokenUsuario: {
+    in: ['cookies'],
+    exists: {
+      errorMessage: 'El token JWT no está presente en la cookie.',
+    },
+    isJWT: {
+      errorMessage: 'El token JWT no tiene un formato válido.',
+    },
+  }
+};
