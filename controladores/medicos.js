@@ -53,7 +53,7 @@ class medicosController {
                 nombre, apellido, sexo, fechaNacimiento,
                 username, password, dni, telefono, direccion, estado,
             })
-            
+
             res.status(200).send({
                 success: true,
                 message: "Medico creado con exito",
@@ -93,24 +93,100 @@ class medicosController {
 
     updateMedicoPorId = async (req, res, next) => {
         try {
-            const { id } = req.params;
-            const { nroMatricula, radioAccion, precio } = req.body;
-            const result = await medico.update(
-                { nroMatricula, radioAccion, precio },
+            const { id, usuarioId } = req.medico;
+            const {
+                nroMatricula, radioAccion, precio, especialidad,
+                sexo, direccion, telefono,
+                username, password
+            } = req.body;
+
+            const datosMedico = {}
+            const datosUsuario = {}
+            const datosPersona = {}
+
+            if (nroMatricula !== undefined && nroMatricula !== null) {
+                datosMedico.nroMatricula = nroMatricula;
+            }
+
+            if (radioAccion !== undefined && radioAccion !== null) {
+                datosMedico.radioAccion = radioAccion;
+            }
+
+            if (precio !== undefined && precio !== null) {
+                datosMedico.precio = precio;
+            }
+
+            if (especialidad !== undefined && especialidad !== null) {
+                datosMedico.especialidad = especialidad;
+            }
+
+            if (sexo !== undefined && sexo !== null) {
+                datosPersona.sexo = sexo;
+            }
+
+            if (direccion !== undefined && direccion !== null) {
+                datosUsuario.direccion = direccion;
+            }
+
+            if (telefono !== undefined && telefono !== null) {
+                datosUsuario.telefono = telefono;
+            }
+
+            if (username !== undefined && username !== null) {
+                datosUsuario.username = username;
+            }
+
+            if (password !== undefined && password !== null) {
+                datosUsuario.password = password;
+            }
+
+            const medicoEncontrado = await medico.findByPk(id, {
+                include: [
+                    {
+                        model: usuario,
+                        include: [persona] // Si también quieres incluir el modelo Persona dentro del modelo Usuario
+                    }
+                ]
+            });
+
+            const {personaId} = medicoEncontrado.usuario.dataValues
+
+            const resultUsuario = await usuario.update(
                 {
-                    where: {
-                        id,
-                    },
+                    ...datosUsuario
+                },
+                {
+                    where: { id: usuarioId }
+                }
+            )
+            const resultPersona = await persona.update(
+                {
+                    ...datosPersona
+                },
+                {
+                    where: { id: personaId }
                 }
             );
-            console.log("Result:", result);
-            if (result[0] === 0) throw new Error("No se pudo modificar el medico");
-            // if(!result) throw new Error ("No se pudo crear el producto")
+                console.log(resultUsuario.dataValues);
+            const resultMedico = await medico.update(
+                {
+                    ...datosMedico
+                },
+                {
+                    where: {
+                        
+                    },
+                },
+
+            );
+            if (resultMedico[0] === 0 && resultUsuario[0] === 0 && resultPersona[0] === 0) throw new Error("No se pudo modificar el medico");
+            // if(!result) throw new Error ("No se pudieron actualizar los datos")
             res.status(200).send({
                 success: true,
                 message: "Medico modificado exitosamente",
             });
         } catch (error) {
+            console.error(error)
             res.status(400).send({
                 success: false,
                 message: error.message,
