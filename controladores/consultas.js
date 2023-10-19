@@ -109,11 +109,12 @@ class consultasController {
     valorarConsultaCliente = async (req, res, next) => {
         const { consultaId } = req.consulta // hay que agregarla cuando se valida
         //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
-        const { valoracion } = req.body
+        const { valoracion, comentario } = req.body
         try {
             const consultaValorada = await consulta.findByPk(consultaId);
             await consultaValorada.update({
-                valoracionCliente: valoracion
+                valoracionCliente: valoracion,
+                comentarioDelCliente: comentario
             });
             res
                 .status(200)
@@ -127,12 +128,13 @@ class consultasController {
 
     valorarConsultaMedico = async (req, res, next) => {
         const { consultaId } = req.consulta // hay que agregarla cuando se valida
-        //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
-        const { valoracion } = req.body
+        //tiene que ser la unica consulta para ese clienteId con estado 'calificando'
+        const { valoracion, comentario } = req.body
         try {
             const consultaValorada = await consulta.findByPk(consultaId);
             await consultaValorada.update({
-                valoracionMedico: valoracion
+                valoracionMedico: valoracion,
+                comentarioDelMedico: comentario
             });
             res
                 .status(200)
