@@ -22,7 +22,7 @@ export const crearNuevoCliente = async ({
     });
     //agrega los familiares
     if (familiares.length > 0) {
-        for (const familiar of familiares) await persona.create({...familiar,  grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id});
+        for (const familiar of familiares) await persona.create({ ...familiar, grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id });
     }
     //crea el usuario
     const nuevoUsuario = await usuario.create({
@@ -51,12 +51,14 @@ class clientesController {
 
             const { nombre, apellido, sexo, fechaNacimiento,
                 username, password, dni, telefono, direccion,
-                grupoFamiliar 
+                grupoFamiliar
             } = req.body;
             const estado = ENUM_USUARIO_ESTADOS.desconenctado;
-            await crearNuevoCliente({ nombre, apellido, sexo, fechaNacimiento,
+            await crearNuevoCliente({
+                nombre, apellido, sexo, fechaNacimiento,
                 username, password, dni, telefono, direccion, estado,
-                grupoFamiliar});
+                grupoFamiliar
+            });
 
             res.status(200).send({
                 success: true,
@@ -96,24 +98,138 @@ class clientesController {
 
     updateClientePorId = async (req, res, next) => {
         try {
-            const { id } = req.params;
-            const { usuarioId, grupoFamiliarId } = req.body;
-            const result = await cliente.update(
-                { usuarioId, grupoFamiliarId },
+            const { id, usuarioId, grupoFamiliarId } = req.cliente;
+            const {
+                grupoFamiliar: familiares,
+                username,
+                password,
+                telefono,
+                fechaNacimiento,
+                direccion,
+                sexo,
+            } = req.body;
+            const clienteEncontradoRecien = await cliente.findByPk(id, {
+                include: [
+                    {
+                        model: usuario,
+                        include: [persona]
+                    }
+                ]
+            });
+            console.log(clienteEncontradoRecien.dataValues, clienteEncontradoRecien.usuario.datavalues, clienteEncontradoRecien.usuario.persona.dataValues);
+
+            const datosUsuario = {};
+
+            if (username !== undefined && username !== null) {
+                datosUsuario.username = username;
+            }
+
+            if (password !== undefined && password !== null) {
+                datosUsuario.password = password;
+            }
+
+            if (direccion !== undefined && direccion !== null) {
+                datosUsuario.direccion = direccion;
+            }
+
+            if (telefono !== undefined && telefono !== null) {
+                datosUsuario.telefono = telefono;
+            }
+
+            const datosPersona = {};
+
+            if (sexo !== undefined && sexo !== null) {
+                datosPersona.sexo = sexo;
+            }
+
+            if (fechaNacimiento !== undefined && fechaNacimiento !== null) {
+                datosPersona.fechaNacimiento = fechaNacimiento;
+            }
+
+            const datosCliente = {};
+
+            if (familiares !== undefined && familiares !== null) {
+                datosCliente.familiares = familiares;
+            }
+
+            const clienteEncontrado = await cliente.findByPk(id, {
+                include: [
+                    {
+                        model: usuario,
+                        include: [persona] // Si también quieres incluir el modelo Persona dentro del modelo Usuario
+                    }
+                ]
+            });
+
+            const { personaId } = clienteEncontrado.usuario.dataValues;
+
+            const resultUsuario = await usuario.update(
                 {
-                    where: {
-                        id,
-                    },
+                    ...datosUsuario
+                },
+                {
+                    where: { id: usuarioId }
                 }
             );
-            console.log("Result:", result);
-            if (result[0] === 0) throw new Error("No se pudo modificar el cliente");
-            // if(!result) throw new Error ("No se pudo crear el producto")
+
+            const resultPersona = await persona.update(
+                {
+                    ...datosPersona
+                },
+                {
+                    where: { id: personaId }
+                }
+            );
+            if (familiares && familiares.length > 0) {
+                for (const familiar of familiares) {
+                    const {
+                        id,
+                        nombre,
+                        apellido,
+                        sexo,
+                        fechaNacimiento,
+                    } = familiar;
+
+                    const familiarEncontrado = await persona.findByPk(id);
+                    console.log('familiarEncontrado', familiarEncontrado.dataValues)
+                    if(grupoFamiliarId !== familiarEncontrado.dataValues.grupoFamiliarId) throw new Error('no tiene los permisos necesarios');
+                    const datosFamiliar = {};
+
+                    if (nombre !== undefined && nombre !== null) {
+                        datosFamiliar.nombre = nombre;
+                    }
+
+                    if (apellido !== undefined && apellido !== null) {
+                        datosFamiliar.apellido = apellido;
+                    }
+
+                    if (sexo !== undefined && sexo !== null) {
+                        datosFamiliar.sexo = sexo;
+                    }
+
+                    if (fechaNacimiento !== undefined && fechaNacimiento !== null) {
+                        datosFamiliar.fechaNacimiento = fechaNacimiento;
+                    }
+
+                    await persona.update(
+                        {
+                            ...datosFamiliar
+                        },
+                        {
+                            where: {
+                                id
+                            }
+                        }
+                    )
+                }
+            }
+
             res.status(200).send({
                 success: true,
                 message: "Cliente modificado exitosamente",
             });
         } catch (error) {
+            console.error(error);
             res.status(400).send({
                 success: false,
                 message: error.message,
