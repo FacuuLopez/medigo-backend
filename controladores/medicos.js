@@ -96,7 +96,7 @@ class medicosController {
             const { id, usuarioId } = req.medico;
             const {
                 nroMatricula, radioAccion, precio, especialidad,
-                sexo, direccion, telefono,
+                sexo, direccion, telefono, fechaNacimiento,
                 username, password
             } = req.body;
 
@@ -130,6 +130,10 @@ class medicosController {
 
             if (telefono !== undefined && telefono !== null) {
                 datosUsuario.telefono = telefono;
+            }
+
+            if (fechaNacimiento !== undefined && fechaNacimiento !== null) {
+                datosPersona.fechaNacimiento = fechaNacimiento;
             }
 
             if (username !== undefined && username !== null) {
