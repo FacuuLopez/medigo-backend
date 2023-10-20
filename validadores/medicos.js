@@ -9,6 +9,7 @@ export const validarMedico = async (req, res, next) => {
             }
         })
         if(!medico) throw new Error('no existe un medico para ese usuario');
+        req.medico = medico.dataValues
         next();
     } catch (error) {
         console.error(error);
