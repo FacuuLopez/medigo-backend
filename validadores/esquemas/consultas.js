@@ -18,6 +18,12 @@ export const consultaSchema= {
             errorMessage: 'Los síntomas son obligatorios.',
         },
     },
+    especialidad: {
+        in: ['body'],
+        optional: { nullable: false }
+        .isIn({ options: [ENUM_MEDICO_ESPECIALIDADES] })
+        .withMessage('La especialidad del médico no es válida.'),
+    },
     precio: {
         in: ['body'],
         optional: {

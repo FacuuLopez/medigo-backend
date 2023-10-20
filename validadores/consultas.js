@@ -44,7 +44,6 @@ export const validarDireccion= async (req, res, next) => {
     await middlewareValidar(req, res, next, esquema);
     return
 }
-
 export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
     try {
         const { id: clienteId } = req.cliente;
@@ -55,8 +54,10 @@ export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
         req.consulta = consulta.dataValues;
         next();
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        res.status(500).json({ error: 'Error interno del servidor.' });
     }
+
 }
 
 export const validarValorarConsultaCliente = async (req, res, next) => {
@@ -98,3 +99,5 @@ const _encontrarConsultaMedico = async (medicoId, estado) => {
         }
     });
 }
+
+
