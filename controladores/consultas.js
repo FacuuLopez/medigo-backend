@@ -1,4 +1,4 @@
-import { consulta, medico } from "../modelos/index.js"
+import { consulta, medico, persona, usuario } from "../modelos/index.js"
 import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
 
 
@@ -157,6 +157,83 @@ class consultasController {
             res
                 .status(500)
                 .send(error.message)
+        }
+    }
+
+    historialConsultasMedico = async (req, res, next) =>{
+        try {
+            const {id} = req.medico;
+            const listaConsultas = await consulta.findAll({
+                attributes:[
+                    'precio', 'createdAt', 
+                    'valoracionCliente','direccion'],
+                include: {
+                        model: persona,
+                        attributes: [
+                            'nombre', 'apellido'
+                        ]
+                    },    
+                where:{
+                    medicoId: id
+                }
+            });
+
+            if (listaConsultas.length === 0) throw new Error("No hay consultas");
+            
+            res.status(200).send({
+                success: true,
+                message: "Consultas encontradas",
+                result: listaConsultas,
+            });
+
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    historialConsultasCliente = async (req, res, next) =>{
+        try {
+            const {id} = req.cliente;
+            const listaConsultas = await consulta.findAll({
+                attributes:[
+                    'precio', 'createdAt', 
+                    'valoracionMedico','direccion'],
+                include: {
+                        model:persona,
+                        attributes:['nombre', 'apellido'],
+                        model: medico,
+                        attributes:['especialidad'],
+                        include:{
+                            model: usuario,
+                            include:{
+                                model: persona,
+                                attributes:['nombre' , 'apellido'],
+                            }
+                        }
+                    },    
+                where:{
+                    clienteId: id
+                }
+            });
+
+            if (listaConsultas.length === 0) throw new Error("No hay consultas");
+            
+            res.status(200).send({
+                success: true,
+                message: "Consultas encontradas",
+                result: listaConsultas,
+            });
+
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
         }
     }
 

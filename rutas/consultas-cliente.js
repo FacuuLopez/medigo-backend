@@ -10,5 +10,5 @@ consultasClientesRutas.post('/seleccionar-medico', validarSeleccionarMedicoConsu
 consultasClientesRutas.delete('/cancelar-consulta', consultaController.cancelarConsulta);
 consultasClientesRutas.put('/finalizar-consulta', consultaController.finalizarConsulta);
 consultasClientesRutas.put('/valorar-consulta', validarValorarConsultaCliente, consultaController.valorarConsultaCliente);
-
+consultasClientesRutas.get('/historialConsultas', consultaController.historialConsultasCliente)
 export default consultasClientesRutas;
