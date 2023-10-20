@@ -99,42 +99,4 @@ const _encontrarConsultaMedico = async (medicoId, estado) => {
     });
 }
 
-export const validarValorarConsultaCliente = async (req, res, next) => {
-    try {
-        const {id: clienteId } = req.cliente;
-        const consulta = await _encontrarConsultaCliente(clienteId, ENUM_CONSULTA_ESTADOS.calificando);
-        req.consulta = consulta.dataValues;
-        next();
-    } catch (error) {
-        console.error(error)
-    }
-}
 
-export const validarValorarConsultaMedico = async (req, res, next) => {
-    try {
-        const {id: medicoId } = req.medico;
-        const consulta = await _encontrarConsultaMedico(medicoId, ENUM_CONSULTA_ESTADOS.calificando);
-        req.consulta = consulta.dataValues;
-        next();
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-const _encontrarConsultaCliente = async (clienteId, estado) => {
-    return await modeloConsulta.findOne({
-        where: {
-            clienteId,
-            estado
-        }
-    });
-}
-
-const _encontrarConsultaMedico = async (medicoId, estado) => {
-    return await modeloConsulta.findOne({
-        where: {
-            medicoId,
-            estado
-        }
-    });
-}
