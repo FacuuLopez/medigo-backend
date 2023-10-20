@@ -1,5 +1,5 @@
 import { consulta, medico, persona, usuario } from "../modelos/index.js"
-import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
+import { ENUM_CONSULTA_ESTADOS, ENUM_MEDICO_ESPECIALIDADES } from "../utils/enums.js";
 
 
 class consultasController {
@@ -228,6 +228,23 @@ class consultasController {
                 result: listaConsultas,
             });
 
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    getEspecialidades = async (req, res, next)=>{
+        try {
+            const especialidades = [ENUM_MEDICO_ESPECIALIDADES.clinico, ENUM_MEDICO_ESPECIALIDADES.pediatra]
+            res.status(200).send({
+                success: true,
+                message: "Especialidades encontradas",
+                result: especialidades,
+            });
         } catch (error) {
             console.error(error)
             res.status(400).send({

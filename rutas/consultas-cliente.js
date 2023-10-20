@@ -11,4 +11,5 @@ consultasClientesRutas.delete('/cancelar-consulta', consultaController.cancelarC
 consultasClientesRutas.put('/finalizar-consulta', consultaController.finalizarConsulta);
 consultasClientesRutas.put('/valorar-consulta', validarValorarConsultaCliente, consultaController.valorarConsultaCliente);
 consultasClientesRutas.get('/historialConsultas', consultaController.historialConsultasCliente)
+consultasClientesRutas.get('/especialidades', consultaController.getEspecialidades)
 export default consultasClientesRutas;

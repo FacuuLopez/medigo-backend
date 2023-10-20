@@ -219,6 +219,23 @@ class medicosController {
 
     }
 
+    getEspecialidades = async (req, res, next)=>{
+        try {
+            const especialidades = [ENUM_MEDICO_ESPECIALIDADES.clinico, ENUM_MEDICO_ESPECIALIDADES.pediatra]
+            res.status(200).send({
+                success: true,
+                message: "Especialidades encontradas",
+                result: especialidades,
+            });
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
 }
 
 export default medicosController;
