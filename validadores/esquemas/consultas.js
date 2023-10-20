@@ -23,8 +23,7 @@ export const consultaSchema= {
         in: ['body'],
         optional: { nullable: false },
         isIn: { options: [ENUM_MEDICO_ESPECIALIDADES],
-            errorMessage: 'La especialidad del médico no es válida.', }
-        
+            errorMessage: 'La especialidad del médico no es válida.', } 
     },
     precio: {
         in: ['body'],
