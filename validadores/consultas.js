@@ -1,31 +1,54 @@
+import { consultaSchema } from "./esquemas/consultas.js";
+import { middlewareValidar } from "./index.js";
 import { consulta as modeloConsulta } from "../modelos/index.js";
 import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
 
+export const validarMotivo = async (req, res, next) => {
+    const esquema = { motivo: consultaSchema.motivo }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarSintomas = async (req, res, next) => {
+    const esquema = { sintomas: consultaSchema.sintomas }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarPrecio = async (req, res, next) => {
+    const esquema = { precio: consultaSchema.precio }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarTiempoLlegada = async (req, res, next) => {
+    const esquema = { tiempoLLegada: consultaSchema.tiempoLLegada }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarValoracionMedico = async (req, res, next) => {
+    const esquema = { valoracionMedico: consultaSchema.valoracionMedico }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarValoracionCliente= async (req, res, next) => {
+    const esquema = { valoracionCliente: consultaSchema.valoracionCliente }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarDireccion= async (req, res, next) => {
+    const esquema = { direccion: consultaSchema.direccion }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
 export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
     try {
         const { id: clienteId } = req.cliente;
         console.log('cliente', req.cliente)
-
-        // Comprueba si ya existe una consulta en curso para este cliente
-        const consultaEnCurso = await modeloConsulta.findOne({
-            where: {
-            clienteId,
-            estado: ENUM_CONSULTA_ESTADOS.enCurso
-            }
-        });
-    
-        if (consultaEnCurso) {
-            // Si ya existe una consulta en curso, se puede manejar como un error
-            return res.status(400).json({ error: 'Ya existe una consulta en curso para este cliente.' });
-        }
-
-
-        const consulta = await modeloConsulta.findOne({
-            where: {
-                clienteId,
-                estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico
-            }
-        });
+        const consulta = await _encontrarConsultaCliente(clienteId, ENUM_CONSULTA_ESTADOS.seleccionandoMedico)
         console.log('la consulta entera',consulta);
         console.log('consulta', consulta.dataValues);
         req.consulta = consulta.dataValues;
@@ -34,4 +57,47 @@ export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
         console.error(error);
         res.status(500).json({ error: 'Error interno del servidor.' });
     }
+
 }
+
+export const validarValorarConsultaCliente = async (req, res, next) => {
+    try {
+        const {id: clienteId } = req.cliente;
+        const consulta = await _encontrarConsultaCliente(clienteId, ENUM_CONSULTA_ESTADOS.calificando);
+        req.consulta = consulta.dataValues;
+        next();
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const validarValorarConsultaMedico = async (req, res, next) => {
+    try {
+        const {id: medicoId } = req.medico;
+        const consulta = await _encontrarConsultaMedico(medicoId, ENUM_CONSULTA_ESTADOS.calificando);
+        req.consulta = consulta.dataValues;
+        next();
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const _encontrarConsultaCliente = async (clienteId, estado) => {
+    return await modeloConsulta.findOne({
+        where: {
+            clienteId,
+            estado
+        }
+    });
+}
+
+const _encontrarConsultaMedico = async (medicoId, estado) => {
+    return await modeloConsulta.findOne({
+        where: {
+            medicoId,
+            estado
+        }
+    });
+}
+
+

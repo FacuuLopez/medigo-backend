@@ -107,14 +107,22 @@ class consultasController {
     }
 
     valorarConsultaCliente = async (req, res, next) => {
-        const { consultaId } = req.consulta // hay que agregarla cuando se valida
+        const { consultaId, valoracionMedico } = req.consulta // hay que agregarla cuando se valida
         //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
-        const { valoracion } = req.body
+        const { valoracion, comentario } = req.body
         try {
             const consultaValorada = await consulta.findByPk(consultaId);
+            valoracionMedico ?
             await consultaValorada.update({
-                valoracionCliente: valoracion
+                valoracionCliente: valoracion,
+                comentarioDelCliente: comentario,
+                estado: ENUM_CONSULTA_ESTADOS.finalizada
+            }) :
+            await consultaValorada.update({
+                valoracionCliente: valoracion,
+                comentarioDelCliente: comentario,
             });
+
             res
                 .status(200)
                 .send('consulta valorada');
@@ -126,14 +134,22 @@ class consultasController {
     }
 
     valorarConsultaMedico = async (req, res, next) => {
-        const { consultaId } = req.consulta // hay que agregarla cuando se valida
-        //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
-        const { valoracion } = req.body
+        const { consultaId, valoracionCliente } = req.consulta // hay que agregarla cuando se valida
+        //tiene que ser la unica consulta para ese clienteId con estado 'calificando'
+        const { valoracion, comentario } = req.body
         try {
             const consultaValorada = await consulta.findByPk(consultaId);
+            
+            valoracionCliente ? await await consultaValorada.update({
+                valoracionMedico: valoracion,
+                comentarioDelMedico: comentario,
+                estado: ENUM_CONSULTA_ESTADOS.finalizada
+            }) :
             await consultaValorada.update({
-                valoracionMedico: valoracion
+                valoracionMedico: valoracion,
+                comentarioDelMedico: comentario,
             });
+
             res
                 .status(200)
                 .send('consulta valorada');

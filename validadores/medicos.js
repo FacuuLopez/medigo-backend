@@ -1,16 +1,15 @@
-import { actualizarTokenUsuario, enviarTokenUsuario, verificarTokenMedico } from "../utils/jwt.js"
-import { validarTokenUsuario } from "./usuarios.js";
- 
+import { medico as modeloMedico} from "../modelos/index.js";
+
 export const validarMedico = async (req, res, next) => {
     try {
-        await validarTokenUsuario(req, res, next);
-        const { tokenUsuario } = req.cookies;
-        const usuarioVerificado = await verificarTokenMedico(tokenUsuario);
-        if (!usuarioVerificado) throw new Error("no se encontro ningún usuario logueado");
-        req.usuario = usuarioVerificado;
-        //actualiza el token si es necesario
-        const tokenActualizado = actualizarTokenUsuario(tokenUsuario);
-        enviarTokenUsuario(tokenActualizado, res);
+        const {id: usuarioId} = req.usuario
+        const medico = await modeloMedico.findOne({
+            where: {
+                usuarioId: usuarioId
+            }
+        })
+        if(!medico) throw new Error('no existe un medico para ese usuario');
+        req.medico = medico.dataValues
         next();
     } catch (error) {
         console.error(error);
@@ -18,4 +17,22 @@ export const validarMedico = async (req, res, next) => {
             .status(401)
             .send({ success: false, result: 'no se pudo verificar al medico' });
     }
+}
+
+export const validarMatricula = async (req, res, next) => {
+    const esquema = { nroMatricula: medicoSchema.nroMatricula  }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarRadioAccion = async (req, res, next) => {
+    const esquema = { radioAccion: medicoSchema.radioAccion  }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarPrecio = async (req, res, next) => {
+    const esquema = { precio: medicoSchema.precio  }
+    await middlewareValidar(req, res, next, esquema);
+    return
 }

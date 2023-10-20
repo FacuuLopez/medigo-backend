@@ -34,9 +34,15 @@ consulta.init({
         type: DT.SMALLINT,
         allowNull: true,
     },
+    comentarioDelMedico:{
+        type: DT.STRING,
+    },
     valoracionCliente: {
         type: DT.SMALLINT,
         allowNull: true,
+    },
+    comentarioDelCliente: {
+        type: DT.STRING
     },
     direccion: {
         type: DT.JSON,

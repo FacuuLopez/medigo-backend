@@ -1,48 +1,77 @@
-import { body } from "express-validator"
+export const consultaSchema= {
 
-export const consultaSchema = [
-
-    body("motivo")
-        .isString()
-        .notEmpty()
-        .withMessage("El motivo es obligatorio"),
-
-    body("sintomas")
-        .isString()
-        .notEmpty()
-        .withMessage("Los síntomas son obligatorios"),
-
-    body("precio")
-        .optional()
-        .isDecimal({ decimal_digits: "2" })
-        .withMessage("El precio debe ser un número decimal válido"),
-        // Utiliza la función `custom` para realizar la validación personalizada
-    body('especialidad').custom((value) => {
-        if (Object.values(ENUM_MEDICO_ESPECIALIDADES).includes(value)) {
-        return true; // El valor pertenece al enum
-        } else {
-        throw new Error('Especialidad no válida');
-        }
-    }),
-    body("tiempoLLegada")
-        .optional()
-        .isDate()
-        .withMessage("El tiempo de llegada debe estar en formato DATE"),
-
-    body("valoracionMedico")
-        .optional()
-        .isInt({ min: 0, max: 5 })
-        .withMessage("La valoración del médico debe ser un número entero entre 0 y 5"),
-
-    body("valoracionCliente")
-        .optional()
-        .isInt({ min: 0, max: 5 })
-        .withMessage("La valoración del cliente debe ser un número entero entre 0 y 5"),
-
-    body("direccion")
-        .isJSON()
-        .notEmpty()
-        .withMessage("La dirección es obligatoria y debe ser un JSON")
-];
-
-
+    motivo: {
+        in: ['body'],
+        isString: {
+            errorMessage: 'El motivo debe ser una cadena.',
+        },
+        notEmpty: {
+            errorMessage: 'El motivo es obligatorio.',
+        },
+    },
+    sintomas: {
+        in: ['body'],
+        isString: {
+            errorMessage: 'Los síntomas deben ser una cadena.',
+        },
+        notEmpty: {
+            errorMessage: 'Los síntomas son obligatorios.',
+        },
+    },
+    precio: {
+        in: ['body'],
+        optional: {
+            options: { nullable: true },
+        },
+        isDecimal: {
+            errorMessage: 'El precio debe ser un número decimal válido.',
+        },
+        custom: {
+            options: (value, { req }) => {
+                if (req.body.precio !== undefined) {
+                    return !isNaN(value);
+                }
+                return true;
+            },
+            errorMessage: 'El precio debe ser un número decimal válido.',
+        },
+    },
+    tiempoLLegada: {
+        in: ['body'],
+        optional: {
+            options: { nullable: true },
+        },
+        isDate: {
+            errorMessage: 'El tiempo de llegada debe estar en formato DATE.',
+        },
+    },
+    valoracionMedico: {
+        in: ['body'],
+        optional: {
+            options: { nullable: true },
+        },
+        isInt: {
+            options: { min: 0, max: 5 },
+            errorMessage: 'La valoración del médico debe ser un número entero entre 0 y 5.',
+        },
+    },
+    valoracionCliente: {
+        in: ['body'],
+        optional: {
+            options: { nullable: true },
+        },
+        isInt: {
+            options: { min: 0, max: 5 },
+            errorMessage: 'La valoración del cliente debe ser un número entero entre 0 y 5.',
+        },
+    },
+    direccion: {
+        in: ['body'],
+    isJSON: {
+        errorMessage: 'La dirección debe ser un JSON válido.',
+    },
+    notEmpty: {
+        errorMessage: 'La dirección es obligatoria.',
+    },
+},
+}
