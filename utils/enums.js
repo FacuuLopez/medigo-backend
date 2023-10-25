@@ -9,7 +9,10 @@ export const ENUM_CONSULTA_ESTADOS = {
 
 export const ENUM_MEDICO_ESPECIALIDADES = {
     clinico: 'clinico',
-    pediatra: 'pediatra',
+    pediatra: 'pediatría',
+    ginecología: 'ginecología',
+    traumatología: 'traumatología',
+    alergista: 'alergista',
 }
 
 export const ENUM_USUARIO_ESTADOS = {
