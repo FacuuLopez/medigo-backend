@@ -1,4 +1,4 @@
-import { medico, cliente, usuario, persona } from "../modelos/index.js";
+import { medico, cliente, usuario, persona, grupoFamiliar } from "../modelos/index.js";
 import { crearTokenUsuario, enviarTokenUsuario } from "../utils/jwt.js";
 
 class usuariosController {
@@ -126,10 +126,8 @@ class usuariosController {
                         ]
                     }
                 ]
-
             })
-            if (medico) {
-                console.log('medico', medicoEncontrado)
+            if (medicoEncontrado) {
                 const { nroMatricula, radioAccion, precio, especialidad, usuario } = medicoEncontrado.dataValues;
                 const { username, dni, telefono, direccion, estado, persona } = usuario.dataValues;
                 const { nombre, apellido, sexo, fechaNacimiento } = persona.dataValues
@@ -138,6 +136,48 @@ class usuariosController {
                     nombre, apellido, sexo, fechaNacimiento,
                     username, dni, telefono, direccion, estado,
                 })
+            }
+            else {
+                const clienteEncontrado = await cliente.findOne({
+                    where: {
+                        usuarioId: id
+                    },
+                    include: [
+                        {
+                            model: usuario,
+                            include: [
+                                {
+                                    model: persona
+                                }
+                            ]
+                        },
+                        {
+                            model: grupoFamiliar, 
+                            include: [
+                                {
+                                    model: persona
+                                }
+                            ]
+                        }
+                    ]
+                });
+                if (clienteEncontrado) {
+                    const { grupoFamiliar: familiares, usuario } = clienteEncontrado.dataValues;
+                    const grupoFamiliarConId = familiares.personas;
+                    // le saco el id del grupo familiar para la respuesta
+                    const grupoFamiliar = grupoFamiliarConId.map(familiar => {
+                        const { grupoFamiliarId, ...resto } = familiar.dataValues;
+                        return resto;
+                      });
+                      
+                    const { username, dni, telefono, direccion, estado, persona } = usuario.dataValues;
+                    const { nombre, apellido, sexo, fechaNacimiento, } = persona.dataValues;
+                    res.status(200).json({
+                        nombre, apellido, sexo, fechaNacimiento,
+                        username, password, dni, telefono, direccion, estado,
+                        grupoFamiliar
+                    });
+                } else throw error
             }
         } catch (error) {
             console.error(error);
