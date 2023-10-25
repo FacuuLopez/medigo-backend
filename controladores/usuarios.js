@@ -1,4 +1,4 @@
-import { usuario } from "../modelos/index.js";
+import { medico, cliente, usuario, persona } from "../modelos/index.js";
 import { crearTokenUsuario, enviarTokenUsuario } from "../utils/jwt.js";
 
 class usuariosController {
@@ -106,16 +106,39 @@ class usuariosController {
                     username,
                 }
             });
-            console.log('el usuario', result.dataValues.password)
             if (!result) throw new Error("Credenciales incorrectas");
             const compare = await result.validatePassword(password, result.dataValues.password);
-            console.log('compare', compare)
             if (!compare) throw new Error("Credenciales incorrectas");
             const tokenUsuario = crearTokenUsuario({ username });
             enviarTokenUsuario(tokenUsuario, res);
-            res
-                .status(200)
-                .send({ success: true, message: "Usuario logueado con exito" });
+            const { id } = result
+            const medicoEncontrado = await medico.findOne({
+                where: {
+                    usuarioId: id
+                },
+                include: [
+                    {
+                        model: usuario,
+                        include: [
+                            {
+                                model: persona
+                            }
+                        ]
+                    }
+                ]
+
+            })
+            if (medico) {
+                console.log('medico', medicoEncontrado)
+                const { nroMatricula, radioAccion, precio, especialidad, usuario } = medicoEncontrado.dataValues;
+                const { username, dni, telefono, direccion, estado, persona } = usuario.dataValues;
+                const { nombre, apellido, sexo, fechaNacimiento } = persona.dataValues
+                res.status(200).json({
+                    nroMatricula, radioAccion, precio, especialidad,
+                    nombre, apellido, sexo, fechaNacimiento,
+                    username, dni, telefono, direccion, estado,
+                })
+            }
         } catch (error) {
             console.error(error);
             res.status(401).send({ success: false, result: 'Credenciales incorrectas' });
@@ -127,7 +150,7 @@ class usuariosController {
 
     }
 
-   
+
 }
 
 export default usuariosController;

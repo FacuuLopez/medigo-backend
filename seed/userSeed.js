@@ -22,7 +22,7 @@ const crearClientes = async () => {
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
       const estado = ENUM_USUARIO_ESTADOS.desconenctado;
-      const sexo = i % 2 === 0 ? 'femenino' : 'masculino';
+      const sexo = i % 2 === 0 ? 'F' : 'M';
       const fechaNacimiento = new Date('1990-10-03T12:00:00');
 
       const cliente = {
@@ -58,7 +58,7 @@ const crearMedicos = async() => {
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
       const estado = ENUM_USUARIO_ESTADOS.desconenctado;
-      const sexo = i % 2 === 0 ? 'femenino' : 'masculino';
+      const sexo = i % 2 === 0 ? 'F' : 'M';
       const fechaNacimiento = new Date('1990-10-03T12:00:00');
       const precio = 3000;
       const radioAccion = 1.0;
