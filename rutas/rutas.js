@@ -2,13 +2,15 @@ import { Router } from "express";
 import usuariosRutas from "./usuarios.js";
 import clientesRutas from "./clientes.js";
 import medicosRutas from "./medicos.js";
-import consultasClientesRutas from "./consultas-cliente.js";
+import EspecialidadesController from "../controladores/especialidades.js";
+
+const especialidadesController = new EspecialidadesController(); 
 
 const rutas = Router();
 
 rutas.use('/usuarios', usuariosRutas);
 rutas.use('/clientes', clientesRutas);
 rutas.use('/medicos', medicosRutas);
-rutas.use('/consultas-cliente', consultasClientesRutas)
+rutas.get('/especialidades', especialidadesController.devolverEspecialidades);
 
 export default rutas;
