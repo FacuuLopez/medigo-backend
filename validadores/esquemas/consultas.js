@@ -1,3 +1,4 @@
+import { ENUM_MEDICO_ESPECIALIDADES } from "../../utils/enums.js";
 export const consultaSchema= {
 
     motivo: {
@@ -17,6 +18,13 @@ export const consultaSchema= {
         notEmpty: {
             errorMessage: 'Los síntomas son obligatorios.',
         },
+    },
+    especialidad: {
+        in: ['body'],
+        optional: { nullable: false },
+        isIn: { options: [ENUM_MEDICO_ESPECIALIDADES],
+            errorMessage: 'La especialidad del médico no es válida.', }
+        
     },
     precio: {
         in: ['body'],

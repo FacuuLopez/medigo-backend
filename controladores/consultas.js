@@ -1,22 +1,22 @@
-import { consulta, medico } from "../modelos/index.js"
-import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
+import { consulta, medico, persona, usuario } from "../modelos/index.js"
+import { ENUM_CONSULTA_ESTADOS, ENUM_MEDICO_ESPECIALIDADES } from "../utils/enums.js";
 
 
 class consultasController {
     constructor() { }
 
     solicitarConsulta = async (req, res, next) => {
-        // se debe de validar en los validadores que no exista otra
-        // consulta para ese usuario con estado "iniciada"
+        // se valida en los validadores/consulta que no exista otra consulta para ese cliente con estado "en curso"
         try {
             const { id: clienteId } = req.cliente
-            const { sintomas, motivo, direccion } = req.body;
+            const { sintomas, motivo, direccion, especialidad } = req.body;
             await consulta.create({
                 clienteId,
                 sintomas,
                 motivo,
                 direccion,
-                estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico
+                estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+                especialidad,
             });
             const medicosDisponibles = null // hay que retornar el array de medicos disponibles
             res
@@ -157,6 +157,100 @@ class consultasController {
             res
                 .status(500)
                 .send(error.message)
+        }
+    }
+
+    historialConsultasMedico = async (req, res, next) =>{
+        try {
+            const {id} = req.medico;
+            const listaConsultas = await consulta.findAll({
+                attributes:[
+                    'precio', 'createdAt', 
+                    'valoracionCliente','direccion'],
+                include: {
+                        model: persona,
+                        attributes: [
+                            'nombre', 'apellido'
+                        ]
+                    },    
+                where:{
+                    medicoId: id
+                }
+            });
+
+            if (listaConsultas.length === 0) throw new Error("No hay consultas");
+            
+            res.status(200).send({
+                success: true,
+                message: "Consultas encontradas",
+                result: listaConsultas,
+            });
+
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    historialConsultasCliente = async (req, res, next) =>{
+        try {
+            const {id} = req.cliente;
+            const listaConsultas = await consulta.findAll({
+                attributes:[
+                    'precio', 'createdAt', 
+                    'valoracionMedico','direccion'],
+                include: {
+                        model:persona,
+                        attributes:['nombre', 'apellido'],
+                        model: medico,
+                        attributes:['especialidad'],
+                        include:{
+                            model: usuario,
+                            include:{
+                                model: persona,
+                                attributes:['nombre' , 'apellido'],
+                            }
+                        }
+                    },    
+                where:{
+                    clienteId: id
+                }
+            });
+
+            if (listaConsultas.length === 0) throw new Error("No hay consultas");
+            
+            res.status(200).send({
+                success: true,
+                message: "Consultas encontradas",
+                result: listaConsultas,
+            });
+
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    getEspecialidades = async (req, res, next)=>{
+        try {
+            const especialidades = [ENUM_MEDICO_ESPECIALIDADES.clinico, ENUM_MEDICO_ESPECIALIDADES.pediatra]
+            res.status(200).send({
+                success: true,
+                message: "Especialidades encontradas",
+                result: especialidades,
+            });
+        } catch (error) {
+            console.error(error)
+            res.status(400).send({
+                success: false,
+                message: error.message,
+            });
         }
     }
 
