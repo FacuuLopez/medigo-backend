@@ -1,7 +1,6 @@
 import { consulta, medico, persona, usuario } from "../modelos/index.js"
 import { ENUM_CONSULTA_ESTADOS, ENUM_MEDICO_ESPECIALIDADES } from "../utils/enums.js";
 
-
 class consultasController {
     constructor() { }
 
@@ -256,4 +255,4 @@ class consultasController {
 
 }
 
-export default consultasController;
+export default  consultasController;

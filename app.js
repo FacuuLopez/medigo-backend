@@ -3,8 +3,9 @@ import express from "express";
 import sequelize from "./config/config.js";
 import cors from "cors";
 import rutas from "./rutas/rutas.js";
-import { usuario, iniciarModelos } from "./modelos/index.js";
+import { usuario, consulta } from "./modelos/index.js";
 import userSeed from "./seed/userSeed.js";
+import crearConsultas from "./seed/consultasSeed.js";
 import cookieParser from "cookie-parser";
 
 const port = process.env.SERVER_PORT;
@@ -30,7 +31,12 @@ try {
       return Promise.all([
         usuario.count().then((count) => count === 0 && userSeed()),
       ]);
-    });
+    })
+    console.log('Ejecutando seeder de consultas...');
+    await crearConsultas();
+    ;
 } catch (error) {
   console.error(error);
 }
+
+    
