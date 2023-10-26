@@ -1,6 +1,33 @@
 import { consulta, medico, persona, usuario } from "../modelos/index.js"
-import { ENUM_CONSULTA_ESTADOS, ENUM_MEDICO_ESPECIALIDADES } from "../utils/enums.js";
+import { ENUM_CONSULTA_ESTADOS, ENUM_MEDICO_ESPECIALIDADES, ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
 
+const DISTANCIA_MAXIMA_M = 1500
+
+/**
+ * Calcula la distancia entre dos puntos geográficos.
+ */
+const calcularDistancia = (x1, y1, x2, y2) => {
+    const rad1 = {
+        x: x1 * (Math.PI / 180),
+        y: y1 * (Math.PI / 180)
+    };
+    const rad2 = {
+        x: x2 * (Math.PI / 180),
+        y: y2 * (Math.PI / 180)
+    };
+
+    deltaX = rad1.x - rad2.x;
+    deltaY = rad1.y - rad2.y;
+
+    // Se aplica la fórmula del semiverseno 
+    // https://es.wikipedia.org/wiki/Fórmula_del_semiverseno
+    const a = Math.sin(deltaX / 2) ** 2 + Math.cos(rad1.x) * Math.cos(rad2.x) * Math.sin(deltaY / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    const RADIO_TIERRA_KM = 6371
+
+    return (RADIO_TIERRA_KM * c * 1000)
+}
 
 class consultasController {
     constructor() { }
@@ -9,7 +36,17 @@ class consultasController {
         // se valida en los validadores/consulta que no exista otra consulta para ese cliente con estado "en curso"
         try {
             const { id: clienteId } = req.cliente
-            const { sintomas, motivo, direccion, especialidad } = req.body;
+            const { 
+                sintomas,
+                motivo,
+                especialidad,
+                latitud,
+                longitud,
+                nombre,
+                apellido,
+                direccion,
+             } = req.body;
+
             await consulta.create({
                 clienteId,
                 sintomas,
@@ -18,11 +55,45 @@ class consultasController {
                 estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
                 especialidad,
             });
-            const medicosDisponibles = null // hay que retornar el array de medicos disponibles
+
+            let medicosDisponibles = await medico.findAll({
+                include: [
+                    {
+                        model: usuario,
+                        include: [persona] // Si también quieres incluir el modelo Persona dentro del modelo Usuario
+                    }
+                ],
+                where: {
+                    especialidad,
+                }
+            }) 
+
+            medicosDisponibles = medicosDisponibles.filter(medico => medico.usuario.estado == ENUM_USUARIO_ESTADOS.conectado)
+            /* TODO: Descomentar cuando se implementen las coordenadas
+            medicosDisponibles = medicosDisponibles.sort(
+                (medicoA, medicoB) =>
+                    calcularDistancia(
+                        latitud,
+                        longitud,
+                        medicoA.latitud, // TODO: Revisar las ubicaciones
+                        medicoA.longitud  // TODO: Revisar las ubicaciones
+                    ) -
+                    calcularDistancia(
+                        latitud,
+                        longitud,
+                        medicoB.latitud, // TODO: Revisar las ubicaciones
+                        medicoB.longitud  // TODO: Revisar las ubicaciones
+                    )
+            );*/
+            /*
+             * TODO: Falta filtrar los médicos cuando distancia > radioAccion.
+             *       Esto falta porque en el modelo de médicos todavía no se
+             *       modificó cómo se guardan las coordenadas
+             */
+            
             res
                 .status(200)
-                .send("solicitando profesional")
-            // .json({ medicosDisponibles });
+                .json(medicosDisponibles);
         } catch (error) {
             res.status(500).send({
                 success: false,
