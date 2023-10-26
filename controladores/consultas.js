@@ -68,10 +68,10 @@ class consultasController {
                 }
             }) 
 
-            medicosDisponibles = medicosDisponibles.filter(medico => medico.usuario.estado == ENUM_USUARIO_ESTADOS.conectado)
+            medicosDisponibles = medicosDisponibles
+                .filter(medico => medico.usuario.estado == ENUM_USUARIO_ESTADOS.conectado)
             /* TODO: Descomentar cuando se implementen las coordenadas
-            medicosDisponibles = medicosDisponibles.sort(
-                (medicoA, medicoB) =>
+                .sort((medicoA, medicoB) =>
                     calcularDistancia(
                         latitud,
                         longitud,
@@ -84,7 +84,18 @@ class consultasController {
                         medicoB.latitud, // TODO: Revisar las ubicaciones
                         medicoB.longitud  // TODO: Revisar las ubicaciones
                     )
-            );*/
+                );*/
+                .map(medico => ({
+                    nroMatricula: medico.nroMatricula,
+                    nombre: medico.usuario.persona.nombre,
+                    apellido: medico.usuario.persona.apellido,
+                    especialidad: medico.especialidad,
+                    tiempo: 500, // TODO: Calcualar según ubicación
+                    precio: medico.precio,
+                    valoracion: medico.usuario.valoracion,
+                    resenas: 0, // TODO: Implementar reseñas
+                    comentarios: [] // TODO: Implementar comentarios
+                }))
             /*
              * TODO: Falta filtrar los médicos cuando distancia > radioAccion.
              *       Esto falta porque en el modelo de médicos todavía no se
