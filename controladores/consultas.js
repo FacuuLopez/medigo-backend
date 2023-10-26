@@ -338,4 +338,4 @@ class consultasController {
 
 }
 
-export default consultasController;
+export default  consultasController;
