@@ -12,19 +12,16 @@ medico.init({
     radioAccion: {
         type: DT.DECIMAL,
         allowNull: false,
-
     },
     precio: {
         type: DT.DECIMAL,
         allowNull: false,
-
     },
-    ubicacion: {
-        type: DT.JSON,
-        allowNull: true,
-        validate:{
-            
-        }
+    latitud: {
+        type: DT.DECIMAL,
+    },
+    longitud: {
+        type: DT.DECIMAL,
     },
     especialidad:{
         type: DT.STRING

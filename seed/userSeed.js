@@ -57,7 +57,7 @@ const crearMedicos = async() => {
       const dni = `223335${i}`;
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
-      const estado = ENUM_USUARIO_ESTADOS.desconenctado;
+      const estado = Math.random() > 0.5 ? ENUM_USUARIO_ESTADOS.desconenctado : ENUM_USUARIO_ESTADOS.conectado;
       const sexo = i % 2 === 0 ? 'F' : 'M';
       const fechaNacimiento = new Date('1990-10-03T12:00:00');
       const precio = 3000;
