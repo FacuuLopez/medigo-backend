@@ -122,84 +122,256 @@ class consultasController {
 
   seleccionarMedicoConsulta = async (req, res, next) => {
     try {
-      const { id: consultaId } = req.consulta; // hay que agregarla cuando se valida
-      //tiene que ser la unica consulta para ese clienteId con estado 'seleccionando medico'
-      const { medicoId } = req.body;
-      const medicoElegido = await medico.findByPk(medicoId);
-      const { precio } = medicoElegido.dataValues;
-      const tiempoLLegada = null; // aca necesitamos calcular a que hora se estima que llega el medico
-      const iniciarConsulta = await consulta.findByPk(consultaId);
-      const consultaIniciada = await iniciarConsulta.update({
-        medicoId,
-        precio,
-        tiempoLLegada,
-        estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+      const { id: clienteId } = req.cliente;
+      const { nroMatricula } = req.body;
+
+      const consultaDePaciente = await consulta.findOne({
+        where: {
+          clienteId,
+          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+        },
       });
-      res.status(200).json({
-        message: "consulta iniciada con exito",
-        consulta: consultaIniciada.dataValues,
+
+      const medico = await medico.findOne({
+        where: {
+          nroMatricula,
+        },
       });
+
+      if (consultaDePaciente && medico) {
+        await consultaEnCurso.update({
+          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+          medicoId: medico.medicoId,
+        });
+
+        res.status(200).json({
+          message: "Agregado medico a consulta con exito",
+          esatdo: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+        });
+      } else {
+        res.status(404).json({
+          message:
+            "No se encontró ninguna consulta en seleccionando medico con ese cliente",
+        });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).send("no se pudo iniciar la consutla");
     }
   };
 
+  // seleccionarMedicoConsulta = async (req, res, next) => {
+  //   try {
+  //     const { id: consultaId } = req.consulta; // hay que agregarla cuando se valida
+  //     //tiene que ser la unica consulta para ese clienteId con estado 'seleccionando medico'
+  //     const { medicoId } = req.body;
+  //     const medicoElegido = await medico.findByPk(medicoId);
+  //     const { precio } = medicoElegido.dataValues;
+  //     const tiempoLLegada = null; // aca necesitamos calcular a que hora se estima que llega el medico
+  //     const iniciarConsulta = await consulta.findByPk(consultaId);
+  //     const consultaIniciada = await iniciarConsulta.update({
+  //       medicoId,
+  //       precio,
+  //       tiempoLLegada,
+  //       estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+  //     });
+  //     res.status(200).json({
+  //       message: "consulta iniciada con exito",
+  //       consulta: consultaIniciada.dataValues,
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).send("no se pudo iniciar la consutla");
+  //   }
+  // };
+
+  solicitarConsulta = async (req, res, next) => {
+    try {
+      const { id: medicoId } = req.medico;
+
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+        },
+      });
+
+      res.status(200).send({
+        success: true,
+        message: "Consulta",
+        result: consultaDeMedico,
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
 
   aceptarConsulta = async (req, res, next) => {
     try {
-      const { consultaId } = req.body;
-      const consultaAceptada = await consulta.findByPk(consultaId);
-      await consultaAceptada.update({
-        
-        estado: ENUM_CONSULTA_ESTADOS.enCurso,
+      const { id: medicoId } = req.medico;
+
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+        },
       });
-      res.status(200).send("consulta aceptada");
+
+      if (consultaDeMedico) {
+        await consultaDeMedico.update({
+          estado: ENUM_CONSULTA_ESTADOS.enCurso,
+        });
+
+        res.status(200).send({
+          message: "consulta aceptada",
+          state: ENUM_CONSULTA_ESTADOS.enCurso,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
     } catch (error) {
       res.status(500).send(error.message);
     }
   };
+
+  solicitarEstadoUltimaConsultaMedico = async (req, res, next) => {
+    try {
+      const { id: medicoId } = req.medico;
+
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+        },
+        order: [["createdAt", "DESC"]],
+      });
+
+      if (consultaDeMedico) {
+        res.status(200).send({
+          message: "Consulta",
+          result: consultaDeMedico.estado,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
+
+  solicitarEstadoUltimaConsultaCliente = async (req, res, next) => {
+    try {
+      const { id: clienteId } = req.cliente;
+
+      const consultaDeCliente = await consulta.findOne({
+        where: {
+          clienteId,
+        },
+        order: [["createdAt", "DESC"]],
+      });
+
+      if (consultaDeCliente) {
+        res.status(200).send({
+          message: "Consulta",
+          result: consultaDeCliente.estado,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  };
+
+  // aceptarConsulta = async (req, res, next) => {
+  //   try {
+  //     const { consultaId } = req.body;
+  //     const consultaAceptada = await consulta.findByPk(consultaId);
+  //     await consultaAceptada.update({
+  //       estado: ENUM_CONSULTA_ESTADOS.enCurso,
+  //     });
+  //     res.status(200).send("consulta aceptada");
+  //   } catch (error) {
+  //     res.status(500).send(error.message);
+  //   }
+  // };
 
   rechazarConsulta = async (req, res, next) => {
     try {
-      const { consultaId } = req.body;
-      const consultaAceptada = await consulta.findByPk(consultaId);
-      await consultaAceptada.update({
-        estado: ENUM_CONSULTA_ESTADOS.rechazada,
+      const { id: medicoId } = req.medico;
+
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+        },
       });
-      res.status(200).send(
-        { mensaje: "consulta rechazada",
-         estado: ENUM_CONSULTA_ESTADOS.rechazada
-        }
-         );
+
+      if (consultaDeMedico) {
+        await consultaDeMedico.update({
+          estado: ENUM_CONSULTA_ESTADOS.rechazada,
+        });
+
+        res.status(200).send({
+          message: "consulta rechazada",
+          state: ENUM_CONSULTA_ESTADOS.rechazada,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
     } catch (error) {
       res.status(500).send(error.message);
     }
   };
 
-  cancelarConsulta = async (req, res, next) => {
+  // rechazarConsulta = async (req, res, next) => {
+  //   try {
+  //     const { consultaId } = req.body;
+  //     const consultaAceptada = await consulta.findByPk(consultaId);
+  //     await consultaAceptada.update({
+  //       estado: ENUM_CONSULTA_ESTADOS.rechazada,
+  //     });
+  //     res.status(200).send({
+  //       mensaje: "consulta rechazada",
+  //       estado: ENUM_CONSULTA_ESTADOS.rechazada,
+  //     });
+  //   } catch (error) {
+  //     res.status(500).send(error.message);
+  //   }
+  // };
+
+  cancelarConsultaMedico = async (req, res, next) => {
     try {
       const { id: medicoId } = req.medico; // Obtenemos el ID del médico desde el token
-      console.log('ID del médico:', medicoId);
 
       const consultaEnCurso = await consulta.findOne({
         where: {
           medicoId: medicoId,
-          estado: ENUM_CONSULTA_ESTADOS.enCurso
+          estado: ENUM_CONSULTA_ESTADOS.enCurso,
         },
       });
-  
-      console.log('Consulta encontrada:', consultaEnCurso);
 
       if (consultaEnCurso) {
-    
         await consultaEnCurso.update({
           estado: ENUM_CONSULTA_ESTADOS.cancelada,
         });
         //console.log('Consulta actualizada:', consultaEnCurso); // Agrega esta línea de registro
-        res.status(200).json({ message: "Consulta en curso cancelada con éxito" });
+        res.status(200).json({
+          message: "Consulta en curso cancelada con éxito",
+          state: ENUM_CONSULTA_ESTADOS.cancelada,
+        });
       } else {
-        
         //console.log('Consulta no encontrada:', consultaEnCurso); // Agrega esta línea de registro
         res.status(404).json({
           message: "No se encontró ninguna consulta en curso para este médico",
@@ -210,71 +382,215 @@ class consultasController {
       res.status(500).json({ error: "Error al cancelar la consulta en curso" });
     }
   };
-  
+
+  cancelarConsultaCliente = async (req, res, next) => {
+    try {
+      const { id: clienteId } = req.cliente; // Obtenemos el ID del médico desde el token
+
+      const consultaEnCurso = await consulta.findOne({
+        where: {
+          medicoId: clienteId,
+          estado: ENUM_CONSULTA_ESTADOS.enCurso,
+        },
+      });
+
+      if (consultaEnCurso) {
+        await consultaEnCurso.update({
+          estado: ENUM_CONSULTA_ESTADOS.cancelada,
+        });
+        //console.log('Consulta actualizada:', consultaEnCurso); // Agrega esta línea de registro
+        res.status(200).json({
+          message: "Consulta en curso cancelada con éxito",
+          state: ENUM_CONSULTA_ESTADOS.cancelada,
+        });
+      } else {
+        //console.log('Consulta no encontrada:', consultaEnCurso); // Agrega esta línea de registro
+        res.status(404).json({
+          message: "No se encontró ninguna consulta en curso para este médico",
+        });
+      }
+    } catch (error) {
+      //console.error(error); // Registra el error en la consola
+      res.status(500).json({ error: "Error al cancelar la consulta en curso" });
+    }
+  };
+
   finalizarConsulta = async (req, res, next) => {
     try {
-      const { consultaId } = req.body;
-      const consultaFinalizada = await consulta.findByPk(consultaId);
-      await consultaFinalizada.update({
-        estado: ENUM_CONSULTA_ESTADOS.finalizada,
+      const { id: medicoId } = req.medico;
+
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+          estado: ENUM_CONSULTA_ESTADOS.enCurso,
+        },
       });
-      res.status(200).send("consulta finalizada");
+
+      if (consultaDeMedico) {
+        await consultaDeMedico.update({
+          estado: ENUM_CONSULTA_ESTADOS.calificando,
+        });
+
+        res.status(200).send({
+          message: "consulta en calificacion",
+          state: ENUM_CONSULTA_ESTADOS.calificando,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
     } catch (error) {
       res.status(500).send(error.message);
     }
   };
+
+  // finalizarConsulta = async (req, res, next) => {
+  //   try {
+  //     const { consultaId } = req.body;
+  //     const consultaFinalizada = await consulta.findByPk(consultaId);
+  //     await consultaFinalizada.update({
+  //       estado: ENUM_CONSULTA_ESTADOS.finalizada,
+  //     });
+  //     res.status(200).send("consulta finalizada");
+  //   } catch (error) {
+  //     res.status(500).send(error.message);
+  //   }
+  // };
 
   valorarConsultaCliente = async (req, res, next) => {
-    const { consultaId, valoracionMedico } = req.consulta; // hay que agregarla cuando se valida
-    //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
-    const { valoracion, comentario } = req.body;
     try {
-      const consultaValorada = await consulta.findByPk(consultaId);
-      valoracionMedico
-        ? await consultaValorada.update({
+      const { id: clienteId } = req.cliente;
+      const { valoracion, comentario } = req.body;
+
+      const consultaDeCliente = await consulta.findOne({
+        where: {
+          clienteId,
+          estado: ENUM_CONSULTA_ESTADOS.calificando,
+        },
+      });
+
+      if (consultaDeCliente) {
+        if (consultaDeCliente.valoracionMedico) {
+          await consultaDeCliente.update({
             valoracionCliente: valoracion,
             comentarioDelCliente: comentario,
             estado: ENUM_CONSULTA_ESTADOS.finalizada,
-          })
-        : await consultaValorada.update({
+          });
+        } else {
+          await consultaDeCliente.update({
             valoracionCliente: valoracion,
             comentarioDelCliente: comentario,
           });
-
-      res.status(200).send("consulta valorada");
+        }
+        res.status(200).send({
+          message: "consulta en calificacion",
+          state: ENUM_CONSULTA_ESTADOS.calificando,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
     } catch (error) {
       res.status(500).send(error.message);
     }
   };
+
+  // valorarConsultaCliente = async (req, res, next) => {
+  //   const { consultaId, valoracionMedico } = req.consulta; // hay que agregarla cuando se valida
+  //   //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
+  //   const { valoracion, comentario } = req.body;
+  //   try {
+  //     const consultaValorada = await consulta.findByPk(consultaId);
+  //     valoracionMedico
+  //       ? await consultaValorada.update({
+  //           valoracionCliente: valoracion,
+  //           comentarioDelCliente: comentario,
+  //           estado: ENUM_CONSULTA_ESTADOS.finalizada,
+  //         })
+  //       : await consultaValorada.update({
+  //           valoracionCliente: valoracion,
+  //           comentarioDelCliente: comentario,
+  //         });
+
+  //     res.status(200).send("consulta valorada");
+  //   } catch (error) {
+  //     res.status(500).send(error.message);
+  //   }
+  // };
 
   valorarConsultaMedico = async (req, res, next) => {
-    const { consultaId, valoracionCliente } = req.consulta; // hay que agregarla cuando se valida
-    //tiene que ser la unica consulta para ese clienteId con estado 'calificando'
-    const { valoracion, comentario } = req.body;
     try {
-      const consultaValorada = await consulta.findByPk(consultaId);
+      const { id: medicoId } = req.medico;
+      const { valoracion, comentario } = req.body;
 
-      valoracionCliente
-        ? await await consultaValorada.update({
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+          estado: ENUM_CONSULTA_ESTADOS.calificando,
+        },
+      });
+
+      if (consultaDeMedico) {
+        if (consultaDeMedico.valoracionCliente) {
+          await consultaDeMedico.update({
             valoracionMedico: valoracion,
             comentarioDelMedico: comentario,
             estado: ENUM_CONSULTA_ESTADOS.finalizada,
-          })
-        : await consultaValorada.update({
+          });
+        } else {
+          await consultaDeMedico.update({
             valoracionMedico: valoracion,
             comentarioDelMedico: comentario,
           });
+        }
 
-      res.status(200).send("consulta valorada");
+        res.status(200).send({
+          message: "consulta en calificacion",
+          state: ENUM_CONSULTA_ESTADOS.calificando,
+        });
+      } else {
+        res.status(400).send({
+          success: false,
+          message: error.message,
+        });
+      }
     } catch (error) {
       res.status(500).send(error.message);
     }
   };
+
+  // valorarConsultaMedico = async (req, res, next) => {
+  //   const { consultaId, valoracionCliente } = req.consulta; // hay que agregarla cuando se valida
+  //   //tiene que ser la unica consulta para ese clienteId con estado 'calificando'
+  //   const { valoracion, comentario } = req.body;
+  //   try {
+  //     const consultaValorada = await consulta.findByPk(consultaId);
+
+  //     valoracionCliente
+  //       ? await await consultaValorada.update({
+  //           valoracionMedico: valoracion,
+  //           comentarioDelMedico: comentario,
+  //           estado: ENUM_CONSULTA_ESTADOS.finalizada,
+  //         })
+  //       : await consultaValorada.update({
+  //           valoracionMedico: valoracion,
+  //           comentarioDelMedico: comentario,
+  //         });
+
+  //     res.status(200).send("consulta valorada");
+  //   } catch (error) {
+  //     res.status(500).send(error.message);
+  //   }
+  // };
 
   historialConsultasMedico = async (req, res, next) => {
     try {
       const { id } = req.medico;
-      console.log('ID del médico:', id);
+      console.log("ID del médico:", id);
       const listaConsultas = await consulta.findAll({
         attributes: ["precio", "createdAt", "valoracionCliente", "direccion"],
         include: {
