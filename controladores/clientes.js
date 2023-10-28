@@ -254,13 +254,10 @@ class clientesController {
         }
     }
 
-
     registro = async (req, res, next) => {
-
     }
 
     actualizarDatosCliente = async (req, res, next) => {
-
     }
 }
 

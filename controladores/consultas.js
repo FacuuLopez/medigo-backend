@@ -260,7 +260,6 @@ class consultasController {
                 }
             });
 
-            if (listaConsultas.length === 0) throw new Error("No hay consultas");
             
             res.status(200).send({
                 success: true,
@@ -302,8 +301,6 @@ class consultasController {
                 }
             });
 
-            if (listaConsultas.length === 0) throw new Error("No hay consultas");
-            
             res.status(200).send({
                 success: true,
                 message: "Consultas encontradas",

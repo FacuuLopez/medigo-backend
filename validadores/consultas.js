@@ -3,6 +3,25 @@ import { middlewareValidar } from "./index.js";
 import { consulta as modeloConsulta } from "../modelos/index.js";
 import { ENUM_CONSULTA_ESTADOS } from "../utils/enums.js";
 
+
+const _encontrarConsultaCliente = async (clienteId, estado) => {
+    return await modeloConsulta.findOne({
+        where: {
+            clienteId,
+            estado
+        }
+    });
+}
+
+const _encontrarConsultaMedico = async (medicoId, estado) => {
+    return await modeloConsulta.findOne({
+        where: {
+            medicoId,
+            estado
+        }
+    });
+}
+
 export const validarMotivo = async (req, res, next) => {
     const esquema = { motivo: consultaSchema.motivo }
     await middlewareValidar(req, res, next, esquema);
@@ -44,21 +63,23 @@ export const validarDireccion= async (req, res, next) => {
     await middlewareValidar(req, res, next, esquema);
     return
 }
-export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
-    try {
-        const { id: clienteId } = req.cliente;
-        console.log('cliente', req.cliente)
-        const consulta = await _encontrarConsultaCliente(clienteId, ENUM_CONSULTA_ESTADOS.seleccionandoMedico)
-        console.log('la consulta entera',consulta);
-        console.log('consulta', consulta.dataValues);
-        req.consulta = consulta.dataValues;
-        next();
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error interno del servidor.' });
-    }
-
-}
+ export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
+   try {
+     const { id: clienteid } = req.cliente;
+     console.log("cliente", req.cliente);
+     const consulta = await _encontrarConsultaCliente(
+       clienteid,
+       ENUM_CONSULTA_ESTADOS.seleccionandoMedico
+     );
+     console.log("la consulta entera", consulta);
+     console.log("consulta", consulta.datavalues);
+     req.consulta = consulta.datavalues;
+     next();
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ error: "error interno del servidor." });
+   }
+ };
 
 export const validarValorarConsultaCliente = async (req, res, next) => {
     try {
@@ -82,22 +103,6 @@ export const validarValorarConsultaMedico = async (req, res, next) => {
     }
 }
 
-const _encontrarConsultaCliente = async (clienteId, estado) => {
-    return await modeloConsulta.findOne({
-        where: {
-            clienteId,
-            estado
-        }
-    });
-}
 
-const _encontrarConsultaMedico = async (medicoId, estado) => {
-    return await modeloConsulta.findOne({
-        where: {
-            medicoId,
-            estado
-        }
-    });
-}
 
 

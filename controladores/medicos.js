@@ -216,7 +216,6 @@ class medicosController {
     }
 
     registro = async (req, res, next) => {
-
     }
 
     actualizarDatosMedico = async (req, res, next) => {
@@ -239,7 +238,6 @@ class medicosController {
             });
         }
     }
-
 }
 
 export default medicosController;
