@@ -4,7 +4,8 @@ export const ENUM_CONSULTA_ESTADOS = {
     enCurso: 'en curso',
     calificando: 'calificando',
     finalizada: 'finalizada',
-    cancelada: 'cancelada'
+    cancelada: 'cancelada',
+    rechazada: 'rechazada'
 }
 
 export const ENUM_MEDICO_ESPECIALIDADES = {

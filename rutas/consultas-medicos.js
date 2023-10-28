@@ -7,7 +7,8 @@ const consultaController = new consultasController();
 
 
 consultasMedicosRutas.post('/aceptar-consulta', consultaController.aceptarConsulta);
-consultasMedicosRutas.delete('/cancelar-consulta', consultaController.cancelarConsulta);
+consultasMedicosRutas.put('/cancelar-consulta', consultaController.cancelarConsulta);
+consultasMedicosRutas.put('/rechazar-consulta', consultaController.rechazarConsulta);
 consultasMedicosRutas.put('/finalizar-consulta', consultaController.finalizarConsulta);
 consultasMedicosRutas.put('/valorar-consulta', validarValoracionMedico, consultaController.valorarConsultaMedico);
 consultasMedicosRutas.get('/historialConsultas',consultaController.historialConsultasMedico )
