@@ -132,14 +132,14 @@ class consultasController {
         },
       });
 
-      const medico = await medico.findOne({
+      const medicoEncontrado  = await medico.findOne({
         where: {
           nroMatricula,
         },
       });
 
-      if (consultaDePaciente && medico) {
-        await consultaEnCurso.update({
+      if (consultaDePaciente && medicoEncontrado) {
+        await consultaDePaciente.update({
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
           medicoId: medico.medicoId,
         });
@@ -185,7 +185,7 @@ class consultasController {
   //   }
   // };
 
-  solicitarConsulta = async (req, res, next) => {
+  solicitarConsultaMedico = async (req, res, next) => {
     try {
       const { id: medicoId } = req.medico;
 
@@ -249,6 +249,7 @@ class consultasController {
       });
 
       if (consultaDeMedico) {
+        
         res.status(200).send({
           message: "Consulta",
           result: consultaDeMedico.estado,
@@ -266,7 +267,7 @@ class consultasController {
 
   solicitarEstadoUltimaConsultaCliente = async (req, res, next) => {
     try {
-      const { id: clienteId } = req.cliente;
+      const { id: clienteId } = req.cliente;  
 
       const consultaDeCliente = await consulta.findOne({
         where: {
@@ -317,12 +318,12 @@ class consultasController {
 
       if (consultaDeMedico) {
         await consultaDeMedico.update({
-          estado: ENUM_CONSULTA_ESTADOS.rechazada,
+          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         });
 
         res.status(200).send({
           message: "consulta rechazada",
-          state: ENUM_CONSULTA_ESTADOS.rechazada,
+          state: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         });
       } else {
         res.status(400).send({

@@ -53,7 +53,7 @@ class clientesController {
                 username, password, dni, telefono, direccion,
                 grupoFamiliar
             } = req.body;
-            const estado = ENUM_USUARIO_ESTADOS.desconenctado;
+            const estado = ENUM_USUARIO_ESTADOS.desconectado;
             await crearNuevoCliente({
                 nombre, apellido, sexo, fechaNacimiento,
                 username, password, dni, telefono, direccion, estado,

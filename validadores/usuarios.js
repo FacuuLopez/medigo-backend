@@ -42,13 +42,13 @@ export const validarUsuario = async (req, res, next) => {
         //console.log("req 1", req); 
         await validarTokenUsuario(req, res, next);
         const { tokenUsuario } = req.cookies;
-        console.log("req cookies", req.cookies); 
+        //console.log("req cookies", req.cookies); 
         const usuarioVerificado = await verificarTokenUsuario(tokenUsuario);
         if (!usuarioVerificado) throw new Error("no se encontro ningún usuario logueado");
         req.usuario = usuarioVerificado;
         //actualiza el token si es necesario
         const tokenActualizado = actualizarTokenUsuario(tokenUsuario);
-        console.log({antes: tokenUsuario, despues: tokenActualizado})
+        //console.log({antes: tokenUsuario, despues: tokenActualizado})
         enviarTokenUsuario(tokenActualizado, res);
         next();
     } catch (error) {

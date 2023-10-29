@@ -18,5 +18,5 @@ export const ENUM_MEDICO_ESPECIALIDADES = {
 
 export const ENUM_USUARIO_ESTADOS = {
     conectado: 'conectado',
-    desconenctado: 'desconectado'
+    desconectado: 'desconectado'
 }

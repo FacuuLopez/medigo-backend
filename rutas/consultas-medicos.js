@@ -19,7 +19,7 @@ consultasMedicosRutas.put(
 );
 consultasMedicosRutas.get(
   "/solicitar-consulta",
-  consultaController.solicitarConsulta
+  consultaController.solicitarConsultaMedico
 );
 consultasMedicosRutas.get(
   "/solicitar-estado-ultima-consulta",

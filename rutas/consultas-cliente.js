@@ -17,9 +17,9 @@ consultasClientesRutas.post(
   validarSeleccionarMedicoConsulta,
   consultaController.seleccionarMedicoConsulta
 );
-consultasClientesRutas.delete(
+consultasClientesRutas.put(
   "/cancelar-consulta",
-  consultaController.cancelarConsulta
+  consultaController.cancelarConsultaCliente
 );
 consultasClientesRutas.put(
   "/finalizar-consulta",

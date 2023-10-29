@@ -67,7 +67,7 @@ class medicosController {
         telefono,
         direccion,
       } = req.body;
-      const estado = ENUM_USUARIO_ESTADOS.desconenctado;
+      const estado = ENUM_USUARIO_ESTADOS.desconectado;
       await crearMedico({
         nroMatricula,
         radioAccion,
@@ -247,27 +247,37 @@ class medicosController {
     try {
       const { usuarioId } = req.medico;
       let estadoNuevo = "";
-
+      
       const usuarioEncontrado = await usuario.findOne({
         where: {
-          usuarioId,
+          id: usuarioId,
         },
       });
 
-      if (usuarioEncontrado.esatdo === ENUM_USUARIO_ESTADOS.conectado) {
-        estadoNuevo = ENUM_USUARIO_ESTADOS.desconenctado;
-      } else {
-        estadoNuevo = ENUM_USUARIO_ESTADOS.conectado;
-      }
-
       if (usuarioEncontrado) {
+        if (usuarioEncontrado.estado === ENUM_USUARIO_ESTADOS.conectado) {
+          estadoNuevo = ENUM_USUARIO_ESTADOS.desconectado;
+        } else {
+          estadoNuevo = ENUM_USUARIO_ESTADOS.conectado;
+        }
+  
         await usuarioEncontrado.update({
-          esatdo: estadoNuevo,
+          estado: estadoNuevo,
+        });
+  
+        res.status(200).json({
+          message: "Estado del médico actualizado con éxito",
+          state: estadoNuevo
+        });
+      } else {
+        res.status(404).json({
+          message: "No se encontró el usuario asociado al médico",
         });
       }
     } catch (error) {
       // Manejar cualquier error que ocurra durante el proceso
-      res.status(500).json({ error: "Error al actualizar estado del medico" });
+      console.error(error);
+      res.status(500).json({ error: "Error al actualizar estado del médico" });
     }
   };
 
