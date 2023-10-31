@@ -247,7 +247,7 @@ class medicosController {
     try {
       const { usuarioId } = req.medico;
       let estadoNuevo = "";
-      
+
       const usuarioEncontrado = await usuario.findOne({
         where: {
           id: usuarioId,
@@ -260,14 +260,14 @@ class medicosController {
         } else {
           estadoNuevo = ENUM_USUARIO_ESTADOS.conectado;
         }
-  
+
         await usuarioEncontrado.update({
           estado: estadoNuevo,
         });
-  
+
         res.status(200).json({
           message: "Estado del médico actualizado con éxito",
-          state: estadoNuevo
+          state: estadoNuevo,
         });
       } else {
         res.status(404).json({

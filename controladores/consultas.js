@@ -132,7 +132,7 @@ class consultasController {
         },
       });
 
-      const medicoEncontrado  = await medico.findOne({
+      const medicoEncontrado = await medico.findOne({
         where: {
           nroMatricula,
         },
@@ -159,31 +159,6 @@ class consultasController {
       res.status(500).send("no se pudo iniciar la consutla");
     }
   };
-
-  // seleccionarMedicoConsulta = async (req, res, next) => {
-  //   try {
-  //     const { id: consultaId } = req.consulta; // hay que agregarla cuando se valida
-  //     //tiene que ser la unica consulta para ese clienteId con estado 'seleccionando medico'
-  //     const { medicoId } = req.body;
-  //     const medicoElegido = await medico.findByPk(medicoId);
-  //     const { precio } = medicoElegido.dataValues;
-  //     const tiempoLLegada = null; // aca necesitamos calcular a que hora se estima que llega el medico
-  //     const iniciarConsulta = await consulta.findByPk(consultaId);
-  //     const consultaIniciada = await iniciarConsulta.update({
-  //       medicoId,
-  //       precio,
-  //       tiempoLLegada,
-  //       estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
-  //     });
-  //     res.status(200).json({
-  //       message: "consulta iniciada con exito",
-  //       consulta: consultaIniciada.dataValues,
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).send("no se pudo iniciar la consutla");
-  //   }
-  // };
 
   solicitarConsultaMedico = async (req, res, next) => {
     try {
@@ -249,7 +224,6 @@ class consultasController {
       });
 
       if (consultaDeMedico) {
-        
         res.status(200).send({
           message: "Consulta",
           result: consultaDeMedico.estado,
@@ -267,7 +241,7 @@ class consultasController {
 
   solicitarEstadoUltimaConsultaCliente = async (req, res, next) => {
     try {
-      const { id: clienteId } = req.cliente;  
+      const { id: clienteId } = req.cliente;
 
       const consultaDeCliente = await consulta.findOne({
         where: {
@@ -291,19 +265,6 @@ class consultasController {
       res.status(500).send(error.message);
     }
   };
-
-  // aceptarConsulta = async (req, res, next) => {
-  //   try {
-  //     const { consultaId } = req.body;
-  //     const consultaAceptada = await consulta.findByPk(consultaId);
-  //     await consultaAceptada.update({
-  //       estado: ENUM_CONSULTA_ESTADOS.enCurso,
-  //     });
-  //     res.status(200).send("consulta aceptada");
-  //   } catch (error) {
-  //     res.status(500).send(error.message);
-  //   }
-  // };
 
   rechazarConsulta = async (req, res, next) => {
     try {
@@ -335,22 +296,6 @@ class consultasController {
       res.status(500).send(error.message);
     }
   };
-
-  // rechazarConsulta = async (req, res, next) => {
-  //   try {
-  //     const { consultaId } = req.body;
-  //     const consultaAceptada = await consulta.findByPk(consultaId);
-  //     await consultaAceptada.update({
-  //       estado: ENUM_CONSULTA_ESTADOS.rechazada,
-  //     });
-  //     res.status(200).send({
-  //       mensaje: "consulta rechazada",
-  //       estado: ENUM_CONSULTA_ESTADOS.rechazada,
-  //     });
-  //   } catch (error) {
-  //     res.status(500).send(error.message);
-  //   }
-  // };
 
   cancelarConsultaMedico = async (req, res, next) => {
     try {
@@ -447,19 +392,6 @@ class consultasController {
     }
   };
 
-  // finalizarConsulta = async (req, res, next) => {
-  //   try {
-  //     const { consultaId } = req.body;
-  //     const consultaFinalizada = await consulta.findByPk(consultaId);
-  //     await consultaFinalizada.update({
-  //       estado: ENUM_CONSULTA_ESTADOS.finalizada,
-  //     });
-  //     res.status(200).send("consulta finalizada");
-  //   } catch (error) {
-  //     res.status(500).send(error.message);
-  //   }
-  // };
-
   valorarConsultaCliente = async (req, res, next) => {
     try {
       const { id: clienteId } = req.cliente;
@@ -499,29 +431,6 @@ class consultasController {
       res.status(500).send(error.message);
     }
   };
-
-  // valorarConsultaCliente = async (req, res, next) => {
-  //   const { consultaId, valoracionMedico } = req.consulta; // hay que agregarla cuando se valida
-  //   //tiene que ser la unica consulta para ese clienteId con estado 'en curso'
-  //   const { valoracion, comentario } = req.body;
-  //   try {
-  //     const consultaValorada = await consulta.findByPk(consultaId);
-  //     valoracionMedico
-  //       ? await consultaValorada.update({
-  //           valoracionCliente: valoracion,
-  //           comentarioDelCliente: comentario,
-  //           estado: ENUM_CONSULTA_ESTADOS.finalizada,
-  //         })
-  //       : await consultaValorada.update({
-  //           valoracionCliente: valoracion,
-  //           comentarioDelCliente: comentario,
-  //         });
-
-  //     res.status(200).send("consulta valorada");
-  //   } catch (error) {
-  //     res.status(500).send(error.message);
-  //   }
-  // };
 
   valorarConsultaMedico = async (req, res, next) => {
     try {
@@ -563,30 +472,6 @@ class consultasController {
       res.status(500).send(error.message);
     }
   };
-
-  // valorarConsultaMedico = async (req, res, next) => {
-  //   const { consultaId, valoracionCliente } = req.consulta; // hay que agregarla cuando se valida
-  //   //tiene que ser la unica consulta para ese clienteId con estado 'calificando'
-  //   const { valoracion, comentario } = req.body;
-  //   try {
-  //     const consultaValorada = await consulta.findByPk(consultaId);
-
-  //     valoracionCliente
-  //       ? await await consultaValorada.update({
-  //           valoracionMedico: valoracion,
-  //           comentarioDelMedico: comentario,
-  //           estado: ENUM_CONSULTA_ESTADOS.finalizada,
-  //         })
-  //       : await consultaValorada.update({
-  //           valoracionMedico: valoracion,
-  //           comentarioDelMedico: comentario,
-  //         });
-
-  //     res.status(200).send("consulta valorada");
-  //   } catch (error) {
-  //     res.status(500).send(error.message);
-  //   }
-  // };
 
   historialConsultasMedico = async (req, res, next) => {
     try {
