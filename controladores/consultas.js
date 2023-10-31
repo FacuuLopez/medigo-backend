@@ -171,7 +171,7 @@ class consultasController {
         },
       });
 
-      res.status(200).send({
+      res.status(200).json({
         success: true,
         message: "Consulta",
         result: consultaDeMedico,
@@ -477,30 +477,36 @@ class consultasController {
     try {
       const { id } = req.medico;
       const listaConsultas = await consulta.findAll({
-        attributes: ["precio", "createdAt", "valoracionCliente", "direccion", "observacion"],
+        attributes: [
+          "precio",
+          "createdAt",
+          "valoracionCliente",
+          "direccion",
+          "observacion",
+        ],
         include: {
           model: persona,
           attributes: ["nombre", "apellido"],
         },
         where: {
           medicoId: id,
-          estado: ENUM_CONSULTA_ESTADOS.finalizada
+          estado: ENUM_CONSULTA_ESTADOS.finalizada,
         },
       });
 
       const listaFinal = [];
       for (let i = 0; i < listaConsultas.length; i++) {
-         const obj1 = listaConsultas[i];
-         
-         listaFinal[i] = {}
-         listaFinal[i].precio = obj1.precio
-         listaFinal[i].createdAt = obj1.createdAt
-         listaFinal[i].valoracionCliente = obj1.valoracionCliente
-         listaFinal[i].direccion = obj1.direccion
-         listaFinal[i].observacion = obj1.observacion
-         listaFinal[i].nombre = obj1.persona.nombre
-         listaFinal[i].apellido = obj1.persona.apellido
-       }
+        const obj1 = listaConsultas[i];
+
+        listaFinal[i] = {};
+        listaFinal[i].precio = obj1.precio;
+        listaFinal[i].createdAt = obj1.createdAt;
+        listaFinal[i].valoracionCliente = obj1.valoracionCliente;
+        listaFinal[i].direccion = obj1.direccion;
+        listaFinal[i].observacion = obj1.observacion;
+        listaFinal[i].nombre = obj1.persona.nombre;
+        listaFinal[i].apellido = obj1.persona.apellido;
+      }
 
       res.status(200).send({
         success: true,
@@ -519,50 +525,48 @@ class consultasController {
   historialConsultasCliente = async (req, res, next) => {
     try {
       const { id } = req.cliente;
-      
 
       const listaConsultas = await consulta.findAll({
         attributes: ["precio", "createdAt", "valoracionMedico", "direccion"],
-        include:[
+        include: [
           {
             model: persona,
-            attributes: ["nombre", "apellido"]
+            attributes: ["nombre", "apellido"],
           },
           {
             model: medico,
-             attributes: ["especialidad"],
-             include: {
-               model: usuario,
-               include: {
-                 model: persona,
-                 attributes: ["nombre", "apellido"],
-               },
-             },
-          }
+            attributes: ["especialidad"],
+            include: {
+              model: usuario,
+              include: {
+                model: persona,
+                attributes: ["nombre", "apellido"],
+              },
+            },
+          },
         ],
         where: {
-          clienteId : id,
-          estado: ENUM_CONSULTA_ESTADOS.finalizada
-        }
-      })
-     
+          clienteId: id,
+          estado: ENUM_CONSULTA_ESTADOS.finalizada,
+        },
+      });
+
       const listaFinal = [];
       for (let i = 0; i < listaConsultas.length; i++) {
-         const obj1 = listaConsultas[i];
-         
-         listaFinal[i] = {}
-         listaFinal[i].precio = obj1.precio
-         listaFinal[i].createdAt = obj1.createdAt
-         listaFinal[i].valoracionMedico = obj1.valoracionMedico
-         listaFinal[i].direccion = obj1.direccion
-         listaFinal[i].nombre = obj1.persona.nombre
-         listaFinal[i].apellido = obj1.persona.apellido
-         listaFinal[i].especialidad = obj1.medico.especialidad
-         listaFinal[i].nombreMedico = obj1.medico.usuario.persona.nombre
-         listaFinal[i].apellidoMedico = obj1.medico.usuario.persona.apellido
-        
-       }
-       
+        const obj1 = listaConsultas[i];
+
+        listaFinal[i] = {};
+        listaFinal[i].precio = obj1.precio;
+        listaFinal[i].createdAt = obj1.createdAt;
+        listaFinal[i].valoracionMedico = obj1.valoracionMedico;
+        listaFinal[i].direccion = obj1.direccion;
+        listaFinal[i].nombre = obj1.persona.nombre;
+        listaFinal[i].apellido = obj1.persona.apellido;
+        listaFinal[i].especialidad = obj1.medico.especialidad;
+        listaFinal[i].nombreMedico = obj1.medico.usuario.persona.nombre;
+        listaFinal[i].apellidoMedico = obj1.medico.usuario.persona.apellido;
+      }
+
       res.status(200).send({
         success: true,
         message: "Consultas encontradas",
@@ -597,7 +601,7 @@ class consultasController {
     }
   };
 
-  agregarObservacionMedico = async (req, res, next) =>{
+  agregarObservacionMedico = async (req, res, next) => {
     try {
       const { id: medicoId } = req.medico;
       const { observacion } = req.body;
@@ -608,25 +612,24 @@ class consultasController {
         },
       });
       let result;
-      
-      if (consultaDeMedico.observacion != "" && consultaDeMedico.observacion != null) {
-        const observacion1 = `${consultaDeMedico.observacion}` + " / " + observacion;
+
+      if (
+        consultaDeMedico.observacion != "" &&
+        consultaDeMedico.observacion != null
+      ) {
+        const observacion1 =
+          `${consultaDeMedico.observacion}` + " / " + observacion;
         result = consultaDeMedico.update({
-              observacion: observacion1
-         }
-        )
-        
+          observacion: observacion1,
+        });
       } else {
-        result = await consultaDeMedico.update(
-          {observacion}
-        )
+        result = await consultaDeMedico.update({ observacion });
       }
       res.status(200).send({
         success: true,
         message: "Observacion actualizada",
         result: consultaDeMedico.observacion,
       });
-      
     } catch (error) {
       console.error(error);
       res.status(400).send({
@@ -634,12 +637,7 @@ class consultasController {
         message: error.message,
       });
     }
-
-
-
-
   };
-
 }
 
 export default consultasController;
