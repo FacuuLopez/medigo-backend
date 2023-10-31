@@ -81,4 +81,10 @@ export const consultaSchema= {
         errorMessage: 'La dirección es obligatoria.',
     },
 },
+    observacion: {
+        in: ['body'],
+        isString: {
+            errorMessage: 'La observacion debe ser una cadena.',
+        },
+},
 }

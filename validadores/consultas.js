@@ -103,6 +103,12 @@ export const validarValorarConsultaMedico = async (req, res, next) => {
     }
 }
 
+export const validarObservacion = async (req, res, next) => {
+    const esquema = { observacion: consultaSchema.observacion }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
 
 
 
