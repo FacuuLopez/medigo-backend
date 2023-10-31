@@ -50,6 +50,11 @@ consulta.init(
       type: DT.JSON,
       allowNull: false,
     },
+    observacion:{
+      type: DT.STRING,
+      allowNull: true,
+      
+    }
   },
   {
     sequelize,

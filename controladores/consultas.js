@@ -476,9 +476,8 @@ class consultasController {
   historialConsultasMedico = async (req, res, next) => {
     try {
       const { id } = req.medico;
-      console.log("ID del médico:", id);
       const listaConsultas = await consulta.findAll({
-        attributes: ["precio", "createdAt", "valoracionCliente", "direccion"],
+        attributes: ["precio", "createdAt", "valoracionCliente", "direccion", "observacion"],
         include: {
           model: persona,
           attributes: ["nombre", "apellido"],
@@ -498,6 +497,7 @@ class consultasController {
          listaFinal[i].createdAt = obj1.createdAt
          listaFinal[i].valoracionCliente = obj1.valoracionCliente
          listaFinal[i].direccion = obj1.direccion
+         listaFinal[i].observacion = obj1.observacion
          listaFinal[i].nombre = obj1.persona.nombre
          listaFinal[i].apellido = obj1.persona.apellido
        }
@@ -596,6 +596,50 @@ class consultasController {
       });
     }
   };
+
+  agregarObservacionMedico = async (req, res, next) =>{
+    try {
+      const { id: medicoId } = req.medico;
+      const { observacion } = req.body;
+      const consultaDeMedico = await consulta.findOne({
+        where: {
+          medicoId,
+          estado: ENUM_CONSULTA_ESTADOS.enCurso,
+        },
+      });
+      let result;
+      
+      if (consultaDeMedico.observacion != "" && consultaDeMedico.observacion != null) {
+        const observacion1 = `${consultaDeMedico.observacion}` + " / " + observacion;
+        result = consultaDeMedico.update({
+              observacion: observacion1
+         }
+        )
+        
+      } else {
+        result = await consultaDeMedico.update(
+          {observacion}
+        )
+      }
+      res.status(200).send({
+        success: true,
+        message: "Observacion actualizada",
+        result: consultaDeMedico.observacion,
+      });
+      
+    } catch (error) {
+      console.error(error);
+      res.status(400).send({
+        success: false,
+        message: error.message,
+      });
+    }
+
+
+
+
+  };
+
 }
 
 export default consultasController;

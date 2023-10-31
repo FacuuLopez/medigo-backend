@@ -38,4 +38,8 @@ consultasMedicosRutas.get(
   "/historialConsultas",
   consultaController.historialConsultasMedico
 );
+consultasMedicosRutas.put(
+  "/observacion-consulta",
+  consultaController.agregarObservacionMedico
+);
 export default consultasMedicosRutas;
