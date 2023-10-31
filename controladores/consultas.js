@@ -485,6 +485,7 @@ class consultasController {
         },
         where: {
           medicoId: id,
+          estado: ENUM_CONSULTA_ESTADOS.finalizada
         },
       });
 
@@ -540,7 +541,8 @@ class consultasController {
           }
         ],
         where: {
-          clienteId : id
+          clienteId : id,
+          estado: ENUM_CONSULTA_ESTADOS.finalizada
         }
       })
      
