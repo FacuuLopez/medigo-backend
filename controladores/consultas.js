@@ -603,10 +603,23 @@ class consultasController {
         },
       });
 
+      const listaFinal = [];
+      for (let i = 0; i < listaConsultas.length; i++) {
+         const obj1 = listaConsultas[i];
+         
+         listaFinal[i] = {}
+         listaFinal[i].precio = obj1.precio
+         listaFinal[i].createdAt = obj1.createdAt
+         listaFinal[i].valoracionCliente = obj1.valoracionCliente
+         listaFinal[i].direccion = obj1.direccion
+         listaFinal[i].nombre = obj1.persona.nombre
+         listaFinal[i].apellido = obj1.persona.apellido
+       }
+
       res.status(200).send({
         success: true,
         message: "Consultas encontradas",
-        result: listaConsultas,
+        result: listaFinal,
       });
     } catch (error) {
       console.error(error);
@@ -620,30 +633,53 @@ class consultasController {
   historialConsultasCliente = async (req, res, next) => {
     try {
       const { id } = req.cliente;
+      
+
       const listaConsultas = await consulta.findAll({
         attributes: ["precio", "createdAt", "valoracionMedico", "direccion"],
-        include: {
-          model: persona,
-          attributes: ["nombre", "apellido"],
-          model: medico,
-          attributes: ["especialidad"],
-          include: {
-            model: usuario,
-            include: {
-              model: persona,
-              attributes: ["nombre", "apellido"],
-            },
+        include:[
+          {
+            model: persona,
+            attributes: ["nombre", "apellido"]
           },
-        },
+          {
+            model: medico,
+             attributes: ["especialidad"],
+             include: {
+               model: usuario,
+               include: {
+                 model: persona,
+                 attributes: ["nombre", "apellido"],
+               },
+             },
+          }
+        ],
         where: {
-          clienteId: id,
-        },
-      });
-
+          clienteId : id
+        }
+      })
+     
+      const listaFinal = [];
+      for (let i = 0; i < listaConsultas.length; i++) {
+         const obj1 = listaConsultas[i];
+         
+         listaFinal[i] = {}
+         listaFinal[i].precio = obj1.precio
+         listaFinal[i].createdAt = obj1.createdAt
+         listaFinal[i].valoracionMedico = obj1.valoracionMedico
+         listaFinal[i].direccion = obj1.direccion
+         listaFinal[i].nombre = obj1.persona.nombre
+         listaFinal[i].apellido = obj1.persona.apellido
+         listaFinal[i].especialidad = obj1.medico.especialidad
+         listaFinal[i].nombreMedico = obj1.medico.usuario.persona.nombre
+         listaFinal[i].apellidoMedico = obj1.medico.usuario.persona.apellido
+        
+       }
+       
       res.status(200).send({
         success: true,
         message: "Consultas encontradas",
-        result: listaConsultas,
+        result: listaFinal,
       });
     } catch (error) {
       console.error(error);
