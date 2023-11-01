@@ -209,7 +209,7 @@ class consultasController {
 
   aceptarConsulta = async (req, res, next) => {
     try {
-      const { id: medicoId } = req.medico;
+      const { id: medicoId, usuarioId } = req.medico;
 
       const consultaDeMedico = await consulta.findOne({
         where: {
@@ -218,14 +218,25 @@ class consultasController {
         },
       });
 
-      if (consultaDeMedico) {
+      const usuarioEncontrado = await usuario.findOne({
+        where: {
+          id: usuarioId,
+        },
+      });
+
+      if (consultaDeMedico && usuarioEncontrado) {
         await consultaDeMedico.update({
           estado: ENUM_CONSULTA_ESTADOS.enCurso,
+        });
+
+        await usuarioEncontrado.update({
+          estado: ENUM_USUARIO_ESTADOS.desconectado,
         });
 
         res.status(200).send({
           message: "consulta aceptada",
           state: ENUM_CONSULTA_ESTADOS.enCurso,
+          user: ENUM_USUARIO_ESTADOS.desconectado,
         });
       } else {
         res.status(400).send({
