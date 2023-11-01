@@ -178,26 +178,24 @@ class consultasController {
       });
 
       const resultFinal = {};
-      resultFinal.motivo = consultaDeMedico.motivo
-      resultFinal.sintomas = consultaDeMedico.sintomas
-      resultFinal.precio = consultaDeMedico.precio
-      resultFinal.tiempoLlegada = consultaDeMedico.tiempoLlegada
-      resultFinal.estado = consultaDeMedico.estado
-      resultFinal.especialidad = consultaDeMedico.especialidad
-      resultFinal.valoracionMedico = consultaDeMedico.valoracionMedico
-      resultFinal.valoracionCliente = consultaDeMedico.valoracionCliente
-      resultFinal.comentarioDelCliente = consultaDeMedico.comentarioDelCliente
-      resultFinal.comentarioDelMedico = consultaDeMedico.comentarioDelMedico
-      resultFinal.direccion = consultaDeMedico.direccion
-      resultFinal.observacion = consultaDeMedico.observacion
-      resultFinal.createdAt = consultaDeMedico.createdAt
-      resultFinal.updateAt = consultaDeMedico.updateAt
-      resultFinal.nombre = usuarioDeLaConsulta.nombre
-      resultFinal.apellido = usuarioDeLaConsulta.apellido
-      resultFinal.sexo = usuarioDeLaConsulta.sexo
-      resultFinal.fechaNacimiento = usuarioDeLaConsulta.fechaNacimiento
-      
-      
+      resultFinal.motivo = consultaDeMedico.motivo;
+      resultFinal.sintomas = consultaDeMedico.sintomas;
+      resultFinal.precio = consultaDeMedico.precio;
+      resultFinal.tiempoLlegada = consultaDeMedico.tiempoLlegada;
+      resultFinal.estado = consultaDeMedico.estado;
+      resultFinal.especialidad = consultaDeMedico.especialidad;
+      resultFinal.valoracionMedico = consultaDeMedico.valoracionMedico;
+      resultFinal.valoracionCliente = consultaDeMedico.valoracionCliente;
+      resultFinal.comentarioDelCliente = consultaDeMedico.comentarioDelCliente;
+      resultFinal.comentarioDelMedico = consultaDeMedico.comentarioDelMedico;
+      resultFinal.direccion = consultaDeMedico.direccion;
+      resultFinal.observacion = consultaDeMedico.observacion;
+      resultFinal.createdAt = consultaDeMedico.createdAt;
+      resultFinal.updateAt = consultaDeMedico.updateAt;
+      resultFinal.nombre = usuarioDeLaConsulta.nombre;
+      resultFinal.apellido = usuarioDeLaConsulta.apellido;
+      resultFinal.sexo = usuarioDeLaConsulta.sexo;
+      resultFinal.fechaNacimiento = usuarioDeLaConsulta.fechaNacimiento;
 
       res.status(200).json({
         success: true,
@@ -536,7 +534,7 @@ class consultasController {
         listaFinal[i].apellido = obj1.persona.apellido;
       }
 
-      res.status(200).send({
+      res.status(200).json({
         success: true,
         message: "Consultas encontradas",
         result: listaFinal,
