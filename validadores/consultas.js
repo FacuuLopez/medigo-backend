@@ -62,6 +62,18 @@ export const validarDireccion = async (req, res, next) => {
   await middlewareValidar(req, res, next, esquema);
   return;
 };
+
+export const validarLatitudCliente = async (req, res, next) => {
+  const esquema = { latitudCliente: consultaSchema.latitudCliente };
+  await middlewareValidar(req, res, next, esquema);
+  return;
+};
+
+export const validarLongitudCliente = async (req, res, next) => {
+  const esquema = { longitudCliente: consultaSchema.longitudCliente };
+  await middlewareValidar(req, res, next, esquema);
+  return;
+};
 export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
   try {
     const { id: clienteid } = req.cliente;

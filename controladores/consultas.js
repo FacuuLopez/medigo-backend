@@ -26,6 +26,14 @@ class consultasController {
         direccion,
       } = req.body;
 
+      const personaConsulta = await persona.findOne({
+        where:{
+          nombre, 
+          apellido, 
+          grupoFamiliarId: id,
+        }
+      })
+
       await consulta.create({
         clienteId,
         sintomas,
@@ -33,6 +41,9 @@ class consultasController {
         direccion,
         estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
         especialidad,
+        personaId: personaConsulta.id,
+        latitudCLiente: latitud,
+        longitudCliente: longitud,
       });
 
       let medicosDisponibles = await medico.findAll({
@@ -206,6 +217,8 @@ class consultasController {
       resultFinal.observacion = consultaDeMedico.observacion;
       resultFinal.createdAt = consultaDeMedico.createdAt;
       resultFinal.updateAt = consultaDeMedico.updateAt;
+      resultFinal.latitudCliente = consultaDeMedico.latitudCliente;
+      resultFinal.longitudCliente = consultaDeMedico.longitudCliente;
       resultFinal.nombre = usuarioDeLaConsulta.nombre;
       resultFinal.apellido = usuarioDeLaConsulta.apellido;
       resultFinal.sexo = usuarioDeLaConsulta.sexo;
