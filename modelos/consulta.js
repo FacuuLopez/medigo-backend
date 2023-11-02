@@ -54,7 +54,7 @@ consulta.init(
       type: DT.STRING,
       allowNull: true,
     },
-    FechaYHoraDeSeleccionandoMedico: {
+    fechaSeleccion: {
       type: DT.DATE,
       allowNull: true,
     },

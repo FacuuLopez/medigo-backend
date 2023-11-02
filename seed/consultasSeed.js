@@ -27,7 +27,7 @@ const crearConsultas = async () => {
       const personaId = i * 2;
       const medicoId = 1;
       const observacion = `observacion ${i}`;
-      const FechaYHoraDeSeleccionandoMedico = null;
+      const fechaSeleccion = null;
 
       let estado;
 
@@ -79,7 +79,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
-        FechaYHoraDeSeleccionandoMedico,
+        fechaSeleccion,
         clienteId,
         medicoId,
         personaId,
@@ -99,7 +99,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
-        FechaYHoraDeSeleccionandoMedico,
+        fechaSeleccion,
         clienteId,
         medicoId,
         personaId,
@@ -118,7 +118,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
-        FechaYHoraDeSeleccionandoMedico,
+        fechaSeleccion,
         clienteId,
         medicoId,
         personaId,
@@ -138,7 +138,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
-        FechaYHoraDeSeleccionandoMedico,
+        fechaSeleccion,
         clienteId,
         medicoId,
         personaId,
