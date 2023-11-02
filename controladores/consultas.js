@@ -124,6 +124,7 @@ class consultasController {
     try {
       const { id: clienteId } = req.cliente;
       const { nroMatricula } = req.body;
+      //console.log("id", clienteId);
 
       const consultaDePaciente = await consulta.findOne({
         where: {
@@ -139,26 +140,72 @@ class consultasController {
       });
 
       if (consultaDePaciente && medicoEncontrado) {
+        // Obtener la fecha y hora actual
+        const currentDateTime = new Date();
+        //console.log("Medico encontrado = ", medicoEncontrado);
+
+        // Actualizar la consulta con el médico y la fecha y hora
         await consultaDePaciente.update({
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
-          medicoId: medico.medicoId,
+          medicoId: medicoEncontrado.id,
+          fechaSeleccion: currentDateTime,
         });
 
         res.status(200).json({
-          message: "Agregado medico a consulta con exito",
-          esatdo: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+          message: "Agregado médico a consulta con éxito",
+          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         });
       } else {
         res.status(404).json({
           message:
-            "No se encontró ninguna consulta en seleccionando medico con ese cliente",
+            "No se encontró ninguna consulta en seleccionando médico con ese cliente",
         });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).send("no se pudo iniciar la consutla");
+      res.status(500).send("No se pudo iniciar la consulta");
     }
   };
+
+  // seleccionarMedicoConsulta = async (req, res, next) => {
+  //   try {
+  //     const { id: clienteId } = req.cliente;
+  //     const { nroMatricula } = req.body;
+
+  //     const consultaDePaciente = await consulta.findOne({
+  //       where: {
+  //         clienteId,
+  //         estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+  //       },
+  //     });
+
+  //     const medicoEncontrado = await medico.findOne({
+  //       where: {
+  //         nroMatricula,
+  //       },
+  //     });
+
+  //     if (consultaDePaciente && medicoEncontrado) {
+  //       await consultaDePaciente.update({
+  //         estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+  //         medicoId: medico.medicoId,
+  //       });
+
+  //       res.status(200).json({
+  //         message: "Agregado medico a consulta con exito",
+  //         esatdo: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+  //       });
+  //     } else {
+  //       res.status(404).json({
+  //         message:
+  //           "No se encontró ninguna consulta en seleccionando medico con ese cliente",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).send("no se pudo iniciar la consutla");
+  //   }
+  // };
 
   solicitarConsultaMedico = async (req, res, next) => {
     try {
