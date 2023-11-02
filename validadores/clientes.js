@@ -1,4 +1,17 @@
 import { cliente as modeloCliente } from "../modelos/index.js";
+import { clienteSchema } from "./esquemas/clientes.js";
+
+export const validarCodigoPostal= async (req, res, next) => {
+    const esquema = { codigoPostal: clienteSchema.codigoPostal }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
+
+export const validarCiudad= async (req, res, next) => {
+    const esquema = { ciudad: clienteSchema.ciudad }
+    await middlewareValidar(req, res, next, esquema);
+    return
+}
 
 export const validarCliente = async (req, res, next) => {
     try {

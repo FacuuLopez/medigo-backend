@@ -5,7 +5,7 @@ import { ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
 export const crearNuevoCliente = async ({
     nombre, apellido, sexo, fechaNacimiento,
     username, password, dni, telefono, direccion, estado,
-    grupoFamiliar: familiares
+    grupoFamiliar: familiares, ciudad, codigoPostal
 }) => {
     // Primero, crea un Grupo Familiar
     const nuevoGrupoFamiliar = await grupoFamiliar.create({
@@ -38,6 +38,8 @@ export const crearNuevoCliente = async ({
     const nuevoCliente = await cliente.create({
         usuarioId: nuevoUsuario.dataValues.id,
         grupoFamiliarId: nuevoGrupoFamiliar.dataValues.id,
+        codigoPostal: codigoPostal,
+        ciudad: ciudad,
     });
 
     return
@@ -107,6 +109,8 @@ class clientesController {
                 fechaNacimiento,
                 direccion,
                 sexo,
+                codigoPostal,
+                ciudad
             } = req.body;
             const clienteEncontradoRecien = await cliente.findByPk(id, {
                 include: [
@@ -152,6 +156,15 @@ class clientesController {
                 datosCliente.familiares = familiares;
             }
 
+            const datosPersonalesCliente = {};
+            if (ciudad !== undefined && ciudad !== null) {
+                datosPersonalesCliente.ciudad = ciudad;
+            }
+
+            if (codigoPostal !== undefined && codigoPostal !== null) {
+                datosPersonalesCliente.codigoPostal = codigoPostal;
+            }
+
             const clienteEncontrado = await cliente.findByPk(id, {
                 include: [
                     {
@@ -178,6 +191,14 @@ class clientesController {
                 },
                 {
                     where: { id: personaId }
+                }
+            );
+            const resultCliente = await cliente.update(
+                {
+                    ...datosPersonalesCliente
+                },
+                {
+                    where: { id }
                 }
             );
             if (familiares && familiares.length > 0) {
