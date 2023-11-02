@@ -1,7 +1,7 @@
 import { Router } from "express";
 import consultasController from "../controladores/consultas.js";
 import {
-  //validarSeleccionarMedicoConsulta,
+  validarSeleccionarMedicoConsulta,
   validarValorarConsultaCliente,
 } from "../validadores/consultas.js";
 
@@ -14,7 +14,7 @@ consultasClientesRutas.post(
 );
 consultasClientesRutas.post(
   "/seleccionar-medico",
-  //validarSeleccionarMedicoConsulta,
+  validarSeleccionarMedicoConsulta,
   consultaController.seleccionarMedicoConsulta
 );
 consultasClientesRutas.put(

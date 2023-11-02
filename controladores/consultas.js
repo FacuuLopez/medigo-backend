@@ -142,11 +142,12 @@ class consultasController {
       if (consultaDePaciente && medicoEncontrado) {
         // Obtener la fecha y hora actual
         const currentDateTime = new Date();
+        console.log("Medico encontrado = ", medicoEncontrado);
 
         // Actualizar la consulta con el médico y la fecha y hora
         await consultaDePaciente.update({
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
-          medicoId: medico.medicoId,
+          medicoId: medicoEncontrado.id,
           FechaYHoraDeSeleccionandoMedico: currentDateTime,
         });
 

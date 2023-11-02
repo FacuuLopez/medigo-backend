@@ -62,23 +62,23 @@ export const validarDireccion = async (req, res, next) => {
   await middlewareValidar(req, res, next, esquema);
   return;
 };
-//  export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
-//    try {
-//      const { id: clienteid } = req.cliente;
-//      console.log("cliente", req.cliente);
-//      const consulta = await _encontrarConsultaCliente(
-//        clienteid,
-//        ENUM_CONSULTA_ESTADOS.seleccionandoMedico
-//      );
-//      console.log("la consulta entera", consulta);
-//      console.log("consulta", consulta.datavalues);
-//      req.consulta = consulta.datavalues;
-//      next();
-//    } catch (error) {
-//      console.error(error);
-//      res.status(500).json({ error: "error interno del servidor." });
-//    }
-//  };
+export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
+  try {
+    const { id: clienteid } = req.cliente;
+    //console.log("cliente", req.cliente);
+    const consulta = await _encontrarConsultaCliente(
+      clienteid,
+      ENUM_CONSULTA_ESTADOS.seleccionandoMedico
+    );
+    //console.log("la consulta entera", consulta);
+    //console.log("consulta", consulta.dataValues);
+    req.consulta = consulta.dataValues;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "error interno del servidor." });
+  }
+};
 
 export const validarValorarConsultaCliente = async (req, res, next) => {
   try {
