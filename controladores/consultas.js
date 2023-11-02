@@ -6,7 +6,7 @@ import {
 } from "../utils/enums.js";
 import { calcularDistanciaCalles } from "../utils/distancias.js";
 
-const MINUTOS_POR_CUADRA = 0.5
+const MINUTOS_POR_CUADRA = 0.5;
 class consultasController {
   constructor() {}
 
@@ -41,8 +41,8 @@ class consultasController {
             model: usuario,
             include: [persona], // Si también quieres incluir el modelo Persona dentro del modelo Usuario
             where: {
-              estado: ENUM_USUARIO_ESTADOS.conectado
-            }
+              estado: ENUM_USUARIO_ESTADOS.conectado,
+            },
           },
         ],
         where: {
@@ -51,31 +51,31 @@ class consultasController {
       });
 
       medicosDisponibles = medicosDisponibles
-          .map((medico) =>
-              Object.assign(medico, {
-                  distancia: calcularDistanciaCalles(
-                      latitud,
-                      longitud,
-                      medico.latitud,
-                      medico.longitud
-                  ),
-              })
-          )
-          .filter((medico) => medico.distancia <= Number(medico.radioAccion))
-          .sort((medicoA, medicoB) => medicoA.distancia - medicoB.distancia)
-          .map((medico) => ({
-              nroMatricula: medico.nroMatricula,
-              nombre: medico.usuario.persona.nombre,
-              apellido: medico.usuario.persona.apellido,
-              especialidad: medico.especialidad,
-              precio: medico.precio,
-              valoracion: medico.usuario.valoracion,
-              resenas: 0, // TODO: Implementar reseñas
-              comentarios: [], // TODO: Implementar comentarios
-              tiempo: Math.round(medico.distancia / 100 * MINUTOS_POR_CUADRA),
-              latitud: medico.latitud,
-              longitud: medico.longitud,
-          }));
+        .map((medico) =>
+          Object.assign(medico, {
+            distancia: calcularDistanciaCalles(
+              latitud,
+              longitud,
+              medico.latitud,
+              medico.longitud
+            ),
+          })
+        )
+        .filter((medico) => medico.distancia <= Number(medico.radioAccion))
+        .sort((medicoA, medicoB) => medicoA.distancia - medicoB.distancia)
+        .map((medico) => ({
+          nroMatricula: medico.nroMatricula,
+          nombre: medico.usuario.persona.nombre,
+          apellido: medico.usuario.persona.apellido,
+          especialidad: medico.especialidad,
+          precio: medico.precio,
+          valoracion: medico.usuario.valoracion,
+          resenas: 0, // TODO: Implementar reseñas
+          comentarios: [], // TODO: Implementar comentarios
+          tiempo: Math.round((medico.distancia / 100) * MINUTOS_POR_CUADRA),
+          latitud: medico.latitud,
+          longitud: medico.longitud,
+        }));
 
       res.status(200).json(medicosDisponibles);
     } catch (error) {
@@ -119,7 +119,8 @@ class consultasController {
 
         res.status(200).json({
           message: "Agregado médico a consulta con éxito",
-          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+          hora: currentDateTime,
         });
       } else {
         res.status(404).json({
