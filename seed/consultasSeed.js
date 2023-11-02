@@ -26,7 +26,8 @@ const crearConsultas = async () => {
       const clienteId = i;
       const personaId = i * 2;
       const medicoId = 1;
-      const observacion = `observacion ${i}`
+      const observacion = `observacion ${i}`;
+      const FechaYHoraDeSeleccionandoMedico = null;
 
       let estado;
 
@@ -78,10 +79,10 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
+        FechaYHoraDeSeleccionandoMedico,
         clienteId,
         medicoId,
         personaId,
-        
       });
 
       // Crear consultas "rechazada" y "finalizada" para este cliente
@@ -98,6 +99,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
+        FechaYHoraDeSeleccionandoMedico,
         clienteId,
         medicoId,
         personaId,
@@ -116,6 +118,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
+        FechaYHoraDeSeleccionandoMedico,
         clienteId,
         medicoId,
         personaId,
@@ -135,6 +138,7 @@ const crearConsultas = async () => {
         comentarioDelCliente,
         direccion,
         observacion,
+        FechaYHoraDeSeleccionandoMedico,
         clienteId,
         medicoId,
         personaId,

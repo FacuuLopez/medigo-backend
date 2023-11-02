@@ -50,11 +50,14 @@ consulta.init(
       type: DT.JSON,
       allowNull: false,
     },
-    observacion:{
+    observacion: {
       type: DT.STRING,
       allowNull: true,
-      
-    }
+    },
+    FechaYHoraDeSeleccionandoMedico: {
+      type: DT.DATE,
+      allowNull: true,
+    },
   },
   {
     sequelize,
