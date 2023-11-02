@@ -63,7 +63,9 @@ const crearMedicos = async () => {
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
       const estado =
-        Math.random() > 0.7
+        i === 1
+          ? ENUM_USUARIO_ESTADOS.desconectado
+          : Math.random() > 0.7
           ? ENUM_USUARIO_ESTADOS.desconectado
           : ENUM_USUARIO_ESTADOS.conectado;
       const sexo = i % 2 === 0 ? "F" : "M";

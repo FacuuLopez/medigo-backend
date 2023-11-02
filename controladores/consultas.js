@@ -90,6 +90,7 @@ class consultasController {
     try {
       const { id: clienteId } = req.cliente;
       const { nroMatricula } = req.body;
+      //console.log("id", clienteId);
 
       const consultaDePaciente = await consulta.findOne({
         where: {
@@ -105,26 +106,72 @@ class consultasController {
       });
 
       if (consultaDePaciente && medicoEncontrado) {
+        // Obtener la fecha y hora actual
+        const currentDateTime = new Date();
+        //console.log("Medico encontrado = ", medicoEncontrado);
+
+        // Actualizar la consulta con el médico y la fecha y hora
         await consultaDePaciente.update({
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
-          medicoId: medico.medicoId,
+          medicoId: medicoEncontrado.id,
+          fechaSeleccion: currentDateTime,
         });
 
         res.status(200).json({
-          message: "Agregado medico a consulta con exito",
-          esatdo: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+          message: "Agregado médico a consulta con éxito",
+          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         });
       } else {
         res.status(404).json({
           message:
-            "No se encontró ninguna consulta en seleccionando medico con ese cliente",
+            "No se encontró ninguna consulta en seleccionando médico con ese cliente",
         });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).send("no se pudo iniciar la consutla");
+      res.status(500).send("No se pudo iniciar la consulta");
     }
   };
+
+  // seleccionarMedicoConsulta = async (req, res, next) => {
+  //   try {
+  //     const { id: clienteId } = req.cliente;
+  //     const { nroMatricula } = req.body;
+
+  //     const consultaDePaciente = await consulta.findOne({
+  //       where: {
+  //         clienteId,
+  //         estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+  //       },
+  //     });
+
+  //     const medicoEncontrado = await medico.findOne({
+  //       where: {
+  //         nroMatricula,
+  //       },
+  //     });
+
+  //     if (consultaDePaciente && medicoEncontrado) {
+  //       await consultaDePaciente.update({
+  //         estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+  //         medicoId: medico.medicoId,
+  //       });
+
+  //       res.status(200).json({
+  //         message: "Agregado medico a consulta con exito",
+  //         esatdo: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+  //       });
+  //     } else {
+  //       res.status(404).json({
+  //         message:
+  //           "No se encontró ninguna consulta en seleccionando medico con ese cliente",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).send("no se pudo iniciar la consutla");
+  //   }
+  // };
 
   solicitarConsultaMedico = async (req, res, next) => {
     try {
@@ -137,10 +184,36 @@ class consultasController {
         },
       });
 
-      res.status(200).send({
+      const usuarioDeLaConsulta = await persona.findOne({
+        where: {
+          id: consultaDeMedico.personaId,
+        },
+      });
+
+      const resultFinal = {};
+      resultFinal.motivo = consultaDeMedico.motivo;
+      resultFinal.sintomas = consultaDeMedico.sintomas;
+      resultFinal.precio = consultaDeMedico.precio;
+      resultFinal.tiempoLlegada = consultaDeMedico.tiempoLlegada;
+      resultFinal.estado = consultaDeMedico.estado;
+      resultFinal.especialidad = consultaDeMedico.especialidad;
+      resultFinal.valoracionMedico = consultaDeMedico.valoracionMedico;
+      resultFinal.valoracionCliente = consultaDeMedico.valoracionCliente;
+      resultFinal.comentarioDelCliente = consultaDeMedico.comentarioDelCliente;
+      resultFinal.comentarioDelMedico = consultaDeMedico.comentarioDelMedico;
+      resultFinal.direccion = consultaDeMedico.direccion;
+      resultFinal.observacion = consultaDeMedico.observacion;
+      resultFinal.createdAt = consultaDeMedico.createdAt;
+      resultFinal.updateAt = consultaDeMedico.updateAt;
+      resultFinal.nombre = usuarioDeLaConsulta.nombre;
+      resultFinal.apellido = usuarioDeLaConsulta.apellido;
+      resultFinal.sexo = usuarioDeLaConsulta.sexo;
+      resultFinal.fechaNacimiento = usuarioDeLaConsulta.fechaNacimiento;
+
+      res.status(200).json({
         success: true,
         message: "Consulta",
-        result: consultaDeMedico,
+        result: resultFinal,
       });
     } catch (error) {
       res.status(500).send(error.message);
@@ -149,7 +222,7 @@ class consultasController {
 
   aceptarConsulta = async (req, res, next) => {
     try {
-      const { id: medicoId } = req.medico;
+      const { id: medicoId, usuarioId } = req.medico;
 
       const consultaDeMedico = await consulta.findOne({
         where: {
@@ -158,14 +231,25 @@ class consultasController {
         },
       });
 
-      if (consultaDeMedico) {
+      const usuarioEncontrado = await usuario.findOne({
+        where: {
+          id: usuarioId,
+        },
+      });
+
+      if (consultaDeMedico && usuarioEncontrado) {
         await consultaDeMedico.update({
           estado: ENUM_CONSULTA_ESTADOS.enCurso,
+        });
+
+        await usuarioEncontrado.update({
+          estado: ENUM_USUARIO_ESTADOS.desconectado,
         });
 
         res.status(200).send({
           message: "consulta aceptada",
           state: ENUM_CONSULTA_ESTADOS.enCurso,
+          user: ENUM_USUARIO_ESTADOS.desconectado,
         });
       } else {
         res.status(400).send({
@@ -443,32 +527,38 @@ class consultasController {
     try {
       const { id } = req.medico;
       const listaConsultas = await consulta.findAll({
-        attributes: ["precio", "createdAt", "valoracionCliente", "direccion", "observacion"],
+        attributes: [
+          "precio",
+          "createdAt",
+          "valoracionCliente",
+          "direccion",
+          "observacion",
+        ],
         include: {
           model: persona,
           attributes: ["nombre", "apellido"],
         },
         where: {
           medicoId: id,
-          estado: ENUM_CONSULTA_ESTADOS.finalizada
+          estado: ENUM_CONSULTA_ESTADOS.finalizada,
         },
       });
 
       const listaFinal = [];
       for (let i = 0; i < listaConsultas.length; i++) {
-         const obj1 = listaConsultas[i];
-         
-         listaFinal[i] = {}
-         listaFinal[i].precio = obj1.precio
-         listaFinal[i].createdAt = obj1.createdAt
-         listaFinal[i].valoracionCliente = obj1.valoracionCliente
-         listaFinal[i].direccion = obj1.direccion
-         listaFinal[i].observacion = obj1.observacion
-         listaFinal[i].nombre = obj1.persona.nombre
-         listaFinal[i].apellido = obj1.persona.apellido
-       }
+        const obj1 = listaConsultas[i];
 
-      res.status(200).send({
+        listaFinal[i] = {};
+        listaFinal[i].precio = obj1.precio;
+        listaFinal[i].createdAt = obj1.createdAt;
+        listaFinal[i].valoracionCliente = obj1.valoracionCliente;
+        listaFinal[i].direccion = obj1.direccion;
+        listaFinal[i].observacion = obj1.observacion;
+        listaFinal[i].nombre = obj1.persona.nombre;
+        listaFinal[i].apellido = obj1.persona.apellido;
+      }
+
+      res.status(200).json({
         success: true,
         message: "Consultas encontradas",
         result: listaFinal,
@@ -485,50 +575,48 @@ class consultasController {
   historialConsultasCliente = async (req, res, next) => {
     try {
       const { id } = req.cliente;
-      
 
       const listaConsultas = await consulta.findAll({
         attributes: ["precio", "createdAt", "valoracionMedico", "direccion"],
-        include:[
+        include: [
           {
             model: persona,
-            attributes: ["nombre", "apellido"]
+            attributes: ["nombre", "apellido"],
           },
           {
             model: medico,
-             attributes: ["especialidad"],
-             include: {
-               model: usuario,
-               include: {
-                 model: persona,
-                 attributes: ["nombre", "apellido"],
-               },
-             },
-          }
+            attributes: ["especialidad"],
+            include: {
+              model: usuario,
+              include: {
+                model: persona,
+                attributes: ["nombre", "apellido"],
+              },
+            },
+          },
         ],
         where: {
-          clienteId : id,
-          estado: ENUM_CONSULTA_ESTADOS.finalizada
-        }
-      })
-     
+          clienteId: id,
+          estado: ENUM_CONSULTA_ESTADOS.finalizada,
+        },
+      });
+
       const listaFinal = [];
       for (let i = 0; i < listaConsultas.length; i++) {
-         const obj1 = listaConsultas[i];
-         
-         listaFinal[i] = {}
-         listaFinal[i].precio = obj1.precio
-         listaFinal[i].createdAt = obj1.createdAt
-         listaFinal[i].valoracionMedico = obj1.valoracionMedico
-         listaFinal[i].direccion = obj1.direccion
-         listaFinal[i].nombre = obj1.persona.nombre
-         listaFinal[i].apellido = obj1.persona.apellido
-         listaFinal[i].especialidad = obj1.medico.especialidad
-         listaFinal[i].nombreMedico = obj1.medico.usuario.persona.nombre
-         listaFinal[i].apellidoMedico = obj1.medico.usuario.persona.apellido
-        
-       }
-       
+        const obj1 = listaConsultas[i];
+
+        listaFinal[i] = {};
+        listaFinal[i].precio = obj1.precio;
+        listaFinal[i].createdAt = obj1.createdAt;
+        listaFinal[i].valoracionMedico = obj1.valoracionMedico;
+        listaFinal[i].direccion = obj1.direccion;
+        listaFinal[i].nombre = obj1.persona.nombre;
+        listaFinal[i].apellido = obj1.persona.apellido;
+        listaFinal[i].especialidad = obj1.medico.especialidad;
+        listaFinal[i].nombreMedico = obj1.medico.usuario.persona.nombre;
+        listaFinal[i].apellidoMedico = obj1.medico.usuario.persona.apellido;
+      }
+
       res.status(200).send({
         success: true,
         message: "Consultas encontradas",
@@ -563,7 +651,7 @@ class consultasController {
     }
   };
 
-  agregarObservacionMedico = async (req, res, next) =>{
+  agregarObservacionMedico = async (req, res, next) => {
     try {
       const { id: medicoId } = req.medico;
       const { observacion } = req.body;
@@ -574,25 +662,24 @@ class consultasController {
         },
       });
       let result;
-      
-      if (consultaDeMedico.observacion != "" && consultaDeMedico.observacion != null) {
-        const observacion1 = `${consultaDeMedico.observacion}` + " / " + observacion;
+
+      if (
+        consultaDeMedico.observacion != "" &&
+        consultaDeMedico.observacion != null
+      ) {
+        const observacion1 =
+          `${consultaDeMedico.observacion}` + " / " + observacion;
         result = consultaDeMedico.update({
-              observacion: observacion1
-         }
-        )
-        
+          observacion: observacion1,
+        });
       } else {
-        result = await consultaDeMedico.update(
-          {observacion}
-        )
+        result = await consultaDeMedico.update({ observacion });
       }
       res.status(200).send({
         success: true,
         message: "Observacion actualizada",
         result: consultaDeMedico.observacion,
       });
-      
     } catch (error) {
       console.error(error);
       res.status(400).send({
@@ -600,12 +687,7 @@ class consultasController {
         message: error.message,
       });
     }
-
-
-
-
   };
-
 }
 
 export default consultasController;
