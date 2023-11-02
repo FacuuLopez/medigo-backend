@@ -28,6 +28,8 @@ const crearConsultas = async () => {
       const medicoId = 1;
       const observacion = `observacion ${i}`;
       const fechaSeleccion = null;
+      const latitudCliente = -34.5928224
+      const longitudCliente = -58.3856141
 
       let estado;
 
@@ -83,6 +85,8 @@ const crearConsultas = async () => {
         clienteId,
         medicoId,
         personaId,
+        latitudCliente,
+        longitudCliente
       });
 
       // Crear consultas "rechazada" y "finalizada" para este cliente
@@ -103,6 +107,8 @@ const crearConsultas = async () => {
         clienteId,
         medicoId,
         personaId,
+        latitudCliente,
+        longitudCliente
       });
 
       await Consulta.create({
@@ -122,6 +128,8 @@ const crearConsultas = async () => {
         clienteId,
         medicoId,
         personaId,
+        latitudCliente,
+        longitudCliente
       });
 
       // Crear consultas "cancelada" para este cliente
@@ -142,6 +150,8 @@ const crearConsultas = async () => {
         clienteId,
         medicoId,
         personaId,
+        latitudCliente,
+        longitudCliente
       });
     }
 

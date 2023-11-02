@@ -58,6 +58,14 @@ consulta.init(
       type: DT.DATE,
       allowNull: true,
     },
+    latitudCliente:{
+      type: DT.DECIMAL,
+      allowNull: true,
+    },
+    longitudCliente:{
+      type: DT.DECIMAL,
+      allowNull: true,
+    }
   },
   {
     sequelize,
