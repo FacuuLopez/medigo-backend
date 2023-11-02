@@ -17,6 +17,8 @@ export const crearMedico = async ({
   telefono,
   direccion,
   estado,
+  latitud,
+  longitud,
 }) => {
   const nuevaPersona = await persona.create({
     nombre,
@@ -42,6 +44,8 @@ export const crearMedico = async ({
     precio,
     radioAccion,
     especialidad,
+    latitud,
+    longitud,
   });
 
   return nuevoMedico;
