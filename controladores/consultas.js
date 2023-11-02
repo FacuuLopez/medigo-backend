@@ -4,37 +4,9 @@ import {
   ENUM_MEDICO_ESPECIALIDADES,
   ENUM_USUARIO_ESTADOS,
 } from "../utils/enums.js";
+import { calcularDistanciaCalles } from "../utils/distancias.js";
 
-const DISTANCIA_MAXIMA_M = 1500;
-
-/**
- * Calcula la distancia entre dos puntos geográficos.
- */
-const calcularDistancia = (x1, y1, x2, y2) => {
-  const rad1 = {
-    x: x1 * (Math.PI / 180),
-    y: y1 * (Math.PI / 180),
-  };
-  const rad2 = {
-    x: x2 * (Math.PI / 180),
-    y: y2 * (Math.PI / 180),
-  };
-
-  deltaX = rad1.x - rad2.x;
-  deltaY = rad1.y - rad2.y;
-
-  // Se aplica la fórmula del semiverseno
-  // https://es.wikipedia.org/wiki/Fórmula_del_semiverseno
-  const a =
-    Math.sin(deltaX / 2) ** 2 +
-    Math.cos(rad1.x) * Math.cos(rad2.x) * Math.sin(deltaY / 2) ** 2;
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-  const RADIO_TIERRA_KM = 6371;
-
-  return RADIO_TIERRA_KM * c * 1000;
-};
-
+const MINUTOS_POR_CUADRA = 0.5;
 class consultasController {
   constructor() {}
 
@@ -68,6 +40,9 @@ class consultasController {
           {
             model: usuario,
             include: [persona], // Si también quieres incluir el modelo Persona dentro del modelo Usuario
+            where: {
+              estado: ENUM_USUARIO_ESTADOS.conectado,
+            },
           },
         ],
         where: {
@@ -76,40 +51,31 @@ class consultasController {
       });
 
       medicosDisponibles = medicosDisponibles
-        .filter(
-          (medico) => medico.usuario.estado == ENUM_USUARIO_ESTADOS.conectado
+        .map((medico) =>
+          Object.assign(medico, {
+            distancia: calcularDistanciaCalles(
+              latitud,
+              longitud,
+              medico.latitud,
+              medico.longitud
+            ),
+          })
         )
-        /* TODO: Descomentar cuando se implementen las coordenadas
-                .sort((medicoA, medicoB) =>
-                    calcularDistancia(
-                        latitud,
-                        longitud,
-                        medicoA.latitud, // TODO: Revisar las ubicaciones
-                        medicoA.longitud  // TODO: Revisar las ubicaciones
-                    ) -
-                    calcularDistancia(
-                        latitud,
-                        longitud,
-                        medicoB.latitud, // TODO: Revisar las ubicaciones
-                        medicoB.longitud  // TODO: Revisar las ubicaciones
-                    )
-                );*/
+        .filter((medico) => medico.distancia <= Number(medico.radioAccion))
+        .sort((medicoA, medicoB) => medicoA.distancia - medicoB.distancia)
         .map((medico) => ({
           nroMatricula: medico.nroMatricula,
           nombre: medico.usuario.persona.nombre,
           apellido: medico.usuario.persona.apellido,
           especialidad: medico.especialidad,
-          tiempo: 500, // TODO: Calcualar según ubicación
           precio: medico.precio,
           valoracion: medico.usuario.valoracion,
           resenas: 0, // TODO: Implementar reseñas
           comentarios: [], // TODO: Implementar comentarios
+          tiempo: Math.round((medico.distancia / 100) * MINUTOS_POR_CUADRA),
+          latitud: medico.latitud,
+          longitud: medico.longitud,
         }));
-      /*
-       * TODO: Falta filtrar los médicos cuando distancia > radioAccion.
-       *       Esto falta porque en el modelo de médicos todavía no se
-       *       modificó cómo se guardan las coordenadas
-       */
 
       res.status(200).json(medicosDisponibles);
     } catch (error) {
@@ -153,7 +119,8 @@ class consultasController {
 
         res.status(200).json({
           message: "Agregado médico a consulta con éxito",
-          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+          hora: currentDateTime,
         });
       } else {
         res.status(404).json({
