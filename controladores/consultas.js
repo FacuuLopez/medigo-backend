@@ -1,4 +1,10 @@
-import { consulta, persona, usuario, medico } from "../modelos/index.js";
+import {
+  consulta,
+  persona,
+  usuario,
+  medico,
+  grupoFamiliar,
+} from "../modelos/index.js";
 import {
   ENUM_CONSULTA_ESTADOS,
   ENUM_MEDICO_ESPECIALIDADES,
@@ -26,12 +32,16 @@ class consultasController {
         direccion,
       } = req.body;
 
-      const personaConsulta = await persona.findOne({
-        where: {
-          nombre,
-          apellido,
-          grupoFamiliarId: id,
-        },
+      const personaConsulta = await grupoFamiliar.findByPk(id, {
+        include: [
+          {
+            model: persona,
+            where: {
+              nombre,
+              apellido,
+            },
+          },
+        ],
       });
 
       await consulta.create({
