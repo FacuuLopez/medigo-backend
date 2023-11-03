@@ -14,7 +14,6 @@ consultasClientesRutas.post(
 );
 consultasClientesRutas.post(
   "/seleccionar-medico",
-  validarSeleccionarMedicoConsulta,
   consultaController.seleccionarMedicoConsulta
 );
 consultasClientesRutas.put(

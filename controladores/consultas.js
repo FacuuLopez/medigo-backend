@@ -134,14 +134,19 @@ class consultasController {
           estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         },
       });
-
+      if (!consultaDePaciente) {
+        throw new Error("No existen consultas en ese estado para este cliente.")
+      }
       const medicoEncontrado = await medico.findOne({
         where: {
           nroMatricula,
         },
       });
 
-      if (consultaDePaciente && medicoEncontrado) {
+      if (!medicoEncontrado) {
+        throw new Error("No existe el medico solicitado.")
+      }
+
         // Obtener la fecha y hora actual
         const currentDateTime = new Date();
         //console.log("Medico encontrado = ", medicoEncontrado);
@@ -158,15 +163,10 @@ class consultasController {
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
           hora: currentDateTime,
         });
-      } else {
-        res.status(404).json({
-          message:
-            "No se encontró ninguna consulta en seleccionando médico con ese cliente",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("No se pudo iniciar la consulta");
+     
+      }catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
     }
   };
 

@@ -82,13 +82,16 @@ export const validarSeleccionarMedicoConsulta = async (req, res, next) => {
       clienteid,
       ENUM_CONSULTA_ESTADOS.seleccionandoMedico
     );
+    if (!consulta) {
+      throw new Error("No existen consultas en ese estado para este cliente.")
+    }
     //console.log("la consulta entera", consulta);
     //console.log("consulta", consulta.dataValues);
     req.consulta = consulta.dataValues;
     next();
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "error interno del servidor." });
+    res.status(500).json(error.message);
   }
 };
 
