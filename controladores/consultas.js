@@ -27,12 +27,12 @@ class consultasController {
       } = req.body;
 
       const personaConsulta = await persona.findOne({
-        where:{
-          nombre, 
-          apellido, 
+        where: {
+          nombre,
+          apellido,
           grupoFamiliarId: id,
-        }
-      })
+        },
+      });
 
       await consulta.create({
         clienteId,
@@ -88,7 +88,10 @@ class consultasController {
           longitud: medico.longitud,
         }));
 
-      res.status(200).json(medicosDisponibles);
+      res.status(200).json({
+        message: "Listado de medicos",
+        result: medicosDisponibles,
+      });
     } catch (error) {
       res.status(500).send({
         success: false,
