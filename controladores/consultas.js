@@ -35,26 +35,28 @@ class consultasController {
 
       const clienteEncontrado = await cliente.findOne({
         where: {
-            id: clienteId
+          id: clienteId,
         },
         include: [
-            {
-                model: grupoFamiliar, 
-                include: [
-                    {
-                        model: persona,
-                        where: {
-                          nombre,
-                          apellido
-                        }
-                    }
-                ]
-            }
-        ]
-    });
-      
-      const {id : personaId} = clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0].dataValues
-      
+          {
+            model: grupoFamiliar,
+            include: [
+              {
+                model: persona,
+                where: {
+                  nombre,
+                  apellido,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const { id: personaId } =
+        clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0]
+          .dataValues;
+
       await consulta.create({
         clienteId,
         sintomas,
@@ -114,7 +116,7 @@ class consultasController {
         result: medicosDisponibles,
       });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       res.status(500).send({
         success: false,
         message: error.message,
@@ -244,6 +246,7 @@ class consultasController {
       resultFinal.updateAt = consultaDeMedico.updateAt;
       resultFinal.latitudCliente = consultaDeMedico.latitudCliente;
       resultFinal.longitudCliente = consultaDeMedico.longitudCliente;
+      resultFinal.fechaSeleccion = consultaDeMedico.fechaSeleccion;
       resultFinal.nombre = usuarioDeLaConsulta.nombre;
       resultFinal.apellido = usuarioDeLaConsulta.apellido;
       resultFinal.sexo = usuarioDeLaConsulta.sexo;
