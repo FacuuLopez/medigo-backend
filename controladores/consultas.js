@@ -1,4 +1,11 @@
-import { consulta, persona, usuario, medico } from "../modelos/index.js";
+import {
+  consulta,
+  persona,
+  usuario,
+  medico,
+  grupoFamiliar,
+  cliente,
+} from "../modelos/index.js";
 import {
   ENUM_CONSULTA_ESTADOS,
   ENUM_MEDICO_ESPECIALIDADES,
@@ -26,6 +33,30 @@ class consultasController {
         direccion,
       } = req.body;
 
+      const clienteEncontrado = await cliente.findOne({
+        where: {
+          id: clienteId,
+        },
+        include: [
+          {
+            model: grupoFamiliar,
+            include: [
+              {
+                model: persona,
+                where: {
+                  nombre,
+                  apellido,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const { id: personaId } =
+        clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0]
+          .dataValues;
+
       await consulta.create({
         clienteId,
         sintomas,
@@ -33,6 +64,9 @@ class consultasController {
         direccion,
         estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
         especialidad,
+        personaId,
+        latitudCLiente: latitud,
+        longitudCliente: longitud,
       });
 
       let medicosDisponibles = await medico.findAll({
@@ -77,8 +111,12 @@ class consultasController {
           longitud: medico.longitud,
         }));
 
-      res.status(200).json(medicosDisponibles);
+      res.status(200).json({
+        message: "Listado de medicos",
+        result: medicosDisponibles,
+      });
     } catch (error) {
+      console.error(error);
       res.status(500).send({
         success: false,
         message: error.message,
@@ -206,6 +244,9 @@ class consultasController {
       resultFinal.observacion = consultaDeMedico.observacion;
       resultFinal.createdAt = consultaDeMedico.createdAt;
       resultFinal.updateAt = consultaDeMedico.updateAt;
+      resultFinal.latitudCliente = consultaDeMedico.latitudCliente;
+      resultFinal.longitudCliente = consultaDeMedico.longitudCliente;
+      resultFinal.fechaSeleccion = consultaDeMedico.fechaSeleccion;
       resultFinal.nombre = usuarioDeLaConsulta.nombre;
       resultFinal.apellido = usuarioDeLaConsulta.apellido;
       resultFinal.sexo = usuarioDeLaConsulta.sexo;

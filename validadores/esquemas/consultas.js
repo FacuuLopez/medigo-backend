@@ -99,4 +99,23 @@ export const consultaSchema = {
       errorMessage: "El tiempo de llegada debe estar en formato DATE.",
     },
   },
+  latitudCliente: {
+    in: ["body"],
+    optional: {
+      options: { nullable: true },
+    },
+    isDecimal: {
+      errorMessage: "La latitud debe ser un número decimal válido.",
+    },
+  },
+  longitudCliente: {
+    in: ["body"],
+    optional: {
+      options: { nullable: true },
+    },
+    isDecimal: {
+      errorMessage: "La longitud debe ser un número decimal válido.",
+    },
+  },
+  
 };

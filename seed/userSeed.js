@@ -6,7 +6,6 @@ import {
 } from "../utils/enums.js";
 import coords from "../utils/coords.js";
 
-
 const crearClientes = async () => {
   try {
     const numUsers = 20;
@@ -29,6 +28,8 @@ const crearClientes = async () => {
       const estado = ENUM_USUARIO_ESTADOS.desconectado;
       const sexo = i % 2 === 0 ? "F" : "M";
       const fechaNacimiento = new Date("1990-10-03T12:00:00");
+      const codigoPostal = "1010";
+      const ciudad = "CABA";
 
       const cliente = {
         username,
@@ -42,6 +43,8 @@ const crearClientes = async () => {
         sexo,
         fechaNacimiento,
         grupoFamiliar,
+        codigoPostal,
+        ciudad,
       };
       await crearNuevoCliente(cliente);
     }
@@ -62,12 +65,7 @@ const crearMedicos = async () => {
       const dni = `223335${i}`;
       const telefono = `123456789${i}`;
       const direccion = `Calle-${i}`;
-      const estado =
-        i === 1
-          ? ENUM_USUARIO_ESTADOS.desconectado
-          : Math.random() > 0.7
-          ? ENUM_USUARIO_ESTADOS.desconectado
-          : ENUM_USUARIO_ESTADOS.conectado;
+      const estado = ENUM_USUARIO_ESTADOS.conectado;
       const sexo = i % 2 === 0 ? "F" : "M";
       const fechaNacimiento = new Date("1990-10-03T12:00:00");
       const precio = 3000;
@@ -77,7 +75,7 @@ const crearMedicos = async () => {
           ? ENUM_MEDICO_ESPECIALIDADES.clinico
           : ENUM_MEDICO_ESPECIALIDADES.pediatra;
       const nroMatricula = `AA123${i}`;
-      const { latitud, longitud } = coords.pop(); 
+      const { latitud, longitud } = coords.pop();
       const medico = {
         username,
         password,
