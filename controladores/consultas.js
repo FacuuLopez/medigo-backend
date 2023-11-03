@@ -1,4 +1,11 @@
-import { consulta, persona, usuario, medico } from "../modelos/index.js";
+import {
+  consulta,
+  persona,
+  usuario,
+  medico,
+  grupoFamiliar,
+  cliente,
+} from "../modelos/index.js";
 import {
   ENUM_CONSULTA_ESTADOS,
   ENUM_MEDICO_ESPECIALIDADES,
@@ -26,14 +33,28 @@ class consultasController {
         direccion,
       } = req.body;
 
-      const personaConsulta = await persona.findOne({
+      const clienteEncontrado = await cliente.findOne({
         where: {
-          nombre,
-          apellido,
-          grupoFamiliarId: id,
+            id: clienteId
         },
-      });
-
+        include: [
+            {
+                model: grupoFamiliar, 
+                include: [
+                    {
+                        model: persona,
+                        where: {
+                          nombre,
+                          apellido
+                        }
+                    }
+                ]
+            }
+        ]
+    });
+      
+      const {id : personaId} = clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0].dataValues
+      
       await consulta.create({
         clienteId,
         sintomas,
@@ -41,7 +62,7 @@ class consultasController {
         direccion,
         estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
         especialidad,
-        personaId: personaConsulta.id,
+        personaId,
         latitudCLiente: latitud,
         longitudCliente: longitud,
       });
@@ -93,6 +114,7 @@ class consultasController {
         result: medicosDisponibles,
       });
     } catch (error) {
+      console.error(error)
       res.status(500).send({
         success: false,
         message: error.message,
