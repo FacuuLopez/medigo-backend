@@ -35,26 +35,28 @@ class consultasController {
 
       const clienteEncontrado = await cliente.findOne({
         where: {
-            id: clienteId
+          id: clienteId,
         },
         include: [
-            {
-                model: grupoFamiliar, 
-                include: [
-                    {
-                        model: persona,
-                        where: {
-                          nombre,
-                          apellido
-                        }
-                    }
-                ]
-            }
-        ]
-    });
-      
-      const {id : personaId} = clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0].dataValues
-      
+          {
+            model: grupoFamiliar,
+            include: [
+              {
+                model: persona,
+                where: {
+                  nombre,
+                  apellido,
+                },
+              },
+            ],
+          },
+        ],
+      });
+
+      const { id: personaId } =
+        clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0]
+          .dataValues;
+
       await consulta.create({
         clienteId,
         sintomas,
@@ -114,7 +116,7 @@ class consultasController {
         result: medicosDisponibles,
       });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       res.status(500).send({
         success: false,
         message: error.message,
@@ -128,6 +130,10 @@ class consultasController {
       const { nroMatricula } = req.body;
       //console.log("id", clienteId);
 
+      if (!nroMatricula) {
+        throw new Error(`No existen nroMatricula ${nroMatricula}`);
+      }
+
       const consultaDePaciente = await consulta.findOne({
         where: {
           clienteId,
@@ -135,7 +141,9 @@ class consultasController {
         },
       });
       if (!consultaDePaciente) {
-        throw new Error("No existen consultas en ese estado para este cliente.")
+        throw new Error(
+          "No existen consultas en ese estado para este cliente."
+        );
       }
       const medicoEncontrado = await medico.findOne({
         where: {
@@ -144,29 +152,36 @@ class consultasController {
       });
 
       if (!medicoEncontrado) {
-        throw new Error("No existe el medico solicitado.")
+        throw new Error("No existe el medico solicitado.");
       }
 
-        // Obtener la fecha y hora actual
-        const currentDateTime = new Date();
-        //console.log("Medico encontrado = ", medicoEncontrado);
+      // Obtener la fecha y hora actual
+      const currentDateTime = new Date();
+      //console.log("Medico encontrado = ", medicoEncontrado);
 
-        // Actualizar la consulta con el médico y la fecha y hora
-        await consultaDePaciente.update({
-          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
-          medicoId: medicoEncontrado.id,
-          fechaSeleccion: currentDateTime,
-        });
+      if (!currentDateTime) {
+        throw new Error(`No existen currentDateTime ${currentDateTime}`);
+      }
 
-        res.status(200).json({
-          message: "Agregado médico a consulta con éxito",
-          estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
-          hora: currentDateTime,
-        });
-     
-      }catch (error) {
-        console.error(error);
-        res.status(500).send(error.message);
+      // Actualizar la consulta con el médico y la fecha y hora
+      const resultado = await consultaDePaciente.update({
+        estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+        medicoId: medicoEncontrado.id,
+        fechaSeleccion: currentDateTime,
+      });
+
+      if (!resultado) {
+        throw new Error(`No existen consultaDePaciente`);
+      }
+
+      res.status(200).json({
+        message: "Agregado médico a consulta con éxito",
+        estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
+        hora: currentDateTime,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send(error.message);
     }
   };
 
