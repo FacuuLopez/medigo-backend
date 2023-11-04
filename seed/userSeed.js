@@ -56,7 +56,7 @@ const crearClientes = async () => {
 
 const crearMedicos = async () => {
   try {
-    const numUsers = 8;
+    const numUsers = 25;
     for (let i = 1; i <= numUsers; i++) {
       const username = `medico${i}@example.com`;
       const password = `password${i}`;
