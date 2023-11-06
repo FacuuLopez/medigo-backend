@@ -218,13 +218,15 @@ class medicosController {
           where: { id: personaId },
         }
       );
-      console.log(resultUsuario.dataValues);
+
       const resultMedico = await medico.update(
         {
           ...datosMedico,
         },
         {
-          where: {},
+          where: {
+            id,
+          },
         }
       );
       if (

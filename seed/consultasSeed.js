@@ -28,8 +28,8 @@ const crearConsultas = async () => {
       const medicoId = 1;
       const observacion = `observacion ${i}`;
       const fechaSeleccion = null;
-      const latitudCliente = -34.5928224
-      const longitudCliente = -58.3856141
+      const latitudCliente = -34.5928224;
+      const longitudCliente = -58.3856141;
 
       let estado;
 
@@ -68,91 +68,91 @@ const crearConsultas = async () => {
       }
 
       // Crear la consulta principal para este cliente
-      await Consulta.create({
-        motivo,
-        sintomas,
-        precio,
-        tiempoLLegada,
-        estado,
-        especialidad,
-        valoracionMedico,
-        comentarioDelMedico,
-        valoraciónCliente,
-        comentarioDelCliente,
-        direccion,
-        observacion,
-        fechaSeleccion,
-        clienteId,
-        medicoId,
-        personaId,
-        latitudCliente,
-        longitudCliente
-      });
+      // await Consulta.create({
+      //   motivo,
+      //   sintomas,
+      //   precio,
+      //   tiempoLLegada,
+      //   estado,
+      //   especialidad,
+      //   valoracionMedico,
+      //   comentarioDelMedico,
+      //   valoraciónCliente,
+      //   comentarioDelCliente,
+      //   direccion,
+      //   observacion,
+      //   fechaSeleccion,
+      //   clienteId,
+      //   medicoId,
+      //   personaId,
+      //   latitudCliente,
+      //   longitudCliente,
+      // });
 
       // Crear consultas "rechazada" y "finalizada" para este cliente
-      await Consulta.create({
-        motivo,
-        sintomas,
-        precio,
-        tiempoLLegada,
-        estado: ENUM_CONSULTA_ESTADOS.rechazada,
-        especialidad,
-        valoracionMedico,
-        comentarioDelMedico,
-        valoraciónCliente,
-        comentarioDelCliente,
-        direccion,
-        observacion,
-        fechaSeleccion,
-        clienteId,
-        medicoId,
-        personaId,
-        latitudCliente,
-        longitudCliente
-      });
+      // await Consulta.create({
+      //   motivo,
+      //   sintomas,
+      //   precio,
+      //   tiempoLLegada,
+      //   estado: ENUM_CONSULTA_ESTADOS.rechazada,
+      //   especialidad,
+      //   valoracionMedico,
+      //   comentarioDelMedico,
+      //   valoraciónCliente,
+      //   comentarioDelCliente,
+      //   direccion,
+      //   observacion,
+      //   fechaSeleccion,
+      //   clienteId,
+      //   medicoId,
+      //   personaId,
+      //   latitudCliente,
+      //   longitudCliente
+      // });
 
-      await Consulta.create({
-        motivo,
-        sintomas,
-        precio,
-        tiempoLLegada,
-        estado: ENUM_CONSULTA_ESTADOS.finalizada,
-        especialidad,
-        valoracionMedico,
-        comentarioDelMedico,
-        valoraciónCliente,
-        comentarioDelCliente,
-        direccion,
-        observacion,
-        fechaSeleccion,
-        clienteId,
-        medicoId,
-        personaId,
-        latitudCliente,
-        longitudCliente
-      });
+      // await Consulta.create({
+      //   motivo,
+      //   sintomas,
+      //   precio,
+      //   tiempoLLegada,
+      //   estado: ENUM_CONSULTA_ESTADOS.finalizada,
+      //   especialidad,
+      //   valoracionMedico,
+      //   comentarioDelMedico,
+      //   valoraciónCliente,
+      //   comentarioDelCliente,
+      //   direccion,
+      //   observacion,
+      //   fechaSeleccion,
+      //   clienteId,
+      //   medicoId,
+      //   personaId,
+      //   latitudCliente,
+      //   longitudCliente
+      // });
 
-      // Crear consultas "cancelada" para este cliente
-      await Consulta.create({
-        motivo,
-        sintomas,
-        precio,
-        tiempoLLegada,
-        estado: ENUM_CONSULTA_ESTADOS.cancelada,
-        especialidad,
-        valoracionMedico,
-        comentarioDelMedico,
-        valoraciónCliente,
-        comentarioDelCliente,
-        direccion,
-        observacion,
-        fechaSeleccion,
-        clienteId,
-        medicoId,
-        personaId,
-        latitudCliente,
-        longitudCliente
-      });
+      // // Crear consultas "cancelada" para este cliente
+      // await Consulta.create({
+      //   motivo,
+      //   sintomas,
+      //   precio,
+      //   tiempoLLegada,
+      //   estado: ENUM_CONSULTA_ESTADOS.cancelada,
+      //   especialidad,
+      //   valoracionMedico,
+      //   comentarioDelMedico,
+      //   valoraciónCliente,
+      //   comentarioDelCliente,
+      //   direccion,
+      //   observacion,
+      //   fechaSeleccion,
+      //   clienteId,
+      //   medicoId,
+      //   personaId,
+      //   latitudCliente,
+      //   longitudCliente
+      // });
     }
 
     console.log("Consultas creadas exitosamente");

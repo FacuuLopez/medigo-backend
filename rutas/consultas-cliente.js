@@ -21,10 +21,10 @@ consultasClientesRutas.put(
   "/cancelar-consulta",
   consultaController.cancelarConsultaCliente
 );
-consultasClientesRutas.put(
-  "/finalizar-consulta",
-  consultaController.finalizarConsulta
-);
+// consultasClientesRutas.put(
+//   "/finalizar-consulta",
+//   consultaController.finalizarConsulta
+// );
 consultasClientesRutas.put(
   "/valorar-consulta",
   validarValorarConsultaCliente,

@@ -31,7 +31,6 @@ consultasMedicosRutas.put(
 );
 consultasMedicosRutas.put(
   "/valorar-consulta",
-  validarValoracionMedico,
   consultaController.valorarConsultaMedico
 );
 consultasMedicosRutas.get(
