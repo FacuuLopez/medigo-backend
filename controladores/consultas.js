@@ -394,7 +394,7 @@ class consultasController {
 
       if (consultaDeMedico) {
         await consultaDeMedico.update({
-          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+          estado: ENUM_CONSULTA_ESTADOS.rechazada,
         });
 
         if (usuarioEncontrado) {
@@ -456,7 +456,7 @@ class consultasController {
 
       const consultaEnCurso = await consulta.findOne({
         where: {
-          medicoId: clienteId,
+          clienteId,
           estado: ENUM_CONSULTA_ESTADOS.enCurso,
         },
       });
