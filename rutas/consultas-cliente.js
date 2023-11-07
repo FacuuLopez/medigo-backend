@@ -42,8 +42,4 @@ consultasClientesRutas.get(
   "/solicitar-estado-ultima-consulta",
   consultaController.solicitarEstadoUltimaConsultaCliente
 );
-consultasClientesRutas.put(
-  "/cancelar-consulta",
-  consultaController.cancelarConsultaCliente
-);
 export default consultasClientesRutas;
