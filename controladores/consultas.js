@@ -482,6 +482,38 @@ class consultasController {
     }
   };
 
+  cancelarConsultaClienteSinEmpezar = async (req, res, next) => {
+    try {
+      const { id: clienteId } = req.cliente; // Obtenemos el ID del médico desde el token
+
+      const consultaEnCurso = await consulta.findOne({
+        where: {
+          clienteId,
+          estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+        },
+      });
+
+      if (consultaEnCurso) {
+        await consultaEnCurso.update({
+          estado: ENUM_CONSULTA_ESTADOS.cancelada,
+        });
+        //console.log('Consulta actualizada:', consultaEnCurso); // Agrega esta línea de registro
+        res.status(200).json({
+          message: "Consulta en curso cancelada con éxito",
+          state: ENUM_CONSULTA_ESTADOS.cancelada,
+        });
+      } else {
+        //console.log('Consulta no encontrada:', consultaEnCurso); // Agrega esta línea de registro
+        res.status(404).json({
+          message: "No se encontró ninguna consulta en curso para este médico",
+        });
+      }
+    } catch (error) {
+      //console.error(error); // Registra el error en la consola
+      res.status(500).json({ error: "Error al cancelar la consulta en curso" });
+    }
+  };
+
   finalizarConsulta = async (req, res, next) => {
     try {
       const { id: medicoId } = req.medico;
@@ -737,16 +769,11 @@ class consultasController {
           estado: ENUM_CONSULTA_ESTADOS.enCurso,
         },
       });
-      let result;
 
-      if (
-        consultaDeMedico.observacion != "" &&
-        consultaDeMedico.observacion != null
-      ) {
-        result = consultaDeMedico.update({
-          observacion,
-        });
-      }
+      await consultaDeMedico.update({
+        observacion,
+      });
+
       res.status(200).send({
         success: true,
         message: "Observacion actualizada",

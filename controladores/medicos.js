@@ -71,28 +71,42 @@ class medicosController {
         telefono,
         direccion,
       } = req.body;
-      const estado = ENUM_USUARIO_ESTADOS.desconectado;
-      await crearMedico({
-        nroMatricula,
-        radioAccion,
-        precio,
-        especialidad,
-        nombre,
-        apellido,
-        sexo,
-        fechaNacimiento,
-        username,
-        password,
-        dni,
-        telefono,
-        direccion,
-        estado,
+
+      const usernameInUse = await usuario.findOne({
+        where: {
+          username,
+        },
       });
 
-      res.status(200).send({
-        success: true,
-        message: "Medico creado con exito",
-      });
+      if (usernameInUse) {
+        res.status(200).send({
+          success: false,
+          message: "username en uso",
+        });
+      } else {
+        const estado = ENUM_USUARIO_ESTADOS.desconectado;
+        await crearMedico({
+          nroMatricula,
+          radioAccion,
+          precio,
+          especialidad,
+          nombre,
+          apellido,
+          sexo,
+          fechaNacimiento,
+          username,
+          password,
+          dni,
+          telefono,
+          direccion,
+          estado,
+        });
+
+        res.status(200).send({
+          success: true,
+          message: "Medico creado con exito",
+        });
+      }
     } catch (error) {
       res.status(200).send({
         success: false,
