@@ -17,9 +17,8 @@ consulta.init(
       type: DT.DECIMAL,
       allowNull: true,
     },
-    // lo cambie a date porque si no hay que actualizarlo permanentemente
-    tiempoLLegada: {
-      type: DT.DATE,
+    tiempoLlegada: {
+      type: DT.DECIMAL,
       allowNull: true,
     },
     estado: {
@@ -58,14 +57,14 @@ consulta.init(
       type: DT.DATE,
       allowNull: true,
     },
-    latitudCliente:{
+    latitudCliente: {
       type: DT.DECIMAL,
       allowNull: true,
     },
-    longitudCliente:{
+    longitudCliente: {
       type: DT.DECIMAL,
       allowNull: true,
-    }
+    },
   },
   {
     sequelize,

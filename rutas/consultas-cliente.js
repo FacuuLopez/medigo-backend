@@ -22,9 +22,13 @@ consultasClientesRutas.put(
   consultaController.cancelarConsultaCliente
 );
 consultasClientesRutas.put(
-  "/finalizar-consulta",
-  consultaController.finalizarConsulta
+  "/cancelar-consulta-sin-empezar",
+  consultaController.cancelarConsultaClienteSinEmpezar
 );
+// consultasClientesRutas.put(
+//   "/finalizar-consulta",
+//   consultaController.finalizarConsulta
+// );
 consultasClientesRutas.put(
   "/valorar-consulta",
   validarValorarConsultaCliente,
@@ -41,9 +45,5 @@ consultasClientesRutas.get(
 consultasClientesRutas.get(
   "/solicitar-estado-ultima-consulta",
   consultaController.solicitarEstadoUltimaConsultaCliente
-);
-consultasClientesRutas.put(
-  "/cancelar-consulta",
-  consultaController.cancelarConsultaCliente
 );
 export default consultasClientesRutas;

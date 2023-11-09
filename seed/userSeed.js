@@ -56,7 +56,7 @@ const crearClientes = async () => {
 
 const crearMedicos = async () => {
   try {
-    const numUsers = 8;
+    const numUsers = 25;
     for (let i = 1; i <= numUsers; i++) {
       const username = `medico${i}@example.com`;
       const password = `password${i}`;
@@ -68,7 +68,7 @@ const crearMedicos = async () => {
       const estado = ENUM_USUARIO_ESTADOS.conectado;
       const sexo = i % 2 === 0 ? "F" : "M";
       const fechaNacimiento = new Date("1990-10-03T12:00:00");
-      const precio = 3000;
+      const precio = Math.floor(Math.random() * (4500 - 1200 + 1)) + 1200;
       const radioAccion = 5000;
       const especialidad =
         i % 2

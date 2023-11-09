@@ -78,27 +78,41 @@ class clientesController {
         codigoPostal,
         ciudad,
       } = req.body;
-      const estado = ENUM_USUARIO_ESTADOS.desconectado;
-      await crearNuevoCliente({
-        nombre,
-        apellido,
-        sexo,
-        fechaNacimiento,
-        username,
-        password,
-        dni,
-        telefono,
-        direccion,
-        estado,
-        grupoFamiliar,
-        codigoPostal,
-        ciudad,
+
+      const usernameInUse = await usuario.findOne({
+        where: {
+          username,
+        },
       });
 
-      res.status(200).send({
-        success: true,
-        message: "Cliente creado con exito",
-      });
+      if (usernameInUse) {
+        res.status(200).send({
+          success: false,
+          message: "username en uso",
+        });
+      } else {
+        const estado = ENUM_USUARIO_ESTADOS.desconectado;
+        await crearNuevoCliente({
+          nombre,
+          apellido,
+          sexo,
+          fechaNacimiento,
+          username,
+          password,
+          dni,
+          telefono,
+          direccion,
+          estado,
+          grupoFamiliar,
+          codigoPostal,
+          ciudad,
+        });
+
+        res.status(200).send({
+          success: true,
+          message: "Cliente creado con exito",
+        });
+      }
     } catch (error) {
       res.status(500).send({
         success: false,
@@ -153,11 +167,6 @@ class clientesController {
           },
         ],
       });
-      console.log(
-        clienteEncontradoRecien.dataValues,
-        clienteEncontradoRecien.usuario.datavalues,
-        clienteEncontradoRecien.usuario.persona.dataValues
-      );
 
       const datosUsuario = {};
 
