@@ -90,7 +90,7 @@ export const consultaSchema = {
       errorMessage: "La observacion debe ser una cadena.",
     },
   },
-  FechaYHoraDeSeleccionandoMedico: {
+  fechaSeleccion: {
     in: ["body"],
     optional: {
       options: { nullable: true },

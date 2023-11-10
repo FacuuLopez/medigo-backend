@@ -7,12 +7,24 @@ import consultasClientesRutas from "./consultas-cliente.js";
 const clientesRutas = Router();
 const clienteController = new clientesController();
 
-clientesRutas.post('/registro', clienteController.createCliente);
+clientesRutas.post("/registro", clienteController.createCliente);
 
 clientesRutas.use(validarUsuario); // no borrar ni cambiar el orden, verifica que sea un usuario quien hace la consulta
 clientesRutas.use(validarCliente);
-clientesRutas.put('/actualizar-datos', clienteController.updateClientePorId)
+clientesRutas.put("/actualizar-datos", clienteController.updateClientePorId);
+clientesRutas.delete(
+  "/eliminar-miembro",
+  clienteController.eliminarMiembroFamiliar
+);
+clientesRutas.post(
+  "/agregar-miembro",
+  clienteController.agregarMiembroFamiliar
+);
+clientesRutas.put(
+  "/modificar-miembro",
+  clienteController.modificarMiembroFamiliar
+);
 
-clientesRutas.use('/consultas', consultasClientesRutas)
+clientesRutas.use("/consultas", consultasClientesRutas);
 
 export default clientesRutas;

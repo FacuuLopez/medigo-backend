@@ -319,6 +319,181 @@ class clientesController {
   registro = async (req, res, next) => {};
 
   actualizarDatosCliente = async (req, res, next) => {};
+
+  eliminarMiembroFamiliar = async (req, res, next) => {
+    try {
+      const { id: clienteId } = req.cliente;
+      const { nombre, apellido, fechaNacimiento } = req.body;
+
+      console.log("cliente: ", clienteId);
+
+      const clienteEncontrado = await cliente.findOne({
+        where: { id: clienteId },
+        include: [
+          grupoFamiliar,
+          {
+            model: usuario,
+            include: [persona],
+          },
+        ],
+      });
+
+      if (!clienteEncontrado) {
+        return res.status(404).json({ message: "No se encontró el cliente" });
+      }
+
+      const grupoFamiliarId = clienteEncontrado.grupoFamiliar.id;
+      const personaId = clienteEncontrado.usuario.persona.id;
+
+      const miembroFamiliar = await persona.findOne({
+        where: {
+          nombre,
+          apellido,
+          fechaNacimiento,
+          grupoFamiliarId,
+        },
+      });
+
+      if (!miembroFamiliar) {
+        return res
+          .status(404)
+          .json({ message: "No se encontró el miembro de la familia" });
+      }
+
+      if (miembroFamiliar.id === personaId) {
+        return res
+          .status(400)
+          .json({ message: "No puedes eliminar al titular de la cuenta" });
+      }
+
+      await persona.destroy({ where: { id: miembroFamiliar.id } });
+
+      res
+        .status(200)
+        .json({ message: "Miembro del grupo familiar eliminado exitosamente" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: "Error al eliminar el miembro del grupo familiar",
+        error: error.message,
+      });
+    }
+  };
+
+  agregarMiembroFamiliar = async (req, res, next) => {
+    try {
+      const { id: clienteId } = req.cliente;
+      const { nombre, apellido, sexo, fechaNacimiento } = req.body;
+
+      const clienteEncontrado = await cliente.findOne({
+        where: { id: clienteId },
+        include: [
+          grupoFamiliar,
+          {
+            model: usuario,
+            include: [persona],
+          },
+        ],
+      });
+
+      if (!clienteEncontrado) {
+        return res.status(404).json({ message: "No se encontró el cliente" });
+      }
+
+      const grupoFamiliarId = clienteEncontrado.grupoFamiliar.id;
+
+      const nuevoMiembroFamiliar = await persona.create({
+        nombre,
+        apellido,
+        sexo,
+        fechaNacimiento,
+        grupoFamiliarId,
+      });
+
+      res.status(200).json({
+        message: "Miembro del grupo familiar agregado exitosamente",
+        miembroFamiliar: nuevoMiembroFamiliar,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: "Error al agregar el miembro del grupo familiar",
+        message: error.message,
+      });
+    }
+  };
+
+  modificarMiembroFamiliar = async (req, res, next) => {
+    try {
+      const { id: clienteId } = req.cliente;
+      const {
+        nombreViejo,
+        apellidoViejo,
+        nombreNuevo,
+        apellidoNuevo,
+        sexoNuevo,
+        fechaNacimientoNuevo,
+        fechaNacimientoViejo,
+      } = req.body;
+
+      const clienteEncontrado = await cliente.findOne({
+        where: { id: clienteId },
+        include: [
+          grupoFamiliar,
+          {
+            model: usuario,
+            include: [persona],
+          },
+        ],
+      });
+
+      if (!clienteEncontrado) {
+        return res.status(404).json({ message: "No se encontró el cliente" });
+      }
+
+      const grupoFamiliarId = clienteEncontrado.grupoFamiliar.id;
+
+      const miembroFamiliar = await persona.findOne({
+        where: {
+          nombre: nombreViejo,
+          apellido: apellidoViejo,
+          fechaNacimiento: fechaNacimientoViejo,
+          grupoFamiliarId,
+        },
+      });
+
+      if (!miembroFamiliar) {
+        return res
+          .status(404)
+          .json({ message: "No se encontró el miembro de la familia" });
+      }
+
+      await persona.update(
+        {
+          nombre: nombreNuevo !== undefined ? nombreNuevo : nombreViejo,
+          apellido: apellidoNuevo !== undefined ? apellidoNuevo : apellidoViejo,
+          sexo: sexoNuevo !== undefined ? sexoNuevo : miembroFamiliar.sexo,
+          fechaNacimiento:
+            fechaNacimientoNuevo !== undefined
+              ? fechaNacimientoNuevo
+              : fechaNacimientoViejo,
+        },
+        {
+          where: { id: miembroFamiliar.id },
+        }
+      );
+
+      res.status(200).json({
+        message: "Miembro del grupo familiar modificado exitosamente",
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: "Error al modificar el miembro del grupo familiar",
+        message: error.message,
+      });
+    }
+  };
 }
 
 export default clientesController;

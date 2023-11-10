@@ -126,13 +126,9 @@ export const validarObservacion = async (req, res, next) => {
   return;
 };
 
-export const validarFechaYHoraDeSeleccionandoMedico = async (
-  req,
-  res,
-  next
-) => {
+export const validarfechaSeleccion = async (req, res, next) => {
   const esquema = {
-    observacion: consultaSchema.FechaYHoraDeSeleccionandoMedico,
+    observacion: consultaSchema.fechaSeleccion,
   };
   await middlewareValidar(req, res, next, esquema);
   return;
