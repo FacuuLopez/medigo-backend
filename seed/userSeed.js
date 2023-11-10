@@ -24,11 +24,11 @@ const crearClientes = async () => {
       const apellido = "fulanito";
       const dni = `223335${i}`;
       const telefono = `123456789${i}`;
-      const direccion = `Calle-${i}`;
+      const direccion = `Av Rivadavia 5${i}60`;
       const estado = ENUM_USUARIO_ESTADOS.desconectado;
       const sexo = i % 2 === 0 ? "F" : "M";
       const fechaNacimiento = new Date("1990-10-03T12:00:00");
-      const codigoPostal = "1010";
+      const codigoPostal = "1424";
       const ciudad = "CABA";
 
       const cliente = {

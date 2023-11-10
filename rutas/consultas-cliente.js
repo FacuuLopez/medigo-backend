@@ -22,6 +22,10 @@ consultasClientesRutas.put(
   consultaController.cancelarConsultaCliente
 );
 consultasClientesRutas.put(
+  "/remover-consulta",
+  consultaController.removerConsultaCliente
+);
+consultasClientesRutas.put(
   "/cancelar-consulta-sin-empezar",
   consultaController.cancelarConsultaClienteSinEmpezar
 );
