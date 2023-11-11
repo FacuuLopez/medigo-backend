@@ -326,6 +326,7 @@ class clientesController {
       const { nombre, apellido, fechaNacimiento } = req.body;
 
       console.log("cliente: ", clienteId);
+      console.log("clienteData: ", { nombre, apellido, fechaNacimiento });
 
       const clienteEncontrado = await cliente.findOne({
         where: { id: clienteId },
@@ -368,9 +369,10 @@ class clientesController {
 
       await persona.destroy({ where: { id: miembroFamiliar.id } });
 
-      res
-        .status(200)
-        .json({ message: "Miembro del grupo familiar eliminado exitosamente" });
+      res.status(200).json({
+        message: "Miembro del grupo familiar eliminado exitosamente",
+        success: true,
+      });
     } catch (error) {
       console.error(error);
       res.status(500).json({
@@ -413,6 +415,7 @@ class clientesController {
       res.status(200).json({
         message: "Miembro del grupo familiar agregado exitosamente",
         miembroFamiliar: nuevoMiembroFamiliar,
+        success: true,
       });
     } catch (error) {
       console.error(error);
@@ -485,6 +488,7 @@ class clientesController {
 
       res.status(200).json({
         message: "Miembro del grupo familiar modificado exitosamente",
+        success: true,
       });
     } catch (error) {
       console.error(error);

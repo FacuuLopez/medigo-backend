@@ -12,7 +12,7 @@ clientesRutas.post("/registro", clienteController.createCliente);
 clientesRutas.use(validarUsuario); // no borrar ni cambiar el orden, verifica que sea un usuario quien hace la consulta
 clientesRutas.use(validarCliente);
 clientesRutas.put("/actualizar-datos", clienteController.updateClientePorId);
-clientesRutas.delete(
+clientesRutas.put(
   "/eliminar-miembro",
   clienteController.eliminarMiembroFamiliar
 );
