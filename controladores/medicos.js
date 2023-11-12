@@ -35,6 +35,8 @@ export const crearMedico = async ({
     telefono,
     direccion,
     estado,
+    valoracion: 0,
+    resenas: 0,
     personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
   });
 

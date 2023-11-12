@@ -45,6 +45,8 @@ export const crearNuevoCliente = async ({
     dni,
     telefono,
     direccion,
+    valoracion: 0,
+    resenas: 0,
     estado,
     personaId: nuevaPersona.dataValues.id, // Asociar el Usuario a la Persona recién creada
   });
