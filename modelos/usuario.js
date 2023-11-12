@@ -41,6 +41,10 @@ usuario.init({
         type: DT.STRING,
         allowNull: false,
     },
+    resenas:{
+        type: DT.INTEGER,
+        allowNull:true
+    }
 },
     {
         sequelize,

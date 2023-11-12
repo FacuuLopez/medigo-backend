@@ -109,7 +109,7 @@ class consultasController {
           especialidad: medico.especialidad,
           precio: medico.precio,
           valoracion: medico.usuario.valoracion,
-          resenas: 0, // TODO: Implementar reseñas
+          resenas: medico.usuario.resenas, // TODO: Implementar reseñas
           comentarios: [], // TODO: Implementar comentarios
           tiempo: Math.round((medico.distancia / 100) * MINUTOS_POR_CUADRA),
           latitud: medico.latitud,
@@ -223,6 +223,14 @@ class consultasController {
       const { id: medicoId } = req.medico;
 
       const consultaDeMedico = await consulta.findOne({
+        include:{
+          
+            model: cliente,
+            include:{
+              attributes:["valoracion", "resenas"],
+              model: usuario
+            }
+        },
         where: {
           medicoId,
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
@@ -246,7 +254,7 @@ class consultasController {
         resultFinal.valoracionMedico = consultaDeMedico.valoracionMedico;
         resultFinal.valoracionCliente = consultaDeMedico.valoracionCliente;
         resultFinal.comentarioDelCliente =
-          consultaDeMedico.comentarioDelCliente;
+        consultaDeMedico.comentarioDelCliente;
         resultFinal.comentarioDelMedico = consultaDeMedico.comentarioDelMedico;
         resultFinal.direccion = consultaDeMedico.direccion;
         resultFinal.piso = consultaDeMedico.piso;
@@ -261,6 +269,8 @@ class consultasController {
         resultFinal.apellido = usuarioDeLaConsulta.apellido;
         resultFinal.sexo = usuarioDeLaConsulta.sexo;
         resultFinal.fechaNacimiento = usuarioDeLaConsulta.fechaNacimiento;
+        resultFinal.valoracion = consultaDeMedico.cliente.usuario.valoracion;
+        resultFinal.resenas = consultaDeMedico.cliente.usuario.resenas;
 
         res.status(200).json({
           success: true,
@@ -726,7 +736,8 @@ class consultasController {
       }
    
       await usuarioCliente.update({
-        valoracion: valFinal
+        valoracion: valFinal,
+        resenas: cantidadConsultasConValoracion
       })
 
     } catch (error) {
@@ -786,7 +797,8 @@ class consultasController {
         
       }
       await usuarioMedico.update({
-        valoracion: valFinal
+        valoracion: valFinal,
+        resenas: cantidadConsultasConValoracion
       })
       
     } catch (error) {
