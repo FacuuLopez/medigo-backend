@@ -103,6 +103,7 @@ export const validarValorarConsultaCliente = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
+    next()
   }
 };
 
