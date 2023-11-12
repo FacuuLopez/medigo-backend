@@ -12,6 +12,8 @@ export const crearNuevoCliente = async ({
   dni,
   telefono,
   direccion,
+  piso,
+  departamento,
   estado,
   grupoFamiliar: familiares,
   ciudad,
@@ -45,6 +47,8 @@ export const crearNuevoCliente = async ({
     dni,
     telefono,
     direccion,
+    piso,
+    departamento,
     valoracion: 0,
     resenas: 0,
     estado,
@@ -157,6 +161,8 @@ class clientesController {
         telefono,
         fechaNacimiento,
         direccion,
+        piso,
+        departamento,
         sexo,
         codigoPostal,
         ciudad,
@@ -182,6 +188,14 @@ class clientesController {
 
       if (direccion !== undefined && direccion !== null) {
         datosUsuario.direccion = direccion;
+      }
+
+      if (piso !== undefined && piso !== null) {
+        datosUsuario.piso = piso;
+      }
+
+      if (departamento !== undefined && departamento !== null) {
+        datosUsuario.departamento = departamento;
       }
 
       if (telefono !== undefined && telefono !== null) {

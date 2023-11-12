@@ -33,6 +33,14 @@ usuario.init({
         type: DT.JSON,
         allowNull: false,
     },
+    piso: {
+        type: DT.STRING,
+        allowNull: true,
+      },
+    departamento: {
+        type: DT.STRING,
+        allowNull: true,
+      },
     valoracion: {
         type: DT.SMALLINT,
         allowNull: true,

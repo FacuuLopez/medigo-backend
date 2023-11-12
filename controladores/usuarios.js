@@ -222,7 +222,7 @@ class usuariosController {
             return resto;
           });
 
-          const { username, dni, telefono, direccion, estado, persona } =
+          const { username, dni, telefono, direccion,piso, departamento, estado, persona } =
             usuario.dataValues;
           const { nombre, apellido, sexo, fechaNacimiento } =
             persona.dataValues;
@@ -241,6 +241,8 @@ class usuariosController {
             ciudad,
             estado,
             grupoFamiliar,
+            piso,
+            departamento,
           });
         } else throw error;
       }
