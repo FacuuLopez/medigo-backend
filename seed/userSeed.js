@@ -231,17 +231,252 @@ const fechasNacimientoClientes = [
 
 const generos = ["M", "F"];
 
+const grupoFamiliarCliente = [
+  {
+    nombre: "Juan",
+    apellido: "Gómez",
+    sexo: "F",
+    fechaNacimiento: new Date("1975-02-15T12:00:00"),
+  },
+  {
+    nombre: "Ana",
+    apellido: "Rodríguez",
+    sexo: "M",
+    fechaNacimiento: new Date("1978-04-25T12:00:00"),
+  },
+  {
+    nombre: "Carlos",
+    apellido: "Martínez",
+    sexo: "F",
+    fechaNacimiento: new Date("1981-08-10T12:00:00"),
+  },
+  {
+    nombre: "María",
+    apellido: "Fernández",
+    sexo: "M",
+    fechaNacimiento: new Date("1983-10-18T12:00:00"),
+  },
+  {
+    nombre: "Pedro",
+    apellido: "Pérez",
+    sexo: "F",
+    fechaNacimiento: new Date("1986-01-05T12:00:00"),
+  },
+  {
+    nombre: "Laura",
+    apellido: "López",
+    sexo: "M",
+    fechaNacimiento: new Date("1982-03-28T12:00:00"),
+  },
+  {
+    nombre: "Diego",
+    apellido: "González",
+    sexo: "F",
+    fechaNacimiento: new Date("1984-07-08T12:00:00"),
+  },
+  {
+    nombre: "Sofía",
+    apellido: "Sánchez",
+    sexo: "M",
+    fechaNacimiento: new Date("1980-12-20T12:00:00"),
+  },
+  {
+    nombre: "Javier",
+    apellido: "Ramírez",
+    sexo: "F",
+    fechaNacimiento: new Date("1976-05-01T12:00:00"),
+  },
+  {
+    nombre: "Valentina",
+    apellido: "Torres",
+    sexo: "M",
+    fechaNacimiento: new Date("1985-09-14T12:00:00"),
+  },
+  {
+    nombre: "Luis",
+    apellido: "Suárez",
+    sexo: "F",
+    fechaNacimiento: new Date("1979-11-02T12:00:00"),
+  },
+  {
+    nombre: "Camila",
+    apellido: "Díaz",
+    sexo: "M",
+    fechaNacimiento: new Date("1977-01-22T12:00:00"),
+  },
+  {
+    nombre: "Fernando",
+    apellido: "Vargas",
+    sexo: "F",
+    fechaNacimiento: new Date("1984-06-17T12:00:00"),
+  },
+  {
+    nombre: "Isabella",
+    apellido: "Hernández",
+    sexo: "M",
+    fechaNacimiento: new Date("1986-10-03T12:00:00"),
+  },
+  {
+    nombre: "Miguel",
+    apellido: "Jiménez",
+    sexo: "F",
+    fechaNacimiento: new Date("1978-02-15T12:00:00"),
+  },
+  {
+    nombre: "Emma",
+    apellido: "Álvarez",
+    sexo: "M",
+    fechaNacimiento: new Date("1980-05-12T12:00:00"),
+  },
+  {
+    nombre: "Alejandro",
+    apellido: "Moreno",
+    sexo: "F",
+    fechaNacimiento: new Date("1975-08-28T12:00:00"),
+  },
+  {
+    nombre: "Lucía",
+    apellido: "Romero",
+    sexo: "M",
+    fechaNacimiento: new Date("1982-09-25T12:00:00"),
+  },
+  {
+    nombre: "Ricardo",
+    apellido: "Rojas",
+    sexo: "F",
+    fechaNacimiento: new Date("1981-11-08T12:00:00"),
+  },
+  {
+    nombre: "Victoria",
+    apellido: "Castro",
+    sexo: "M",
+    fechaNacimiento: new Date("1979-03-19T12:00:00"),
+  },
+  {
+    nombre: "Gabriel",
+    apellido: "Ortega",
+    sexo: "F",
+    fechaNacimiento: new Date("1980-06-16T12:00:00"),
+  },
+  {
+    nombre: "Marta",
+    apellido: "Ruiz",
+    sexo: "M",
+    fechaNacimiento: new Date("1982-09-21T12:00:00"),
+  },
+  {
+    nombre: "Raúl",
+    apellido: "Navarro",
+    sexo: "F",
+    fechaNacimiento: new Date("1977-03-03T12:00:00"),
+  },
+  {
+    nombre: "Elena",
+    apellido: "Flores",
+    sexo: "M",
+    fechaNacimiento: new Date("1978-06-20T12:00:00"),
+  },
+  {
+    nombre: "Francisco",
+    apellido: "Serrano",
+    sexo: "F",
+    fechaNacimiento: new Date("1983-11-14T12:00:00"),
+  },
+  {
+    nombre: "Adriana",
+    apellido: "Morales",
+    sexo: "M",
+    fechaNacimiento: new Date("1986-01-30T12:00:00"),
+  },
+  {
+    nombre: "José",
+    apellido: "Cruz",
+    sexo: "F",
+    fechaNacimiento: new Date("1979-02-09T12:00:00"),
+  },
+  {
+    nombre: "Carmen",
+    apellido: "Gutiérrez",
+    sexo: "M",
+    fechaNacimiento: new Date("1981-07-12T12:00:00"),
+  },
+  {
+    nombre: "Andrés",
+    apellido: "Ortiz",
+    sexo: "F",
+    fechaNacimiento: new Date("1980-03-17T12:00:00"),
+  },
+  {
+    nombre: "Natalia",
+    apellido: "Reyes",
+    sexo: "M",
+    fechaNacimiento: new Date("1985-05-03T12:00:00"),
+  },
+  {
+    nombre: "Rafael",
+    apellido: "Iglesias",
+    sexo: "F",
+    fechaNacimiento: new Date("1986-08-19T12:00:00"),
+  },
+  {
+    nombre: "Leticia",
+    apellido: "Silva",
+    sexo: "M",
+    fechaNacimiento: new Date("1978-10-05T12:00:00"),
+  },
+  {
+    nombre: "Martín",
+    apellido: "Luna",
+    sexo: "F",
+    fechaNacimiento: new Date("1982-01-11T12:00:00"),
+  },
+  {
+    nombre: "Paula",
+    apellido: "Mendoza",
+    sexo: "M",
+    fechaNacimiento: new Date("1977-04-28T12:00:00"),
+  },
+  {
+    nombre: "Antonio",
+    apellido: "Torres",
+    sexo: "F",
+    fechaNacimiento: new Date("1975-06-15T12:00:00"),
+  },
+  {
+    nombre: "Gabriela",
+    apellido: "Cabrera",
+    sexo: "M",
+    fechaNacimiento: new Date("1979-09-02T12:00:00"),
+  },
+  {
+    nombre: "David",
+    apellido: "García",
+    sexo: "F",
+    fechaNacimiento: new Date("1981-11-10T12:00:00"),
+  },
+  {
+    nombre: "Patricia",
+    apellido: "Molina",
+    sexo: "M",
+    fechaNacimiento: new Date("1976-02-18T12:00:00"),
+  },
+  {
+    nombre: "Alberto",
+    apellido: "Núñez",
+    sexo: "F",
+    fechaNacimiento: new Date("1982-05-07T12:00:00"),
+  },
+  {
+    nombre: "Clara",
+    apellido: "Ríos",
+    sexo: "M",
+    fechaNacimiento: new Date("1983-02-21T12:00:00"),
+  },
+];
+
 const crearClientes = async () => {
   try {
     const numUsers = 40;
-    const grupoFamiliar = [
-      {
-        nombre: "Raquel",
-        apellido: "Prodigo",
-        sexo: "F",
-        fechaNacimiento: new Date("2022-10-03T12:00:00"),
-      },
-    ];
     for (let i = 1; i <= numUsers; i++) {
       const username = `cliente${i}@gmail.com`;
       const password = "123456";
@@ -257,6 +492,7 @@ const crearClientes = async () => {
       const fechaNacimiento = new Date(fechasNacimientoClientes[i - 1]);
       const codigoPostal = codigoPostalClientes[i - 1];
       const ciudad = "CABA";
+      const grupoFamiliar = grupoFamiliarCliente[i - 1];
 
       const cliente = {
         username,
