@@ -32,6 +32,8 @@ class consultasController {
         nombre,
         apellido,
         direccion,
+        departamento,
+        piso,
       } = req.body;
 
       const clienteEncontrado = await cliente.findOne({
@@ -63,6 +65,8 @@ class consultasController {
         sintomas,
         motivo,
         direccion,
+        departamento,
+        piso,
         estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         especialidad,
         personaId,
@@ -245,6 +249,8 @@ class consultasController {
           consultaDeMedico.comentarioDelCliente;
         resultFinal.comentarioDelMedico = consultaDeMedico.comentarioDelMedico;
         resultFinal.direccion = consultaDeMedico.direccion;
+        resultFinal.piso = consultaDeMedico.piso;
+        resultFinal.departamento = consultaDeMedico.departamento;
         resultFinal.observacion = consultaDeMedico.observacion;
         resultFinal.createdAt = consultaDeMedico.createdAt;
         resultFinal.updateAt = consultaDeMedico.updateAt;
