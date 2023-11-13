@@ -70,7 +70,7 @@ class consultasController {
         estado: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
         especialidad,
         personaId,
-        latitudCLiente: latitud,
+        latitudCliente: latitud,
         longitudCliente: longitud,
       });
 
