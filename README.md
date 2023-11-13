@@ -2,6 +2,17 @@
 
 Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le proporcionará todas las instrucciones necesarias para conectar nuestra aplicación de manera efectiva con nuestro servidor para poder asi hacer uso de nuestros servicios.
 
+- [Medigo Manual de uso del servidor](#medigo-manual-de-uso-del-servidor)
+  - [Guía de Instalacion](#guía-de-instalacion)
+  - [Endpoints](#endpoints)
+    - [Usuarios](#usuarios-usuarios)
+    - [Especialidades](#especialidades-especialidades)
+    - [Clientes](#clientes-clientes)
+    - [Manejo de consultas del lado del cliente](#manejo-de-consultas-del-lado-del-cliente-clientesconsultas)
+    - [Médicos](#médicos-medicos)
+    - [Manejo de consultas del lado del médico](#manejo-de-consultas-del-lado-del-médico-medicosconsultas)
+  - [Contribución](#contribución)
+
 ## Guía de Instalacion
 
   1. Es necesario que posea [Docker](https://www.docker.com) instalado en su dispositivo para ejecutar el servidor.
@@ -12,7 +23,7 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
 
 ## Endpoints
 
-### Usuarios /usuarios
+### Usuarios `/usuarios`
 
 - `POST .../login`
   - **Datos Requeridos:**
@@ -46,8 +57,18 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
     ```
      `tokenUsuario`: [Valor del Token]
     ```
+### Especialidades `/especialidades`
+- `GET: .../`
+  - **Datos Requeridos:**
+    *No requiere*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+        especialiedades,
+    }
+    ```
 
-### Clientes /clientes
+### Clientes `/clientes`
 
 - `POST .../registro`
   -  **Datos Requeridos:**
@@ -75,7 +96,7 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
       }
       ```
 
-> Para poder hacer uso del resto de los servicios del cliente es necesario que primero se haya autenticado como cliente y agregue el tokenUsuario devuelto al momento de loguearse en las peticiones.
+> Para poder hacer uso del resto de los servicios del cliente es necesario que primero se haya autenticado como cliente y agregue el tokenUsuario en el header como cookie devuelto al momento de loguearse en las peticiones.
 
 - `PUT .../actualizar-datos`
   - **Datos Requeridos:**
@@ -118,7 +139,7 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
         success: true,
     }
     ```
-    - `POST .../agregar-miembro  `
+- `POST .../agregar-miembro  `
   - **Datos Requeridos:**
     ```json
     {
@@ -136,7 +157,7 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
         success: true,
     }
     ```
-    - `PUT .../modificar-miembro`
+- `PUT .../modificar-miembro`
   - **Datos Requeridos:**
     ```json
     {
@@ -156,7 +177,7 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
         success: true,
     }
     ```
-### Consultas de Clientes clientes/consultas
+### Manejo de consultas del lado del cliente `/clientes/consultas`
 
 - `POST: .../solicitar-consulta`
   - **Datos Requeridos:**
@@ -256,17 +277,6 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
         result: listaFinal,
     }
     ```
-- `GET: .../especialidades`
-  - **Datos Requeridos:**
-    *No requiere*
-    - **Respuesta Exitosa:** 200 Ok
-    ```json
-    {
-        success: true,
-        message: "Especialidades encontradas",
-        result: [ Lista de especialidades],
-    }
-    ```
 - `GET: .../solicitar-estado-ultima-consulta `
   - **Datos Requeridos:**
     *No requiere*
@@ -277,3 +287,185 @@ Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le propor
           result: [Estado de la consulta],
     }
     ```
+
+### Médicos `/medicos`
+- `POST: .../registro  `
+  - **Datos Requeridos:**
+    ```json
+    {
+        nroMatricula,
+        radioAccion,
+        precio,
+        especialidad,
+        nombre,
+        apellido,
+        sexo,
+        fechaNacimiento,
+        username,
+        password,
+        dni,
+        telefono,
+        direccion,
+    }
+    ```
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          success: true,
+          message: "Medico creado con exito",
+    }
+    ```
+> Para poder hacer uso del resto de los servicios del médico es necesario que primero se haya autenticado como tal y agregue el tokenUsuario en el header como cookie devuelto al momento de loguearse en las peticiones.
+- `PUT: .../actualizar-datos`
+  - **Datos Requeridos:**
+    ```json
+    {
+        nroMatricula,
+        radioAccion,
+        precio,
+        especialidad,
+        sexo,
+        direccion,
+        telefono,
+        fechaNacimiento,
+        username,
+        password,
+    }
+    ```
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+        success: true,
+        message: "Medico modificado exitosamente",
+    }
+    ```
+- `PUT: .../actualizar-estado` > Cambia el estado entre conectado y desconectado
+  - **Datos Requeridos:**
+    *No requiere*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          estado: estadoNuevo,
+    }
+    ```
+### Manejo de consultas del lado del médico `/medicos/consultas`
+- `POST: .../aceptar-consulta`
+  - **Datos Requeridos:**
+    *No requiere*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          message: "consulta aceptada",
+          state: 'en curso',
+          user: 'desconectado',
+    }
+    ```
+- `PUT: .../cancelar-consulta`
+  - **Datos Requeridos:**
+    *No requiere*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          message: "Consulta en curso cancelada con éxito",
+          state: 'cancelada',
+    }
+    ```
+- `PUT: .../rechazar-consulta `
+  - **Datos Requeridos:**
+    *No Requiere*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          message: "consulta rechazada",
+          state: 'seleccionando medico',
+        }
+    ```
+- `GET: .../solicitar-consulta `
+  - **Datos Requeridos:**
+    *No requerido*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          success: true,
+          message: "Consulta",
+          result: [Estado completo de la consulta],
+    }
+    /
+    {
+          success: true,
+          message: "Consulta",
+          result: null,
+    }
+    ```
+- `GET: .../solicitar-estado-ultima-consulta`
+  - **Datos Requeridos:**
+    *No requerido*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          message: "Consulta",
+          result: [Estado de la consulta],
+        }
+    ```
+- `PUT: .../finalizar-consulta`
+  - **Datos Requeridos:**
+    *No requerido*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          message: "consulta en calificacion",
+          state:'calificando',
+    }
+    ```
+- ` PUT: .../valorar-consulta`
+  - **Datos Requeridos:**
+    ```json
+    {
+        valoracion,
+        comentario
+    }
+    ```
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+          message: "consulta en calificacion",
+          state: 'calificando',
+    }
+    ```
+- `GET: .../historialConsultas `
+  - **Datos Requeridos:**
+    *No requerido*
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+        success: true,
+        message: "Consultas encontradas",
+        result: [Lista con el historial de consultas],
+    }
+    ```
+- `PUT: /observacion-consulta`
+  - **Datos Requeridos:**
+    ```json
+    {
+        observacion
+    } 
+    ```
+    - **Respuesta Exitosa:** 200 Ok
+    ```json
+    {
+        success: true,
+        message: "Observacion actualizada",
+        result: observacion,
+    }
+    ```
+
+## Contribución
+
+- [Paula Fuentes](mailto:paulyta1983@gmail.com) - [@paulyta1983](https://github.com/paulyta1983/)
+- [Mariano Di Gennaro](mailto:mariano.psico@gmail.com) - [@marianopsico](https://github.com/marianopsico/)
+- [Ezequiel Korelblum](mailto:ezequiel@losko.com.ar) - [@EzeKoren](https://github.com/EzeKoren/)
+- [Uriel Swarcman](mailto:urielszw@gmail.com) - [@UrielSzw](https://github.com/UrielSzw/)
+- [Javier Bagdadi](mailto:javibagdadi@hotmail.com) - [@javibag](https://github.com/javibag/)
+- [Federico Peirano](mailto:fedepr2345@gmail.com) - [@FedePeira](https://github.com/FedePeira/)
+- [Matías Sosa](mailto:sosamatias171@gmail.com) - [@sosamatias1](https://github.com/sosamatias1/)
+- [Facundo Lopez Bruno](mailto:faculopez93@hotmail.com.ar) - [@FacuuLopez](https://github.com/FacuuLopez/)
