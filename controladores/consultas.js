@@ -132,7 +132,7 @@ class consultasController {
   seleccionarMedicoConsulta = async (req, res, next) => {
     try {
       const { id: clienteId } = req.cliente;
-      const { nroMatricula, tiempoLlegada } = req.body;
+      const { nroMatricula, tiempoLlegada, horaEstimada } = req.body;
       //console.log("id", clienteId);
 
       const consultaDePaciente = await consulta.findOne({
@@ -151,20 +151,23 @@ class consultasController {
       if (consultaDePaciente && medicoEncontrado) {
         // Obtener la fecha y hora actual
         const currentDateTime = new Date();
+        console.log("currentDateTime", currentDateTime);
+        console.log("horaEstimada", horaEstimada);
+
         //console.log("Medico encontrado = ", medicoEncontrado);
 
         // Actualizar la consulta con el médico y la fecha y hora
         await consultaDePaciente.update({
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
           medicoId: medicoEncontrado.id,
-          fechaSeleccion: currentDateTime,
+          fechaSeleccion: horaEstimada,
           tiempoLlegada,
         });
 
         res.status(200).json({
           message: "Agregado médico a consulta con éxito",
           estado: ENUM_CONSULTA_ESTADOS.solicitandoMedico,
-          hora: currentDateTime,
+          hora: horaEstimada,
         });
       } else {
         res.status(404).json({
@@ -223,13 +226,12 @@ class consultasController {
       const { id: medicoId } = req.medico;
 
       const consultaDeMedico = await consulta.findOne({
-        include:{
-          
-            model: cliente,
-            include:{
-              attributes:["valoracion", "resenas"],
-              model: usuario
-            }
+        include: {
+          model: cliente,
+          include: {
+            attributes: ["valoracion", "resenas"],
+            model: usuario,
+          },
         },
         where: {
           medicoId,
@@ -244,6 +246,11 @@ class consultasController {
           },
         });
 
+        console.log(
+          "consultaDeMedico.fechaSeleccion",
+          consultaDeMedico.fechaSeleccion
+        );
+
         const resultFinal = {};
         resultFinal.motivo = consultaDeMedico.motivo;
         resultFinal.sintomas = consultaDeMedico.sintomas;
@@ -254,7 +261,7 @@ class consultasController {
         resultFinal.valoracionMedico = consultaDeMedico.valoracionMedico;
         resultFinal.valoracionCliente = consultaDeMedico.valoracionCliente;
         resultFinal.comentarioDelCliente =
-        consultaDeMedico.comentarioDelCliente;
+          consultaDeMedico.comentarioDelCliente;
         resultFinal.comentarioDelMedico = consultaDeMedico.comentarioDelMedico;
         resultFinal.direccion = consultaDeMedico.direccion;
         resultFinal.piso = consultaDeMedico.piso;
@@ -619,7 +626,7 @@ class consultasController {
             comentarioDelCliente: comentario,
           });
         }
-        await this.calcularValoracionPromedioMedico(consultaDeCliente.medicoId)
+        await this.calcularValoracionPromedioMedico(consultaDeCliente.medicoId);
         res.status(200).send({
           message: "consulta en calificacion",
           state: ENUM_CONSULTA_ESTADOS.calificando,
@@ -639,7 +646,7 @@ class consultasController {
     try {
       const { id: medicoId } = req.medico;
       const { valoracion, comentario } = req.body;
-      
+
       console.log("1", { valoracion, comentario });
       const consultasMedico = await consulta.findAll({
         where: {
@@ -647,9 +654,9 @@ class consultasController {
           estado: ENUM_CONSULTA_ESTADOS.calificando,
         },
       });
-      const consultaDeMedico = consultasMedico[0]
+      const consultaDeMedico = consultasMedico[0];
       console.log("2", consultaDeMedico);
-      
+
       if (consultaDeMedico) {
         if (consultaDeMedico.valoracionCliente) {
           console.log("3", consultaDeMedico.valoracionCliente);
@@ -657,19 +664,18 @@ class consultasController {
             valoracionMedico: valoracion,
             comentarioDelMedico: comentario,
             estado: ENUM_CONSULTA_ESTADOS.finalizada,
-          })
-                   
-          
-          
+          });
         } else {
           console.log("4", consultaDeMedico.valoracionCliente);
           await consultaDeMedico.update({
             valoracionMedico: valoracion,
             comentarioDelMedico: comentario,
           });
-          }
-        await this.calcularValoracionPromedioCliente(consultaDeMedico.clienteId)
-          
+        }
+        await this.calcularValoracionPromedioCliente(
+          consultaDeMedico.clienteId
+        );
+
         console.log("5", consultaDeMedico);
         res.status(200).send({
           message: "consulta en calificacion",
@@ -685,128 +691,125 @@ class consultasController {
       res.status(500).send(error.message);
     }
   };
-  
-  calcularValoracionPromedioCliente= async (clienteId) =>{
+
+  calcularValoracionPromedioCliente = async (clienteId) => {
     try {
-      let clienteConsulta
-      let usuarioCliente
+      let clienteConsulta;
+      let usuarioCliente;
       const consultasTotales = await consulta.findAll({
-        attributes:["valoracionMedico"],
-        where:{
+        attributes: ["valoracionMedico"],
+        where: {
           clienteId,
-          [Op.or]:[{
-            estado:  ENUM_CONSULTA_ESTADOS.finalizada 
-          },{
-            estado : ENUM_CONSULTA_ESTADOS.calificando
-          }]
-        }
-      })
-      let valFinal
-      let valTotal = 0
-      let valoracion 
-      let cantidadConsultasConValoracion = consultasTotales.length
+          [Op.or]: [
+            {
+              estado: ENUM_CONSULTA_ESTADOS.finalizada,
+            },
+            {
+              estado: ENUM_CONSULTA_ESTADOS.calificando,
+            },
+          ],
+        },
+      });
+      let valFinal;
+      let valTotal = 0;
+      let valoracion;
+      let cantidadConsultasConValoracion = consultasTotales.length;
       for (let i = 0; i < consultasTotales.length; i++) {
-        valoracion = consultasTotales[i].valoracionMedico 
+        valoracion = consultasTotales[i].valoracionMedico;
 
         if (valoracion) {
-          valTotal += valoracion 
-          
-        }else{
-          cantidadConsultasConValoracion -= 1
+          valTotal += valoracion;
+        } else {
+          cantidadConsultasConValoracion -= 1;
         }
-        
       }
-      
+
       clienteConsulta = await cliente.findOne({
-        attributes:["usuarioId"],
-        where:{
-          id: clienteId
-        }
-      })
+        attributes: ["usuarioId"],
+        where: {
+          id: clienteId,
+        },
+      });
       usuarioCliente = await usuario.findOne({
-        where:{
-          id: clienteConsulta.usuarioId
-        }
-      })
-   
+        where: {
+          id: clienteConsulta.usuarioId,
+        },
+      });
+
       if (!valTotal || !cantidadConsultasConValoracion) {
-        valFinal = 0
-      }else{
-        valFinal = parseInt(valTotal/cantidadConsultasConValoracion)
+        valFinal = 0;
+      } else {
+        valFinal = parseInt(valTotal / cantidadConsultasConValoracion);
       }
-   
+
       await usuarioCliente.update({
         valoracion: valFinal,
-        resenas: cantidadConsultasConValoracion
-      })
-
+        resenas: cantidadConsultasConValoracion,
+      });
     } catch (error) {
       console.log("No se pudo realizar el update a la valoracion del usuario.");
       console.log(error.message);
     }
-  }
+  };
 
-  calcularValoracionPromedioMedico= async (medicoId) =>{
+  calcularValoracionPromedioMedico = async (medicoId) => {
     try {
-      let medicoConsulta
-      let usuarioMedico
-      
+      let medicoConsulta;
+      let usuarioMedico;
+
       const consultasTotales = await consulta.findAll({
-        attributes:["valoracionCliente"],
-        where:{
+        attributes: ["valoracionCliente"],
+        where: {
           medicoId,
-          [Op.or]:[{
-            estado:  ENUM_CONSULTA_ESTADOS.finalizada 
-          },{
-            estado : ENUM_CONSULTA_ESTADOS.calificando
-          }]
-          
-        }
-      })
-      let valFinal
-      let valTotal = 0
-      let valoracion 
-      let cantidadConsultasConValoracion = consultasTotales.length
+          [Op.or]: [
+            {
+              estado: ENUM_CONSULTA_ESTADOS.finalizada,
+            },
+            {
+              estado: ENUM_CONSULTA_ESTADOS.calificando,
+            },
+          ],
+        },
+      });
+      let valFinal;
+      let valTotal = 0;
+      let valoracion;
+      let cantidadConsultasConValoracion = consultasTotales.length;
       for (let i = 0; i < consultasTotales.length; i++) {
-        valoracion = consultasTotales[i].valoracionCliente 
+        valoracion = consultasTotales[i].valoracionCliente;
         if (valoracion) {
-          valTotal += valoracion 
-          
-        }else{
-          cantidadConsultasConValoracion -= 1
+          valTotal += valoracion;
+        } else {
+          cantidadConsultasConValoracion -= 1;
         }
-        
       }
-      
+
       medicoConsulta = await medico.findOne({
-        attributes:["usuarioId"],
-        where:{
-          id: medicoId
-        }
-      })
+        attributes: ["usuarioId"],
+        where: {
+          id: medicoId,
+        },
+      });
       usuarioMedico = await usuario.findOne({
-        where:{
-          id: medicoConsulta.usuarioId
-        }
-      })
+        where: {
+          id: medicoConsulta.usuarioId,
+        },
+      });
 
       if (!valTotal || !cantidadConsultasConValoracion) {
-        valFinal = 0
-      }else{
-        valFinal = parseInt(valTotal/cantidadConsultasConValoracion)
-        
+        valFinal = 0;
+      } else {
+        valFinal = parseInt(valTotal / cantidadConsultasConValoracion);
       }
       await usuarioMedico.update({
         valoracion: valFinal,
-        resenas: cantidadConsultasConValoracion
-      })
-      
+        resenas: cantidadConsultasConValoracion,
+      });
     } catch (error) {
       console.log("No se pudo realizar el update a la valoracion del usuario.");
       console.log(error.message);
     }
-  }
-
+  };
 
   historialConsultasMedico = async (req, res, next) => {
     try {
@@ -965,6 +968,5 @@ class consultasController {
     }
   };
 }
-
 
 export default consultasController;
