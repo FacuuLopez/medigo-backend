@@ -429,7 +429,7 @@ class consultasController {
 
         res.status(200).send({
           message: "consulta rechazada",
-          state: ENUM_CONSULTA_ESTADOS.seleccionandoMedico,
+          state: ENUM_CONSULTA_ESTADOS.rechazada,
         });
       } else {
         res.status(400).send({
