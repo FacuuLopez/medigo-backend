@@ -232,7 +232,6 @@ const departamentoClientes = [
   "Departamento 45",
 ];
 
-
 const codigoPostalClientes = [
   "1424",
   "1012",
@@ -330,127 +329,127 @@ const generos = ["M", "F"];
 
 const grupoFamiliarCliente = [
   {
-    nombre: "Juan",
+    nombre: "Isabel",
     apellido: "Gómez",
     sexo: "F",
     fechaNacimiento: new Date("1975-02-15T12:00:00"),
   },
   {
-    nombre: "Ana",
+    nombre: "Mariano",
     apellido: "Rodríguez",
     sexo: "M",
     fechaNacimiento: new Date("1978-04-25T12:00:00"),
   },
   {
-    nombre: "Carlos",
+    nombre: "Sofía",
     apellido: "Martínez",
     sexo: "F",
     fechaNacimiento: new Date("1981-08-10T12:00:00"),
   },
   {
-    nombre: "María",
+    nombre: "Maximiliano",
     apellido: "Fernández",
     sexo: "M",
     fechaNacimiento: new Date("1983-10-18T12:00:00"),
   },
   {
-    nombre: "Pedro",
+    nombre: "Valentina",
     apellido: "Pérez",
     sexo: "F",
     fechaNacimiento: new Date("1986-01-05T12:00:00"),
   },
   {
-    nombre: "Laura",
+    nombre: "Luis",
     apellido: "López",
     sexo: "M",
     fechaNacimiento: new Date("1982-03-28T12:00:00"),
   },
   {
-    nombre: "Diego",
+    nombre: "Felipe",
     apellido: "González",
     sexo: "F",
     fechaNacimiento: new Date("1984-07-08T12:00:00"),
   },
   {
-    nombre: "Sofía",
+    nombre: "Julieta",
     apellido: "Sánchez",
     sexo: "M",
     fechaNacimiento: new Date("1980-12-20T12:00:00"),
   },
   {
-    nombre: "Javier",
+    nombre: "Gustavo",
     apellido: "Ramírez",
     sexo: "F",
     fechaNacimiento: new Date("1976-05-01T12:00:00"),
   },
   {
-    nombre: "Valentina",
+    nombre: "Delfina",
     apellido: "Torres",
     sexo: "M",
     fechaNacimiento: new Date("1985-09-14T12:00:00"),
   },
   {
-    nombre: "Luis",
+    nombre: "Lautaro",
     apellido: "Suárez",
     sexo: "F",
     fechaNacimiento: new Date("1979-11-02T12:00:00"),
   },
   {
-    nombre: "Camila",
+    nombre: "Renata",
     apellido: "Díaz",
     sexo: "M",
     fechaNacimiento: new Date("1977-01-22T12:00:00"),
   },
   {
-    nombre: "Fernando",
+    nombre: "Agustina",
     apellido: "Vargas",
     sexo: "F",
     fechaNacimiento: new Date("1984-06-17T12:00:00"),
   },
   {
-    nombre: "Isabella",
+    nombre: "Leonardo",
     apellido: "Hernández",
     sexo: "M",
     fechaNacimiento: new Date("1986-10-03T12:00:00"),
   },
   {
-    nombre: "Miguel",
+    nombre: "Martina",
     apellido: "Jiménez",
     sexo: "F",
     fechaNacimiento: new Date("1978-02-15T12:00:00"),
   },
   {
-    nombre: "Emma",
+    nombre: "Emilio",
     apellido: "Álvarez",
     sexo: "M",
     fechaNacimiento: new Date("1980-05-12T12:00:00"),
   },
   {
-    nombre: "Alejandro",
+    nombre: "Camila",
     apellido: "Moreno",
     sexo: "F",
     fechaNacimiento: new Date("1975-08-28T12:00:00"),
   },
   {
-    nombre: "Lucía",
+    nombre: "Lucas",
     apellido: "Romero",
     sexo: "M",
     fechaNacimiento: new Date("1982-09-25T12:00:00"),
   },
   {
-    nombre: "Ricardo",
+    nombre: "Martina",
     apellido: "Rojas",
     sexo: "F",
     fechaNacimiento: new Date("1981-11-08T12:00:00"),
   },
   {
-    nombre: "Victoria",
+    nombre: "Sebastián",
     apellido: "Castro",
     sexo: "M",
     fechaNacimiento: new Date("1979-03-19T12:00:00"),
   },
   {
-    nombre: "Gabriel",
+    nombre: "Isabella",
     apellido: "Ortega",
     sexo: "F",
     fechaNacimiento: new Date("1980-06-16T12:00:00"),
@@ -462,7 +461,7 @@ const grupoFamiliarCliente = [
     fechaNacimiento: new Date("1982-09-21T12:00:00"),
   },
   {
-    nombre: "Raúl",
+    nombre: "Rodrigo",
     apellido: "Navarro",
     sexo: "F",
     fechaNacimiento: new Date("1977-03-03T12:00:00"),
@@ -474,13 +473,13 @@ const grupoFamiliarCliente = [
     fechaNacimiento: new Date("1978-06-20T12:00:00"),
   },
   {
-    nombre: "Francisco",
+    nombre: "Fernando",
     apellido: "Serrano",
     sexo: "F",
     fechaNacimiento: new Date("1983-11-14T12:00:00"),
   },
   {
-    nombre: "Adriana",
+    nombre: "Adela",
     apellido: "Morales",
     sexo: "M",
     fechaNacimiento: new Date("1986-01-30T12:00:00"),
@@ -492,19 +491,19 @@ const grupoFamiliarCliente = [
     fechaNacimiento: new Date("1979-02-09T12:00:00"),
   },
   {
-    nombre: "Carmen",
+    nombre: "Catalina",
     apellido: "Gutiérrez",
     sexo: "M",
     fechaNacimiento: new Date("1981-07-12T12:00:00"),
   },
   {
-    nombre: "Andrés",
+    nombre: "Nicolás",
     apellido: "Ortiz",
     sexo: "F",
     fechaNacimiento: new Date("1980-03-17T12:00:00"),
   },
   {
-    nombre: "Natalia",
+    nombre: "Olivia",
     apellido: "Reyes",
     sexo: "M",
     fechaNacimiento: new Date("1985-05-03T12:00:00"),
@@ -522,31 +521,31 @@ const grupoFamiliarCliente = [
     fechaNacimiento: new Date("1978-10-05T12:00:00"),
   },
   {
-    nombre: "Martín",
+    nombre: "Mateo",
     apellido: "Luna",
     sexo: "F",
     fechaNacimiento: new Date("1982-01-11T12:00:00"),
   },
   {
-    nombre: "Paula",
+    nombre: "Ana",
     apellido: "Mendoza",
     sexo: "M",
     fechaNacimiento: new Date("1977-04-28T12:00:00"),
   },
   {
-    nombre: "Antonio",
+    nombre: "Antonia",
     apellido: "Torres",
     sexo: "F",
     fechaNacimiento: new Date("1975-06-15T12:00:00"),
   },
   {
-    nombre: "Gabriela",
+    nombre: "Gonzalo",
     apellido: "Cabrera",
     sexo: "M",
     fechaNacimiento: new Date("1979-09-02T12:00:00"),
   },
   {
-    nombre: "David",
+    nombre: "Daniel",
     apellido: "García",
     sexo: "F",
     fechaNacimiento: new Date("1981-11-10T12:00:00"),
@@ -584,8 +583,8 @@ const crearClientes = async () => {
       const telefono =
         Math.floor(Math.random() * (1199999999 - 1111111111 + 1)) + 1111111111;
       const direccion = direccionesClientes[i - 1];
-      const piso = pisoClientes[i - 1]
-      const departamento = departamentoClientes[i - 1]
+      const piso = pisoClientes[i - 1];
+      const departamento = departamentoClientes[i - 1];
       const estado = ENUM_USUARIO_ESTADOS.desconectado;
       const sexo = generos[i % 2];
       const fechaNacimiento = new Date(fechasNacimientoClientes[i - 1]);
