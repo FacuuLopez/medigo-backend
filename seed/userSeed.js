@@ -13,15 +13,15 @@ import {
   DEPARTAMENTO_CLIENTES,
   CODIGO_POSTAL_CLIENTES,
   FECHAS_NACIMIENTO_CLIENTES,
-  GRUPO_FAMILIAR_CLIENTE
-} from "../utils/userSeedData.js"
+  GRUPO_FAMILIAR_CLIENTE,
+} from "../utils/userSeedData.js";
 import {
   NOMBRES_MEDICOS,
   APELLIDOS_MEDICOS,
   DIRECCIONES_MEDICOS,
   COORDENADAS_MEDICOS,
-  FECHAS_NACIMIENTO_MEDICOS
-} from "../utils/medicSeedData.js"
+  FECHAS_NACIMIENTO_MEDICOS,
+} from "../utils/medicSeedData.js";
 
 const GENEROS = ["M", "F"];
 
@@ -42,8 +42,8 @@ const crearClientes = async () => {
       const departamento = DEPARTAMENTO_CLIENTES[i - 1];
       const estado = ENUM_USUARIO_ESTADOS.desconectado;
       const sexo = GENEROS[i % 2];
-      const fechaNacimiento = new Date(CODIGO_POSTAL_CLIENTES[i - 1]);
-      const codigoPostal = FECHAS_NACIMIENTO_CLIENTES[i - 1];
+      const fechaNacimiento = new Date(FECHAS_NACIMIENTO_CLIENTES[i - 1]);
+      const codigoPostal = CODIGO_POSTAL_CLIENTES[i - 1];
       const ciudad = "CABA";
       const grupoFamiliar = GRUPO_FAMILIAR_CLIENTE[i - 1];
 
