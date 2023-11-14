@@ -1,6 +1,22 @@
 # Medigo Manual de uso del servidor
 
-Bienvenido/a a nuestra aplicación de Médicos a Domicilio. Esta guía le proporcionará todas las instrucciones necesarias para conectar nuestra aplicación de manera efectiva con nuestro servidor para poder asi hacer uso de nuestros servicios.
+## Introducción
+
+Bienvenido al proyecto MEDIGO_BACKEND. Este proyecto es un servicio de backend para la aplicación MEDIGO, una plataforma de consultas médicas a domicilio.
+
+## Descripción
+
+El MEDIGO_BACKEND está diseñado para manejar todas las operaciones del lado del servidor de la aplicación MEDIGO. Proporciona APIs para la autenticación de usuarios, la gestión de perfiles de usuario, el manejo de consultas médicas y más. El backend está construido con Node.js y utiliza Sequelize para las operaciones de la base de datos.
+
+Este README proporciona una guía completa sobre los puntos finales expuestos por el backend, los parámetros requeridos y las respuestas. También incluye una guía sobre cómo configurar y ejecutar el proyecto localmente.
+
+Por favor, consulta la tabla de contenidos para una fácil navegación.
+
+## Estado del Proyecto
+
+El proyecto está actualmente en la etapa de **Despliegue**. Esto significa que todas las características principales han sido desarrolladas, probadas y están listas para ser usadas en un entorno de producción. Cualquier actualización futura en esta etapa será para correcciones de errores, mejoras de rendimiento o nuevas características menores.
+
+## Contenido
 
 - [Medigo Manual de uso del servidor](#medigo-manual-de-uso-del-servidor)
   - [Guía de Instalacion](#guía-de-instalacion)
