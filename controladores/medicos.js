@@ -54,7 +54,7 @@ export const crearMedico = async ({
 };
 
 class medicosController {
-  constructor() {}
+  constructor() { }
 
   createMedico = async (req, res, next) => {
     try {
@@ -161,11 +161,17 @@ class medicosController {
         fechaNacimiento,
         username,
         password,
+        latitud,
+        longitud,
       } = req.body;
 
       const datosMedico = {};
       const datosUsuario = {};
       const datosPersona = {};
+
+      if (latitud !== undefined && latitud !== null) datosMedico.latitud = latitud;
+
+      if (longitud !== undefined && longitud !== null) datosMedico.longitud = longitud;
 
       if (nroMatricula !== undefined && nroMatricula !== null) {
         datosMedico.nroMatricula = nroMatricula;
@@ -320,9 +326,9 @@ class medicosController {
     }
   };
 
-  registro = async (req, res, next) => {};
+  registro = async (req, res, next) => { };
 
-  actualizarDatosMedico = async (req, res, next) => {};
+  actualizarDatosMedico = async (req, res, next) => { };
 
   getEspecialidades = async (req, res, next) => {
     try {
