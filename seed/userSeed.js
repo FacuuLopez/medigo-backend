@@ -853,7 +853,7 @@ const crearMedicos = async () => {
       const sexo = generos[i % 2];
       const fechaNacimiento = new Date(fechasNacimientoMedicos[i - 1]);
       const precio = Math.floor(Math.random() * (4500 - 1200 + 1)) + 1200;
-      const radioAccion = 5000;
+      const radioAccion = 50; // Kilómetros
       const especialidad =
         i % 2
           ? ENUM_MEDICO_ESPECIALIDADES.clinico

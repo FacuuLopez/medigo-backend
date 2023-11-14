@@ -102,7 +102,7 @@ class consultasController {
             ),
           })
         )
-        .filter((medico) => medico.distancia <= Number(medico.radioAccion))
+        .filter((medico) => medico.distancia <= (Number(medico.radioAccion) * 1000))
         .sort((medicoA, medicoB) => medicoA.distancia - medicoB.distancia)
         .map((medico) => ({
           nroMatricula: medico.nroMatricula,
