@@ -338,6 +338,8 @@ El proyecto está actualmente en la etapa de **Despliegue**. Esto significa que 
     {
         nroMatricula,
         radioAccion,
+        latitud,
+        longitud,
         precio,
         especialidad,
         sexo,
