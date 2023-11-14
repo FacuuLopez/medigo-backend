@@ -35,30 +35,32 @@ class consultasController {
         departamento,
         piso,
       } = req.body;
-
+      
       const clienteEncontrado = await cliente.findOne({
-        where: {
-          id: clienteId,
-        },
+        
         include: [
           {
             model: grupoFamiliar,
-            include: [
-              {
-                model: persona,
-                where: {
-                  nombre,
-                  apellido,
-                },
-              },
-            ],
+           
           },
         ],
+        where: {
+          id: clienteId,
+        },
       });
-
+      const miembroFamiliar = await persona.findOne({
+        where:{
+          [Op.and]: [
+            { grupoFamiliarId: clienteEncontrado.grupoFamiliar.id },
+            { nombre },
+            { apellido },
+          ]
+          
+        }
+      })
+      
       const { id: personaId } =
-        clienteEncontrado.dataValues.grupoFamiliar.dataValues.personas[0]
-          .dataValues;
+        miembroFamiliar.dataValues;
 
       await consulta.create({
         clienteId,
