@@ -1,6 +1,5 @@
 import { medico, persona, usuario } from "../modelos/index.js";
-import bcrypt from "bcrypt";
-import { ENUM_USUARIO_ESTADOS } from "../utils/enums.js";
+import { ENUM_USUARIO_ESTADOS, ENUM_MEDICO_ESPECIALIDADES } from "../utils/enums.js";
 
 export const crearMedico = async ({
   nroMatricula,
@@ -332,10 +331,8 @@ class medicosController {
 
   getEspecialidades = async (req, res, next) => {
     try {
-      const especialidades = [
-        ENUM_MEDICO_ESPECIALIDADES.clinico,
-        ENUM_MEDICO_ESPECIALIDADES.pediatra,
-      ];
+      const especialidades = Object.values(ENUM_MEDICO_ESPECIALIDADES);
+
       res.status(200).send({
         success: true,
         message: "Especialidades encontradas",
