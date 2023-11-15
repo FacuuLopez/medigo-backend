@@ -257,9 +257,7 @@ El proyecto está actualmente en la etapa de **Despliegue**. Esto significa que 
     ```
 - `PUT: .../cancelar-consulta-sin-empezar`
   - **Datos Requeridos:**
-    ```json
-    
-    ```
+    *No requiere*
     - **Respuesta Exitosa:** 200 Ok
     ```json
     {
