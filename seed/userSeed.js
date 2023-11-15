@@ -60,7 +60,6 @@ const crearClientes = async () => {
         estado,
         sexo,
         fechaNacimiento,
-        grupoFamiliar: [grupoFamiliar],
         codigoPostal,
         ciudad,
       };
