@@ -29,7 +29,7 @@ const crearClientes = async () => {
   try {
     const numUsers = 40;
     for (let i = 1; i <= numUsers; i++) {
-      const username = `cliente${i}@gmail.com`;
+      const username = `paciente${i}@gmail.com`;
       const password = "123456";
       const nombre = NOMBRES_CLIENTES[i - 1];
       const apellido = APELLIDOS_CLIENTES[i - 1];
